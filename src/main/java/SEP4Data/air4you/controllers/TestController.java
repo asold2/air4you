@@ -15,10 +15,6 @@ public class TestController {
         return "Hi, my name is, what? My name is, who?\n" +
                 "My name is, chka-chka, Slim Shady";
     }
-    @RequestMapping("/error")
-    @ResponseBody
-    String error(HttpServletRequest request) {
-        return "<h1>Error occurred</h1>";
-    }
+
 
 }
