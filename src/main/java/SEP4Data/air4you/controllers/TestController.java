@@ -1,4 +1,4 @@
-package SEP4Data.air4you;
+package SEP4Data.air4you.controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
