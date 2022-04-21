@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-    @GetMapping("/")
+    @GetMapping("/error")
     String test(){
         return "Hi, my name is, what? My name is, who?\n" +
                 "My name is, chka-chka, Slim Shady";
