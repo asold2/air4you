@@ -10,10 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class TestController {
 
-    @GetMapping("/test")
+    @GetMapping("/")
     String test(){
-        return "Hi, my name is, what? My name is, who?\n" +
-                "My name is, chka-chka, Slim Shady";
+        return "Hi Data Warehouse group from SEP4 group 1!";
     }
 
 
