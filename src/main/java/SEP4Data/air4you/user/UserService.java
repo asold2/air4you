@@ -10,11 +10,9 @@ import java.util.List;
 public class UserService {
 
     @Autowired
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+
 
 
     public boolean register(String username, String password) {

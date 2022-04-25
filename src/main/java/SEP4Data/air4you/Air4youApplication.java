@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"SEP4Data.air4you.user", "controllers"})
+@ComponentScan(basePackages = {"SEP4Data.air4you.user", "SEP4Data.air4you.controllers"})
 @EnableJpaRepositories
 @Configuration
 @EnableAutoConfiguration
