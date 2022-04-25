@@ -14,6 +14,4 @@ public class TestController {
     String test(){
         return "Hi Data Warehouse group from SEP4 group 1!";
     }
-
-
 }
