@@ -29,4 +29,17 @@ public int registerUser(@PathVariable String username, @PathVariable String pass
     public List<User> getUsers(){
         return userService.getAllUsers();
 }
+
+    @DeleteMapping("/users/total_deletion")
+    public int deleteUsers(){
+        if(userService.deleteAll()){
+            return  HttpServletResponse.SC_ACCEPTED;
+        }
+        else{
+            return  HttpServletResponse.SC_BAD_REQUEST;
+        }
+    }
+
 }
+
+
