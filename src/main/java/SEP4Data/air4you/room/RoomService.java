@@ -6,7 +6,14 @@ import java.util.List;
 
 @Service
 public interface RoomService {
-    boolean registerRoom(int roomId);
+    boolean registerRoom(Room room);
+    List<Room> getRooms(String userId);
 
-    List<Room> getRooms();
+    List<Room> getAllRooms();
+
+    void deleteAll();
+
+    void deleteUserFromRoom(Room room);
+
+    void deleteAllFromUser(String userId);
 }
