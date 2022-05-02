@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 
+// This is random text I will remember to remove
 
 public class Air4youApplication {
 
@@ -18,3 +19,6 @@ public class Air4youApplication {
 	}
 
 }
+
+
+// you have to update the application you uploaded to the beanstalk
