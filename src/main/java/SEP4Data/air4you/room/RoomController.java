@@ -1,10 +1,9 @@
 package SEP4Data.air4you.room;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -15,17 +14,36 @@ public class RoomController {
     @Autowired
     private RoomService roomService;
 
-    @PostMapping("/room/registration/{roomId}/")
-    public int registerRoom(@PathVariable int roomId){
-        if(roomService.registerRoom(roomId)){
+    @PostMapping("/room/registration/")
+    public int registerRoom(@RequestBody Room room){
+        if(roomService.registerRoom(room)){
             return HttpServletResponse.SC_OK;
         }
         else {
             return HttpServletResponse.SC_FORBIDDEN;
         }
     }
-    @GetMapping("/rooms/")
-    public List<Room> getRooms(){
-        return roomService.getRooms();
+    @GetMapping("/rooms/{userId}")
+    public List<Room> getRooms(@PathVariable String userId){
+        return roomService.getRooms(userId);
     }
+
+    @GetMapping("/all/rooms/")
+    public List<Room> getAllRooms(){
+        System.out.println("Getting all rooms!!!");
+        return roomService.getAllRooms();
+    }
+
+    @PutMapping("empty/room/of/user/")
+    public void deleteUserFromRoom(@RequestBody Room room){
+        System.out.println("testing for delete user from room");
+        roomService.deleteUserFromRoom(room);
+    }
+
+    @DeleteMapping("/abortion/")
+    public void deleteAllRoms(@RequestBody String userId){
+
+        roomService.deleteAllFromUser(userId);
+    }
+
 }
