@@ -30,7 +30,7 @@ public class RoomController {
 
     @GetMapping("/all/rooms/")
     public List<Room> getAllRooms(){
-        System.out.println("Getting all rooms again again!!!");
+        System.out.println("Getting all rooms again again again!!!");
         return roomService.getAllRooms();
     }
 
