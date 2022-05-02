@@ -36,7 +36,7 @@ public class RoomController {
 
     @PutMapping("empty/room/of/user/")
     public void deleteUserFromRoom(@RequestBody Room room){
-        System.out.println("testing for delete user from room");
+        System.out.println("testing");
         roomService.deleteUserFromRoom(room);
     }
 
