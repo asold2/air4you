@@ -21,8 +21,7 @@ public class Room {
         this.roomId = id;
         this.userId = userId;
         this.registrationDate = registrationDate;
-
-            }
+    }
 
     public void setRoomId(int roomId) {
         this.roomId = roomId;
