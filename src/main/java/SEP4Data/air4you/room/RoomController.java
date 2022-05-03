@@ -41,9 +41,15 @@ public class RoomController {
     }
 
     @DeleteMapping("/abortion/")
-    public void deleteAllRoms(@RequestBody String userId){
+    public void deleteAllRoomsFromUser(@RequestBody String userId){
 
         roomService.deleteAllFromUser(userId);
+    }
+
+    @DeleteMapping("/deletion/")
+    public void deleteAllRooms(){
+
+        roomService.deleteAll();
     }
 
 }
