@@ -1,10 +1,8 @@
 package SEP4Data.air4you.threshold;
 
-import SEP4Data.air4you.MeasurementTypes;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Table(name = "threshold")
