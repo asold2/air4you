@@ -22,13 +22,24 @@ env:
 
 # Each workflow consists of one or many jobs
 jobs:
+
+  job_id:
+    runs-on: ubuntu-latest
+    steps:
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v0'
+
+      - name: 'Use gcloud CLI'
+        run: 'gcloud info'
+
   # A build job (this can be named called whatever you like)
   build:
     runs-on: ubuntu-latest
-
-
-
-
     # Each job consists of one or many steps
     steps:
       - name: Checkout the repo
