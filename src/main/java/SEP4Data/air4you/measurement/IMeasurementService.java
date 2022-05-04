@@ -6,7 +6,6 @@ import java.util.List;
 
 @Service
 public interface IMeasurementService {
-
     void addMeasurement(Measurement measurement);
     List<Measurement> getMeasurements(int roomId);
     void deleteAllFromRoom(int roomId);
