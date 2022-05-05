@@ -15,15 +15,18 @@ public class RoomController {
     @Autowired
     private RoomService roomService;
 
-    @PostMapping("/room/registration/")
+    @PostMapping("/room/")
     public int registerRoom(@RequestBody Room room){
         if(roomService.registerRoom(room)){
             return HttpServletResponse.SC_OK;
         }
         else {
-            return HttpServletResponse.SC_FORBIDDEN;
+            // Changed from Forbidden (403) to Expectation_Failed (417)
+            return HttpServletResponse.SC_EXPECTATION_FAILED;
         }
     }
+
+
 
     @GetMapping("/rooms/{userId}")
     public List<Room> getRooms(@PathVariable String userId){
