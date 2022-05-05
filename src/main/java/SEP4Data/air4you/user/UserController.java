@@ -1,10 +1,9 @@
 package SEP4Data.air4you.user;
 
-import SEP4Data.air4you.user.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.List;
 
 @RestController
 public class UserController {
