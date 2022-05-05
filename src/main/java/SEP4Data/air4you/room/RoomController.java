@@ -1,5 +1,6 @@
 package SEP4Data.air4you.room;
 
+import SEP4Data.air4you.user.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,6 @@ public class RoomController {
     public List<Room> getRooms(@PathVariable String userId){
         return roomService.getRooms(userId);
     }
-
-
 
     @GetMapping("/all/rooms/")
     public List<Room> getAllRooms(){
