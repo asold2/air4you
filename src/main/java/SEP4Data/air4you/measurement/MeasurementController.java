@@ -25,6 +25,25 @@ public class MeasurementController {
         return measurementService.getMeasurements(roomId);
     }
 
+    @DeleteMapping("/measurement/room/{roomId}")
+    public void removeMeasurement(@PathVariable int roomId){
+        measurementService.deleteAllFromRoom(roomId);
+    }
+
+    @DeleteMapping("/measurement/user/{userId}")
+    public void removeMeasurement(@PathVariable String userId){
+        measurementService.deleteAllFromUser(Integer.valueOf(userId));
+    }
+
+    // DO NOT USE THIS UNLESS YOU ARE READY TO HAVE NO DATA ON MEASUREMENTS
+    @DeleteMapping("/measurement/all/")
+    public void removeMeasurement(){
+        measurementService.deleteAll();
+    }
+
+
+
+
 
 
 

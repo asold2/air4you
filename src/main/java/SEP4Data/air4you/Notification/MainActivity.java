@@ -7,6 +7,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 @Service
 public class MainActivity {
@@ -14,25 +15,26 @@ public class MainActivity {
     public void sendNotification(String title, String content){
 
         Notification message = new Notification(title, content);
-        PushNotification data = new PushNotification(message,"dlfvYOSQQeChIa1JJQ93hR:APA91bEMPjqM4a6ZavXhHsLVO1EG31QZbAl5QVB4BvAqgzZE0jCx68DgojyKgYhPJl5yDxpYzd7cp0PMrZRqMLG0_8hMpSKQ3iYqmEXBO8Pp6wZwU_tgqvTVcKPoc6qhQhyRBot67mMe");
+        PushNotification data = new PushNotification(message,"eFv5k7HsQWucVQ0cs7E7Qh:APA91bFIcI0YG6qIcIesNdzbZPA_jnmu_pctycm_hG-QkgegVm3CeQr0KNSc1gYD3oEcqXmv3r5EZcA4z_QTbgnhnkal2b-eN5z9PdI88K6OPg21D0Hw9y6aXA_aqgHsfMum76isg09D");
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         NotificationAPI apiService = retrofit.create(NotificationAPI.class);
-        Call<Response> call = apiService.postNotification(data);
-        call.enqueue(new Callback<Response>() {
+        Call<String> call = apiService.postNotification(data);
+        call.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<Response> call, Response<Response> response) {
+            public void onResponse(Call<String> call, Response<String> response) {
                 if(!response.isSuccessful()){
                     System.out.println(String.valueOf(response.code()));
                     return;
                 }
             }
             @Override
-            public void onFailure(Call<Response> call, Throwable throwable) {
+            public void onFailure(Call<String> call, Throwable throwable) {
                 System.out.println(throwable.getMessage());
             }
         });

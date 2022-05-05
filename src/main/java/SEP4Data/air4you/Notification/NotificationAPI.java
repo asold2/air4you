@@ -12,5 +12,5 @@ import retrofit2.http.POST;
 public interface NotificationAPI {
     @Headers({"Authorization: key=" + Constants.SERVER_KEY, "Content-Type:" + Constants.CONTENT_TYPE})
     @POST("fcm/send")
-    Call<Response> postNotification(@Body PushNotification data);
+    Call<String> postNotification(@Body PushNotification data);
 }
