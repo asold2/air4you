@@ -15,7 +15,7 @@ public class RoomController {
     @Autowired
     private RoomService roomService;
 
-    // KSAKDAS
+
 
     @PostMapping("/room/")
     public int registerRoom(@RequestBody Room room){
