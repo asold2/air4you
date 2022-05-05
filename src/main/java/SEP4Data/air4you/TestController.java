@@ -13,25 +13,10 @@ import java.io.IOException;
 @RestController
 public class TestController {
 
-    FirebaseOptions options;
-    String property = System.getenv("spring.datasource.url");
-
-    {
-        try {
-            options = FirebaseOptions.builder()
-                    .setCredentials(GoogleCredentials.getApplicationDefault())
-                    .setDatabaseUrl("https://" + ".firebaseio.com/")
-                    .build();
-            FirebaseApp.initializeApp(options);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
  // s
     @GetMapping("/")
     String test(){
-        return "Hi Data Warehouse group from SEP4 group 1!\n " + property;
+        return "Hi Data Warehouse group from SEP4 group 1!\n ";
     }
 }
