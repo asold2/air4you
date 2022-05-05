@@ -32,4 +32,32 @@ public class Measurement {
     public DateTime getTimestamp(){
         return timestamp;
     }
+
+    public void setTimestamp(DateTime timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public double getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
+    }
+
+    public double getHumidity() {
+        return humidity;
+    }
+
+    public void setHumidity(double humidity) {
+        this.humidity = humidity;
+    }
+
+    public double getCo2() {
+        return co2;
+    }
+
+    public void setCo2(double co2) {
+        this.co2 = co2;
+    }
 }
