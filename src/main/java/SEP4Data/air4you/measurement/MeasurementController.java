@@ -1,9 +1,9 @@
 package SEP4Data.air4you.measurement;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class MeasurementController {
@@ -15,10 +15,17 @@ public class MeasurementController {
         this.measurementService = measurementService;
     }
 
-    @PostMapping("measurement/")
+    @PostMapping("/measurement/")
     public void addMeasurement(@RequestBody Measurement measurement){
         measurementService.addMeasurement(measurement);
     }
+
+    @GetMapping("/measurement/{roomId}")
+    public List<Measurement> getMeasurement(@PathVariable int roomId){
+        return measurementService.getMeasurements(roomId);
+    }
+
+
 
 
 

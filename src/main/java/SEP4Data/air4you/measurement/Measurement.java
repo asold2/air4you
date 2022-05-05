@@ -28,4 +28,8 @@ public class Measurement {
     public Measurement() {
 
     }
+
+    public DateTime getTimestamp(){
+        return timestamp;
+    }
 }

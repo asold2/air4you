@@ -23,10 +23,13 @@ public class RoomController {
             return HttpServletResponse.SC_FORBIDDEN;
         }
     }
+
     @GetMapping("/rooms/{userId}")
     public List<Room> getRooms(@PathVariable String userId){
         return roomService.getRooms(userId);
     }
+
+
 
     @GetMapping("/all/rooms/")
     public List<Room> getAllRooms(){
