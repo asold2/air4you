@@ -74,4 +74,8 @@ public class Measurement {
     public void setRoomId(String roomId) {
         this.roomId = roomId;
     }
+
+    public void setId(int id) {
+        Id = id;
+    }
 }

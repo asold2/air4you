@@ -30,7 +30,7 @@ public class Room {
         this.userId = userId;
         this.name = name;
         this.registrationDate = registrationDate;
-//        measurements = new ArrayList<>();
+        measurements = new ArrayList<>();
     }
 
     public String getName() {
