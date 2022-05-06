@@ -51,7 +51,7 @@ public class RoomController {
     //Returns array list of all possible rooms
     @GetMapping("/all/rooms/")
     public List<Room> getAllRooms(){
-        System.out.println("Getting all rooms again again again again!!!");
+        System.out.println("Getting all rooms again again again!!!");
         return roomService.getAllRooms();
     }
 
