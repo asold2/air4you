@@ -64,4 +64,9 @@ public class RoomServiceImpl implements RoomService{
         }
     }
 
+    @Override
+    public Room getRoomById(String roomId) {
+        return roomRepository.getById(roomId);
+    }
+
 }

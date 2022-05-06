@@ -13,16 +13,16 @@ public class MeasurementService implements IMeasurementService{
 
     @Override
     public void addMeasurement(Measurement measurement) {
-        if(measurementRepository.existsById(measurement.getTimestamp().hashCode())){
-
+        if(measurementRepository.existsById(measurement.getId())){
+            return;
         } else {
-
+            measurementRepository.save(measurement);
         }
     }
 
     @Override
     public List<Measurement> getMeasurements(int roomId) {
-        return null;
+        return measurementRepository.findAll();
     }
 
     @Override

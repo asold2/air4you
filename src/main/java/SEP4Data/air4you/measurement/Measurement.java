@@ -1,24 +1,25 @@
 package SEP4Data.air4you.measurement;
 
-import org.joda.time.DateTime;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name="measurement")
 public class Measurement {
 
     @Id
-    private DateTime timestamp;
-    private int roomId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int Id;
+    private Date date;
+    private String roomId;
     private double temperature;
     private double humidity;
     private double co2;
 
-    public Measurement(DateTime timestamp, int  roomId, double temperature, double humidity, double co2){
-        this.timestamp = timestamp;
+    public Measurement(Date timestamp, String  roomId, double temperature, double humidity, double co2){
+        this.date = timestamp;
         this.roomId = roomId;
         this.temperature = temperature;
         this.humidity = humidity;
@@ -29,12 +30,17 @@ public class Measurement {
 
     }
 
-    public DateTime getTimestamp(){
-        return timestamp;
+    public int getId() {
+        return Id;
     }
 
-    public void setTimestamp(DateTime timestamp) {
-        this.timestamp = timestamp;
+
+    public Date getDate(){
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public double getTemperature() {
@@ -59,5 +65,13 @@ public class Measurement {
 
     public void setCo2(double co2) {
         this.co2 = co2;
+    }
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
     }
 }

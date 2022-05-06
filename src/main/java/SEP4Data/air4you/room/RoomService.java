@@ -16,4 +16,6 @@ public interface RoomService {
     void deleteUserFromRoom(Room room);
 
     void deleteAllFromUser(String userId);
+
+    Room getRoomById(String roomId);
 }
