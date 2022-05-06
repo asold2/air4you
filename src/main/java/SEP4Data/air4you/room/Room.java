@@ -14,7 +14,7 @@ import java.util.List;
 @Table(name="room")
 public class Room {
     @Id
-    private String roomId;
+    private int roomId;
     private String name;
     private String userId = "none";
     private LocalDateTime registrationDate;
@@ -25,7 +25,7 @@ public class Room {
     public Room() {
     }
 
-    public Room(String id, String userId, String name, LocalDateTime registrationDate){
+    public Room(int id, String userId, String name, LocalDateTime registrationDate){
         this.roomId = id;
         this.userId = userId;
         this.name = name;
@@ -49,7 +49,7 @@ public class Room {
         this.measurements = measurements;
     }
 
-    public void setRoomId(String roomId) {
+    public void setRoomId(int roomId) {
         this.roomId = roomId;
     }
 
@@ -65,7 +65,7 @@ public class Room {
         this.registrationDate = registrationDate;
     }
 
-    public String getRoomId(){
+    public int getRoomId(){
         return roomId;
     }
 
