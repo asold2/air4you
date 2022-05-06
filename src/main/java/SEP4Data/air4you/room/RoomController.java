@@ -21,6 +21,7 @@ public class RoomController {
 
     @PostMapping("/room/")
     public int registerRoom(@RequestBody Room room){
+        System.out.println("testing");
         if(roomService.registerRoom(room)){
             return HttpServletResponse.SC_OK;
         }
