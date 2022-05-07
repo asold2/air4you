@@ -38,8 +38,9 @@ public class RoomController {
 
     //Gets rooms with last measurement. Body is userId as String
     //returns array list of rooms
-    @GetMapping("/room/last/")
+    @PostMapping("/room/last/")
     public List<Room> getRoomsLastMeasurment(@RequestBody String userId){
+        System.out.println(userId + "!!!!!!!!!!!!!!!");
         Measurement measurement = null;
         List<Room> roomsToReturn = new ArrayList<>();
         for (Room room: roomService.getRooms(userId)) {
@@ -49,10 +50,10 @@ public class RoomController {
         return roomsToReturn;
     }
     //Returns array list of all possible rooms
-    @GetMapping("/all/rooms/")
-    public List<Room> getAllRooms(){
+    @PostMapping("/all/rooms/")
+    public List<Room> getAllRooms(@RequestBody String userId){
         System.out.println("Getting all rooms again again again again once more and again!!!");
-        return roomService.getAllRooms();
+        return roomService.getRooms(userId);
     }
 
     @PutMapping("empty/room/of/user/")
