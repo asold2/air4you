@@ -7,9 +7,9 @@ import java.util.List;
 @Service
 public interface IMeasurementService {
     void addMeasurement(Measurement measurement);
-    List<Measurement> getMeasurements(int roomId);
-    void deleteAllFromRoom(int roomId);
-    void deleteAllFromUser(int userId);
+    List<Measurement> getMeasurements(String roomId);
+    void deleteAllFromRoom(String roomId);
+    void deleteAllFromUser(String userId);
     void deleteAll();
 
 }

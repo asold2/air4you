@@ -21,17 +21,17 @@ public class MeasurementService implements IMeasurementService{
     }
 
     @Override
-    public List<Measurement> getMeasurements(int roomId) {
+    public List<Measurement> getMeasurements(String roomId) {
         return measurementRepository.findAll();
     }
 
     @Override
-    public void deleteAllFromRoom(int roomId) {
+    public void deleteAllFromRoom(String roomId) {
 
     }
 
     @Override
-    public void deleteAllFromUser(int userId) {
+    public void deleteAllFromUser(String userId) {
 
     }
 
