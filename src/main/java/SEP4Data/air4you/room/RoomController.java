@@ -53,7 +53,8 @@ public class RoomController {
     @PostMapping("/all/rooms/")
     public List<Room> getAllRooms(@RequestBody String userId){
         System.out.println("Getting all rooms again again again again once more and again!!!");
-        return roomService.getRooms(userId);
+        System.out.println(userId + "!!!!!!1");
+        return roomService.getAllRooms();
     }
 
     @PutMapping("empty/room/of/user/")
