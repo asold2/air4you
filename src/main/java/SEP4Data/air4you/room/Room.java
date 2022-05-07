@@ -71,10 +71,13 @@ public class Room implements Serializable {
     }
 
     public void onlyLastMeasurement(){
-        Measurement measurement = this.getMeasurements().get(this.getMeasurements().size()-1);
-        System.out.println(measurement.getId() + "last measurement");
-        this.getMeasurements().clear();
-        this.getMeasurements().add(measurement);
+        if(!this.getMeasurements().isEmpty()){
+            Measurement measurement = this.getMeasurements().get(this.getMeasurements().size()-1);
+            System.out.println(measurement.getId() + "last measurement");
+            this.getMeasurements().clear();
+            this.getMeasurements().add(measurement);
+        }
+
     }
 
     public LocalDateTime getRegistrationDate() {
