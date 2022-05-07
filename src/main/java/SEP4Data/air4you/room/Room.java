@@ -25,8 +25,8 @@ public class Room {
     public Room() {
     }
 
-    public Room(String id, String userId, String name, LocalDateTime registrationDate){
-        this.roomId = id;
+    public Room(String roomId, String userId, String name, LocalDateTime registrationDate){
+        this.roomId = roomId;
         this.userId = userId;
         this.name = name;
         this.registrationDate = registrationDate;
