@@ -79,4 +79,6 @@ public class Room {
     public LocalDateTime getRegistrationDate() {
         return registrationDate;
     }
+
+
 }

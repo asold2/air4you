@@ -17,7 +17,7 @@ public class RoomServiceImpl implements RoomService{
     @Override
     public boolean registerRoom(Room room) {
         room.setRegistrationDate(LocalDateTime.now());
-        if(roomRepository.existsById(String.valueOf(room.getRoomId()))){
+        if(roomRepository.existsById(room.getRoomId())){
             return false;
         }
         else{

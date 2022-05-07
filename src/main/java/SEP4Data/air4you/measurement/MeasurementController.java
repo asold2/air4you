@@ -21,7 +21,7 @@ public class MeasurementController {
         this.measurementService = measurementService;
     }
 
-    @PostMapping(value = "/measurement/", consumes = {"application/json"})
+    @PostMapping("measurement")
     public void addMeasurement(@RequestBody Measurement measurement){
         System.out.println(measurement.toString());
 //        roomService.getRoomById(measurement.getRoomId()).setMeasurements(new ArrayList<Measurement>());
