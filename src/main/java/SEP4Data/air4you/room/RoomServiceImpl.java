@@ -17,7 +17,7 @@ public class RoomServiceImpl implements RoomService{
     @Override
     public boolean registerRoom(Room room) {
         room.setRegistrationDate(LocalDateTime.now());
-        if(roomRepository.existsById(room.getRoomId())){
+        if(roomRepository.existsById(String.valueOf(room.getRoomId()))){
             return false;
         }
         else{
@@ -49,17 +49,16 @@ public class RoomServiceImpl implements RoomService{
 
     @Override
     public void deleteUserFromRoom(Room room) {
-        Room roomTemp = room;
-        roomRepository.deleteById(room.getRoomId());
-        roomTemp.setUserId("none");
-        roomRepository.save(roomTemp);
+        roomRepository.deleteById(String.valueOf(room.getRoomId()));
+        room.setUserId("none");
+        roomRepository.save(room);
     }
 
     @Override
     public void deleteAllFromUser(String userId) {
         for (Room room : roomRepository.findAll()){
             if (room.getUserId().equals(userId)){
-                roomRepository.deleteById(room.getRoomId());
+                roomRepository.deleteById(String.valueOf(room.getRoomId()));
             }
         }
     }
