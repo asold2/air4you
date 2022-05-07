@@ -51,9 +51,10 @@ public class RoomController {
     }
     //Returns array list of all possible rooms
     @PostMapping("/all/rooms/")
-    public List<Room> getAllRooms(@RequestBody String userId){
+    public List<Room> getAllRooms(){
         System.out.println("Getting all rooms again again again again once more and again!!!");
-        System.out.println(userId + "!!!!!!1");
+//        System.out.println(userId + "!!!!!!1");
+//        return roomService.getRooms(userId);
         return roomService.getAllRooms();
     }
 

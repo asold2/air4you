@@ -3,11 +3,12 @@ package SEP4Data.air4you.measurement;
 
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name="measurement")
-public class Measurement {
+public class Measurement implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -3,10 +3,11 @@ package SEP4Data.air4you.threshold;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "threshold")
-public class Threshold {
+public class Threshold implements Serializable {
 
     @Id
     private int thresholdId;
