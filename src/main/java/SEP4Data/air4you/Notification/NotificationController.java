@@ -14,7 +14,7 @@ public class NotificationController {
 
     @GetMapping("/notification/")
     public void registerRoom(){
-        mainActivity.sendNotification("Title", "Content", new Data("DataBody", "DataTitle", "Key1"));
+        mainActivity.sendNotification( new Data("DataBody", "DataTitle", "Key1"));
         System.out.println("Skibadaba da");
     }
 }

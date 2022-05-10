@@ -12,9 +12,9 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 @Service
 public class MainActivity {
 
-    public void sendNotification(String title, String content, Data data){
+    public void sendNotification(Data data){
 
-        Notification notification = new Notification(title, content);
+
         PushNotification pushNotification = new PushNotification("eFv5k7HsQWucVQ0cs7E7Qh:APA91bFIcI0YG6qIcIesNdzbZPA_jnmu_pctycm_hG-QkgegVm3CeQr0KNSc1gYD3oEcqXmv3r5EZcA4z_QTbgnhnkal2b-eN5z9PdI88K6OPg21D0Hw9y6aXA_aqgHsfMum76isg09D", data);
 
         Retrofit retrofit = new Retrofit.Builder()
