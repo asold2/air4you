@@ -24,6 +24,8 @@ public class TempThresholdController {
     public List<TemperatureThreshold> getAllThrehsolds(){
         return tempThresholdService.getAllTempThresholds();
     }
+
+
     @PostMapping("/new/threshold/")
     public int addThreshold(@RequestBody TemperatureThreshold temperatureThreshold){
         if (tempThresholdService.addTempThreshold(temperatureThreshold)){

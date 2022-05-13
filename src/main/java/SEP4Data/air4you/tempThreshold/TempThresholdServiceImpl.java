@@ -1,5 +1,6 @@
 package SEP4Data.air4you.tempThreshold;
 
+import SEP4Data.air4you.room.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,8 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
 
     @Autowired
     private TempThresholdRepository tempThresholdRepository;
+    @Autowired
+    private RoomRepository roomRepository;
 
     @Override
     public List<TemperatureThreshold> getAllTempThresholds() {
@@ -38,6 +41,11 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
 
     @Override
     public boolean addTempThreshold(TemperatureThreshold temperatureThreshold) {
+
+        System.out.println();
+        if (roomRepository.findById(temperatureThreshold.getRoomId()).isEmpty()){
+            return false;
+        }
 
         List<TemperatureThreshold> roomsThresholds = new ArrayList<>();
         for (TemperatureThreshold temp: tempThresholdRepository.findAll()) {
