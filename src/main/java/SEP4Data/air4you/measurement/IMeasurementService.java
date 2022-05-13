@@ -12,4 +12,5 @@ public interface IMeasurementService {
     void deleteAllFromUser(String userId);
     void deleteAll();
 
+    Measurement getLastMeasurementByRoomId(String roomId);
 }

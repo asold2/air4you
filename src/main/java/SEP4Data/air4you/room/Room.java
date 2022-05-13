@@ -2,10 +2,7 @@ package SEP4Data.air4you.room;
 
 import SEP4Data.air4you.measurement.Measurement;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,6 +18,10 @@ public class Room implements Serializable {
     private LocalDateTime registrationDate;
     @OneToMany(mappedBy="roomId")
     private List<Measurement> measurements;
+//    private String notoficationToken;
+
+
+
 
 
     public Room() {
@@ -31,7 +32,7 @@ public class Room implements Serializable {
         this.userId = userId;
         this.name = name;
         this.registrationDate = registrationDate;
-        measurements = new ArrayList<>();
+        measurements = new ArrayList<Measurement>();
     }
 
     public String getName() {
@@ -42,7 +43,8 @@ public class Room implements Serializable {
         this.name = name;
     }
 
-    public List<Measurement> getMeasurements() {
+
+        public List<Measurement> getMeasurements() {
         return measurements;
     }
 
@@ -77,7 +79,6 @@ public class Room implements Serializable {
             this.getMeasurements().clear();
             this.getMeasurements().add(measurement);
         }
-
     }
 
     public LocalDateTime getRegistrationDate() {
@@ -85,4 +86,14 @@ public class Room implements Serializable {
     }
 
 
+    @Override
+    public String toString() {
+        return "Room{" +
+                "roomId='" + roomId + '\'' +
+                ", name='" + name + '\'' +
+                ", userId='" + userId + '\'' +
+                ", registrationDate=" + registrationDate +
+                ", measurements=" + measurements +
+                '}';
+    }
 }

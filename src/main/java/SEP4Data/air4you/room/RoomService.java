@@ -1,5 +1,6 @@
 package SEP4Data.air4you.room;
 
+import SEP4Data.air4you.measurement.Measurement;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,4 +19,6 @@ public interface RoomService {
     void deleteAllFromUser(String userId);
 
     Room getRoomById(String roomId);
+
+//    void setLatestMeasurementForRoom(Measurement measurement);
 }

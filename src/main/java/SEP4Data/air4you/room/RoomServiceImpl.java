@@ -1,12 +1,12 @@
 package SEP4Data.air4you.room;
 
+import SEP4Data.air4you.measurement.Measurement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class RoomServiceImpl implements RoomService{
@@ -39,6 +39,7 @@ public class RoomServiceImpl implements RoomService{
 
     @Override
     public List<Room> getAllRooms() {
+
         return roomRepository.findAll();
     }
 
@@ -67,5 +68,18 @@ public class RoomServiceImpl implements RoomService{
     public Room getRoomById(String roomId) {
         return roomRepository.getById(roomId);
     }
+
+//    @Override
+//    public void setLatestMeasurementForRoom(Measurement measurement) {
+//////        Room room = roomRepository.getById(measurement.getRoomId());
+//////        room.setLastMeasurement(measurement);
+//////        roomRepository.save(room);
+////        roomRepository.updateRoomMeasurement(measurement, measurement.getRoomId());
+//
+//        //        room.setLastMeasuremnt(measurement);
+////        roomRepository.deleteById(measurement.getRoomId());
+////        roomRepository.save(room);
+////        System.out.println(room.toString());
+//    }
 
 }

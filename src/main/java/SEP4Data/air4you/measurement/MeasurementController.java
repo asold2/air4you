@@ -25,8 +25,8 @@ public class MeasurementController {
     public void addMeasurement(@RequestBody Measurement measurement){
         System.out.println(measurement.toString());
 //        roomService.getRoomById(measurement.getRoomId()).setMeasurements(new ArrayList<Measurement>());
-
         measurementService.addMeasurement(measurement);
+//        roomService.setLatestMeasurementForRoom(measurement);
     }
 
     @GetMapping("/measurement/{roomId}")

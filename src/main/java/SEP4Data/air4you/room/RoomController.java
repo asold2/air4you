@@ -1,9 +1,7 @@
 package SEP4Data.air4you.room;
 
+import SEP4Data.air4you.measurement.IMeasurementService;
 import SEP4Data.air4you.measurement.Measurement;
-import SEP4Data.air4you.user.User;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,12 +14,13 @@ public class RoomController {
 
     @Autowired
     private RoomService roomService;
+    @Autowired
+    private IMeasurementService measurementService;
 
 
 
     @PostMapping("/room/")
     public int registerRoom(@RequestBody Room room){
-        System.out.println("testing");
         if(roomService.registerRoom(room)){
             return HttpServletResponse.SC_OK;
         }
@@ -41,7 +40,6 @@ public class RoomController {
     @PostMapping("/room/last/{userId}")
     public List<Room> getRoomsLastMeasurment(@PathVariable String userId){
         System.out.println(userId + "!!!!!!!!!!!!!!!");
-        Measurement measurement = null;
         List<Room> roomsToReturn = new ArrayList<>();
         for (Room room: roomService.getRooms(userId)) {
             room.onlyLastMeasurement();
@@ -53,8 +51,7 @@ public class RoomController {
     @PostMapping("/all/rooms/")
     public List<Room> getAllRooms(){
         System.out.println("Getting all rooms again again again again once more and again!!!");
-//        System.out.println(userId + "!!!!!!1");
-//        return roomService.getRooms(userId);
+
         return roomService.getAllRooms();
     }
 
