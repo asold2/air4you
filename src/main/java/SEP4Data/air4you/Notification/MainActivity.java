@@ -12,10 +12,10 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 @Service
 public class MainActivity {
 
-    public void sendNotification(String title, String content){
+    public void sendNotification(Data data){
 
-        Notification message = new Notification(title, content);
-        PushNotification data = new PushNotification(message,"eFv5k7HsQWucVQ0cs7E7Qh:APA91bFIcI0YG6qIcIesNdzbZPA_jnmu_pctycm_hG-QkgegVm3CeQr0KNSc1gYD3oEcqXmv3r5EZcA4z_QTbgnhnkal2b-eN5z9PdI88K6OPg21D0Hw9y6aXA_aqgHsfMum76isg09D");
+
+        PushNotification pushNotification = new PushNotification("eFv5k7HsQWucVQ0cs7E7Qh:APA91bFIcI0YG6qIcIesNdzbZPA_jnmu_pctycm_hG-QkgegVm3CeQr0KNSc1gYD3oEcqXmv3r5EZcA4z_QTbgnhnkal2b-eN5z9PdI88K6OPg21D0Hw9y6aXA_aqgHsfMum76isg09D", data);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -24,7 +24,7 @@ public class MainActivity {
                 .build();
 
         NotificationAPI apiService = retrofit.create(NotificationAPI.class);
-        Call<String> call = apiService.postNotification(data);
+        Call<String> call = apiService.postNotification(pushNotification);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {

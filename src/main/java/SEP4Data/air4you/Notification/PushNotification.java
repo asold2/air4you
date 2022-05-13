@@ -2,24 +2,25 @@ package SEP4Data.air4you.Notification;
 
 public class PushNotification {
 
-    private Notification notification;
+
+    private Data data;
     private String to;
 
-    public PushNotification(Notification notification, String to){
-        this.notification = notification;
+    public PushNotification( String to, Data data){
         this.to = to;
+        this.data = data;
     }
 
-    public PushNotification(Notification data){
-        this.notification = data;
+    public PushNotification(Data data){
+        this.data = data;
     }
 
-    public void setNotification(Notification data){
-        this.notification = data;
+    public void setNotification(Data data){
+        this.data = data;
     }
 
-    public Notification getNotification(){
-        return notification;
+    public Data getNotification(){
+        return data;
     }
 
     public String getTo(){
