@@ -12,12 +12,12 @@ public class NotificationController {
 
     @GetMapping("/notification/")
     public void registerRoom(){
-        mainActivity.sendNotification( new Data("DataBody", "DataTitle", "Key1"));
+        mainActivity.sendNotification("eFv5k7HsQWucVQ0cs7E7Qh:APA91bFIcI0YG6qIcIesNdzbZPA_jnmu_pctycm_hG-QkgegVm3CeQr0KNSc1gYD3oEcqXmv3r5EZcA4z_QTbgnhnkal2b-eN5z9PdI88K6OPg21D0Hw9y6aXA_aqgHsfMum76isg09D" ,new Data("DataBody", "DataTitle", "Key1"));
         System.out.println("Skibadaba da");
     }
 
     @PutMapping("/authenticate/")
-    public int authenticate(RequestBody UserId){
+    public int authenticate(RequestBody userId){
         return 1;
     }
 

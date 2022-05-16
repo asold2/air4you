@@ -8,5 +8,6 @@ public interface TokenService {
     boolean createToken(UserToken newUserToken);
     void deleteToken(UserToken oldUserToken);
     boolean updateToken(UserToken updatedUserToken);
+    String getToken(String uId);
 
 }
