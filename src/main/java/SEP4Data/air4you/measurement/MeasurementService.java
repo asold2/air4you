@@ -1,5 +1,8 @@
 package SEP4Data.air4you.measurement;
 
+import SEP4Data.air4you.humidityThreshold.HumidityThresholdRepository;
+import SEP4Data.air4you.tempThreshold.TempThresholdRepository;
+import SEP4Data.air4you.tempThreshold.TemperatureThreshold;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +15,19 @@ public class MeasurementService implements IMeasurementService{
     @Autowired
     MeasurementRepository measurementRepository;
 
+    @Autowired
+    HumidityThresholdRepository humidityThresholdRepository;
+
+    @Autowired
+    TempThresholdRepository tempThresholdRepository;
+
     @Override
     public void addMeasurement(Measurement measurement) {
 
             measurementRepository.save(measurement);
+
+            //TODO check if beyond threshold
+
 
     }
 
