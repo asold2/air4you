@@ -13,12 +13,15 @@ import javax.servlet.http.HttpServletResponse;
 public class TokenController{
 
     @Autowired
-    TokenService tokenService;
+    private TokenService tokenService;
+
+    public TokenController(TokenService tokenService){
+        this.tokenService = tokenService;
+    }
 
 
     @PostMapping("/token/")
     public int CreateToken(@RequestBody UserToken userToken){
-        tokenService.createToken(userToken);
         if( tokenService.createToken(userToken)){
             return HttpServletResponse.SC_OK;
         }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 public class TokenServiceImpl implements TokenService{
 
     @Autowired
-    TokenRepository tokenRepository;
+    private TokenRepository tokenRepository;
 
     @Override
     public boolean createToken(UserToken newUserToken) {

@@ -3,10 +3,10 @@ package SEP4Data.air4you.Notification.Token;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "user_token")
 public class UserToken {
     @SerializedName("uID")
     @Expose
@@ -23,6 +23,10 @@ public class UserToken {
     public UserToken(String uId, String token) {
         this.uId = uId;
         this.token = token;
+    }
+
+    public UserToken() {
+
     }
 
     public int getId() {
