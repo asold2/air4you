@@ -67,6 +67,13 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
         if(temperatureThreshold.getStartTime()==null || temperatureThreshold.getEndTime()==null){
             return false;
         }
+        else if(temperatureThreshold.getMax()<= temperatureThreshold.getMin()){
+            return false;
+        }
+
+//        else if(temperatureThreshold.getMin()>= temperatureThreshold.getMax()){
+//            return false;
+//        }
         tempThresholdRepository.save(temperatureThreshold);
         return  true;
     }
