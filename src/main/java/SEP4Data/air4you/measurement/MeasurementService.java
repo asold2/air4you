@@ -56,6 +56,7 @@ public class MeasurementService implements IMeasurementService{
              roomService.getAllRooms()) {
             if (room.getRoomId().equals(measurement.getRoomId())){
                 to = tokenService.getToken(room.getUserId());
+                System.out.println(to);
                 break;
             }
         }

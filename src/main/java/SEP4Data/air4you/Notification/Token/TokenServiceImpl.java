@@ -15,13 +15,8 @@ public class TokenServiceImpl implements TokenService{
 
     @Override
     public boolean createToken(UserToken newUserToken) {
-        if(tokenRepository.existsById(newUserToken.getId())){
-            return updateToken(newUserToken);
-        }
-        else{
-            tokenRepository.save(newUserToken);
-            return true;
-        }
+       tokenRepository.save(newUserToken);
+       return true;
     }
 
 
@@ -38,9 +33,10 @@ public class TokenServiceImpl implements TokenService{
 
     @Override
     public String getToken(String uId) {
-
+        System.out.println(uId + "!!!!!!!!@@#@#$");
         for (UserToken temp : tokenRepository.findAll())
         {
+            System.out.println(temp.getuId()+ "AAAAAAADSECDCE");
             if (temp.getuId().equals(uId))
             {
                return temp.getToken();
@@ -49,6 +45,16 @@ public class TokenServiceImpl implements TokenService{
         }
         return null;
 
+    }
+
+    @Override
+    public void deleteAll() {
+        tokenRepository.deleteAll();
+    }
+
+    @Override
+    public List<UserToken> getAllTokens() {
+        return tokenRepository.findAll();
     }
 
 

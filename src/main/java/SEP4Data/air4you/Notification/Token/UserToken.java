@@ -48,4 +48,12 @@ public class UserToken {
     public void setToken(String token) {
         this.token = token;
     }
+
+    public void setuId(String uId) {
+        this.uId = uId;
+    }
+
+    public void setId(int id) {
+        Id = id;
+    }
 }

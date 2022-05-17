@@ -1,5 +1,6 @@
 package SEP4Data.air4you.Notification.Token;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,11 @@ public class TokenController{
 
     public TokenController(TokenService tokenService){
         this.tokenService = tokenService;
+    }
+
+    @GetMapping("/all/tokens/")
+    public List<UserToken> getAllTokens(){
+        return tokenService.getAllTokens();
     }
 
 
@@ -31,6 +37,11 @@ public class TokenController{
     @PutMapping("/token/")
     public void DeleteToken(@RequestBody UserToken userToken){
         tokenService.deleteToken(userToken);
+    }
+
+    @DeleteMapping("delete/tokens/")
+    public void deleteAllTokens(){
+        tokenService.deleteAll();
     }
 
 
