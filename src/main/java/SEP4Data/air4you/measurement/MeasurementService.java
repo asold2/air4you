@@ -59,7 +59,7 @@ public class MeasurementService implements IMeasurementService{
                 break;
             }
         }
-        if (!to.equals(null)) {
+//        if (!to.equals(null)) {
 
 
             for (TemperatureThreshold threshold :
@@ -94,7 +94,7 @@ public class MeasurementService implements IMeasurementService{
 
             }
         }
-    }
+//    }
 
     @Override
     public List<Measurement> getMeasurements(String roomId) {
