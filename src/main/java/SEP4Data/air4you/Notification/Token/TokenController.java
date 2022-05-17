@@ -2,7 +2,6 @@ package SEP4Data.air4you.Notification.Token;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -19,13 +18,22 @@ public class TokenController{
 
     @GetMapping("/all/tokens/")
     public List<UserToken> getAllTokens(){
+        for (UserToken userToken:
+             tokenService.getAllTokens()) {
+            System.out.println(userToken.getUid());
+        }
+        System.out.println("Hello");
         return tokenService.getAllTokens();
     }
 
 
     @PostMapping("/token/")
     public int CreateToken(@RequestBody UserToken userToken){
+        System.out.println("Token has been created!");
+        System.out.println("UserToken Token: " + userToken.getToken());
+        System.out.println("UserToken UID: " + userToken.getUid());
         if( tokenService.createToken(userToken)){
+            tokenService.notifyUser(userToken.getToken());
             return HttpServletResponse.SC_OK;
         }
         else {
@@ -36,12 +44,12 @@ public class TokenController{
 
     @PutMapping("/token/")
     public void DeleteToken(@RequestBody UserToken userToken){
-        tokenService.deleteToken(userToken);
+        //tokenService.deleteToken(userToken);
     }
 
     @DeleteMapping("delete/tokens/")
     public void deleteAllTokens(){
-        tokenService.deleteAll();
+        //tokenService.deleteAll();
     }
 
 

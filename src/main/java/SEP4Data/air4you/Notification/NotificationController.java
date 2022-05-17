@@ -1,5 +1,6 @@
 package SEP4Data.air4you.Notification;
 
+import SEP4Data.air4you.Notification.Token.UserToken;
 import antlr.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +17,9 @@ public class NotificationController {
         System.out.println("Skibadaba da");
     }
 
-    @PutMapping("/authenticate/")
-    public int authenticate(RequestBody userId){
+    @PostMapping("/authenticate/")
+    public int authenticate(@RequestBody UserToken userToken){
+        mainActivity.sendNotification(userToken.getToken() ,new Data("DataBody", "DataTitle", "Key1"));
         return 1;
     }
 

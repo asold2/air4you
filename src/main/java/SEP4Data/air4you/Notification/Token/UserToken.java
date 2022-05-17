@@ -6,22 +6,18 @@ import com.google.gson.annotations.SerializedName;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "user_token")
+@Table(name = "tokens")
 public class UserToken {
-    @SerializedName("uID")
-    @Expose
-    private String uId;
+    private String uid;
 
-    @SerializedName("token")
-    @Expose
     private String token;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int Id;
 
-    public UserToken(String uId, String token) {
-        this.uId = uId;
+    public UserToken(String uid, String token) {
+        this.uid = uid;
         this.token = token;
     }
 
@@ -29,16 +25,16 @@ public class UserToken {
 
     }
 
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
     public int getId() {
         return Id;
-    }
-
-    public String getuId() {
-        return uId;
-    }
-
-    public void setId(String uId) {
-        this.uId = uId;
     }
 
     public String getToken() {
@@ -47,10 +43,6 @@ public class UserToken {
 
     public void setToken(String token) {
         this.token = token;
-    }
-
-    public void setuId(String uId) {
-        this.uId = uId;
     }
 
     public void setId(int id) {
