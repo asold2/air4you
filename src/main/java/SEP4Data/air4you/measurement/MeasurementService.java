@@ -15,7 +15,15 @@ import SEP4Data.air4you.tempThreshold.TemperatureThreshold;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -63,35 +71,48 @@ public class MeasurementService implements IMeasurementService{
 //        if (!to.equals(null)) {
 
 
+
+
             for (TemperatureThreshold threshold :
                     temperatureThresholds) {
-                if (measurement.getTemperature() > threshold.getMax()) {
-                    data = new Data("Temperature is too high", "Threshold has been reached", String.valueOf(measurement.getTemperature()));
 
-                    mainActivity.sendNotification(to,data);
+                if (isInsideThreshold(measurement.getDate(), threshold.getStartTime(), threshold.getEndTime()))
+                {
 
-                } else if (measurement.getTemperature() > threshold.getMin()) {
-                    data = new Data("Temperature is too low", "Threshold has been reached", String.valueOf(measurement.getTemperature()));
+                    if (measurement.getTemperature() > threshold.getMax())
+                    {
+                        data = new Data("Temperature is too high",
+                            "Threshold has been reached", String.valueOf(measurement.getTemperature()));
 
-                    mainActivity.sendNotification(to,data);
-                    // Todo send notification too low
+                        mainActivity.sendNotification(to, data);
+
+                    }
+                    else if (measurement.getTemperature() > threshold.getMin())
+                    {
+                        data = new Data("Temperature is too low",
+                            "Threshold has been reached", String.valueOf(measurement.getTemperature()));
+
+                        mainActivity.sendNotification(to, data);
+                        // Todo send notification too low
+                    }
                 }
-
             }
             for (HumidityThreshold threshold :
                     humidityThresholds) {
-                if (measurement.getHumidity() > threshold.getMax()) {
-                    data = new Data("Humidity is too high", "Threshold has been reached", String.valueOf(measurement.getTemperature()));
+                if (isInsideThreshold(measurement.getDate(), threshold.getStartTime(), threshold.getEndTime()))
+                {
+                    if (measurement.getHumidity() > threshold.getMax()) {
+                        data = new Data("Humidity is too high", "Threshold has been reached", String.valueOf(measurement.getTemperature()));
 
-                    mainActivity.sendNotification(to,data);
-                    // Todo send notification
-                } else if (measurement.getHumidity() > threshold.getMin()) {
-                    data = new Data("Humidity is too low", "Threshold has been reached", String.valueOf(measurement.getTemperature()));
+                        mainActivity.sendNotification(to,data);
+                        // Todo send notification
+                    } else if (measurement.getHumidity() > threshold.getMin()) {
+                        data = new Data("Humidity is too low", "Threshold has been reached", String.valueOf(measurement.getTemperature()));
 
-                    mainActivity.sendNotification(to,data);
-                    // Todo send notification too low
+                        mainActivity.sendNotification(to,data);
+                        // Todo send notification too low
+                    }
                 }
-
 
             }
         }
@@ -134,4 +155,27 @@ public class MeasurementService implements IMeasurementService{
         }
         return roomsMeasuremnts.get(roomsMeasuremnts.size()-1);
     }
+
+    private boolean isInsideThreshold(Date timestamp, LocalTime startTime, LocalTime endTime){
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(timestamp);
+
+        int measurementHour = calendar.get(Calendar.HOUR_OF_DAY);
+        int measurementMinute = calendar.get(Calendar.MINUTE);
+        int measurementSecond = calendar.get(Calendar.SECOND);
+
+        if (measurementHour > startTime.getHour() && measurementHour < endTime.getHour()){
+            if (measurementMinute > startTime.getMinute() && measurementMinute < endTime.getMinute()){
+                if (measurementSecond > startTime.getSecond() && measurementSecond < endTime.getSecond()){
+                    System.out.println("Inside threshold");
+                    return true;
+                }
+            }
+        }
+
+        System.out.println("Inside threshold");
+        return false;
+    }
+
 }
