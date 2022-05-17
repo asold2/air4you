@@ -38,8 +38,6 @@ public class TempThresholdController {
 
     @DeleteMapping("/remove/tempthresholds/{roomId}/{thresholdId}")
     public void deleteTempThreshold(@PathVariable String roomId, @PathVariable int thresholdId){
-        System.out.println(roomId + "!!!!!!!!");
-        System.out.println(thresholdId + "AAAAAAAa");
         tempThresholdService.deleteTempThreshold(roomId, thresholdId);
     }
 
