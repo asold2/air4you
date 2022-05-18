@@ -5,9 +5,10 @@ import java.util.List;
 
 
 public interface ITempThresholdService {
+
     List<TemperatureThreshold> getAllTempThresholds();
     boolean addTempThreshold(TemperatureThreshold temperatureThreshold);
-    void deleteTempThreshold(String roomId, int thresholdId);
+    void deleteTempThreshold(int Id);
     void updateTempThreshold(TemperatureThreshold temperatureThreshold);
 
 

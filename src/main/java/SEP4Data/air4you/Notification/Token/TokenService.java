@@ -12,8 +12,6 @@ public interface TokenService {
     boolean updateToken(UserToken updatedUserToken);
     void notifyUser(String token);
     String getToken(String uId);
-
     void deleteAll();
-
     List<UserToken> getAllTokens();
 }

@@ -8,9 +8,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "tokens")
 public class UserToken {
+
     @SerializedName("uID")
     private String uid;
-
     private String token;
 
     @Id
