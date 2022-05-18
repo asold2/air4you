@@ -8,7 +8,7 @@ public interface IHumidityThresholdService
 {
   List<HumidityThreshold> getAllHumidityThresholds();
   boolean addHumidityThreshold(HumidityThreshold humidityThreshold);
-  void deleteHumidityThreshold(String roomId, int thresholdId);
+  void deleteHumidityThreshold(int id);
   void updateHumidityThreshold(int thresholdId, double max, double min);
   List<HumidityThreshold> getAllHumidityThresholdsByRoomId(String roomId);
   void deleteAll();

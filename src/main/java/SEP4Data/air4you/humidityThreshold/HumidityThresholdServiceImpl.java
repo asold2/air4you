@@ -73,15 +73,9 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
   }
 
   @Override
-  public void deleteHumidityThreshold(String roomId, int thresholdId)
+  public void deleteHumidityThreshold(int id)
   {
-    for (HumidityThreshold temp : humidityThresholdRepository.findAll())
-    {
-      if (temp.getRoomId().equals(roomId) && temp.getId() == thresholdId)
-      {
-        humidityThresholdRepository.deleteById(thresholdId);
-      }
-    }
+    humidityThresholdRepository.deleteById(id);
   }
 
   @Override
