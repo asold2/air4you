@@ -51,7 +51,7 @@ public class MeasurementService implements IMeasurementService{
     RoomService roomService;
 
     @Override
-    public @ResponseBody Threshold addMeasurement(Measurement measurement) {
+    public  Threshold addMeasurement(Measurement measurement) {
 
             measurementRepository.save(measurement);
         System.out.println(returnCurrentTempThreshold(measurement.getRoomId()) + "BJHVGKHCFGCHYLYV!!!!!!!!!!!!");
@@ -151,7 +151,7 @@ public class MeasurementService implements IMeasurementService{
     }
 
     @Override
-    public @ResponseBody Threshold returnCurrentTempThreshold(String roomId) {
+    public  Threshold returnCurrentTempThreshold(String roomId) {
         LocalTime currentTime = LocalTime.now();
         TemperatureThreshold temperatureThreshold = null;
         for (TemperatureThreshold temp: tempThresholdService.getAllTempThresholdsByRoomId(roomId)) {

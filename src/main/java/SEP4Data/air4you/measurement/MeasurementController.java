@@ -1,5 +1,6 @@
 package SEP4Data.air4you.measurement;
 
+import SEP4Data.air4you.common.Threshold;
 import SEP4Data.air4you.room.RoomService;
 import SEP4Data.air4you.tempThreshold.TemperatureThreshold;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +24,10 @@ public class MeasurementController {
     }
 
     @PostMapping("/measurement/")
-    public void addMeasurement(@RequestBody Measurement measurement){
+    public @ResponseBody
+    Threshold addMeasurement(@RequestBody Measurement measurement){
         System.out.println(measurement.toString());
-        measurementService.addMeasurement(measurement);
-        //ToDo
-        //send back to iot thresholds that this measurement is in
-
-
-//        roomService.setLatestMeasurementForRoom(measurement);
+        return measurementService.addMeasurement(measurement);
     }
 
 
