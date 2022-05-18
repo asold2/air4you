@@ -37,7 +37,7 @@ public class HumidityThresholdController
   }
 
   @DeleteMapping("/remove/humidityThr/{roomId}/{thresholdId}")
-  public void deleteTempThreshold(@PathVariable String roomId, @PathVariable int thresholdId){
+  public void deleteHumidityThreshold(@PathVariable String roomId, @PathVariable int thresholdId){
     System.out.println(roomId + "!!!!!!!!");
     System.out.println(thresholdId + "AAAAAAAa");
     humidityThresholdService.deleteHumidityThreshold(roomId, thresholdId);
