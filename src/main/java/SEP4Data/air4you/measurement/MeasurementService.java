@@ -4,6 +4,7 @@ import SEP4Data.air4you.Notification.Data;
 import SEP4Data.air4you.Notification.MainActivity;
 import SEP4Data.air4you.Notification.PushNotification;
 import SEP4Data.air4you.Notification.Token.TokenService;
+import SEP4Data.air4you.common.Threshold;
 import SEP4Data.air4you.humidityThreshold.HumidityThreshold;
 import SEP4Data.air4you.humidityThreshold.HumidityThresholdRepository;
 import SEP4Data.air4you.humidityThreshold.IHumidityThresholdService;
@@ -14,6 +15,7 @@ import SEP4Data.air4you.tempThreshold.TempThresholdRepository;
 import SEP4Data.air4you.tempThreshold.TemperatureThreshold;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -32,6 +34,7 @@ public class MeasurementService implements IMeasurementService{
     @Autowired
     MeasurementRepository measurementRepository;
 
+
     @Autowired
     MainActivity mainActivity;
 
@@ -48,9 +51,10 @@ public class MeasurementService implements IMeasurementService{
     RoomService roomService;
 
     @Override
-    public void addMeasurement(Measurement measurement) {
+    public @ResponseBody Threshold addMeasurement(Measurement measurement) {
 
             measurementRepository.save(measurement);
+        System.out.println(returnCurrentTempThreshold(measurement.getRoomId()) + "BJHVGKHCFGCHYLYV!!!!!!!!!!!!");
 
         //TODO check if beyond threshold
 
@@ -64,10 +68,10 @@ public class MeasurementService implements IMeasurementService{
              roomService.getAllRooms()) {
             if (room.getRoomId().equals(measurement.getRoomId())){
                 to = tokenService.getToken(room.getUserId());
-                System.out.println(to);
                 break;
             }
         }
+
 //        if (!to.equals(null)) {
 
 
@@ -115,7 +119,8 @@ public class MeasurementService implements IMeasurementService{
                 }
 
             }
-        }
+            return returnCurrentTempThreshold(measurement.getRoomId());
+    }
 //    }
 
     @Override
@@ -143,6 +148,19 @@ public class MeasurementService implements IMeasurementService{
     @Override
     public void deleteAll() {
 
+    }
+
+    @Override
+    public @ResponseBody Threshold returnCurrentTempThreshold(String roomId) {
+        LocalTime currentTime = LocalTime.now();
+        TemperatureThreshold temperatureThreshold = null;
+        for (TemperatureThreshold temp: tempThresholdService.getAllTempThresholdsByRoomId(roomId)) {
+            if (temp.getStartTime().isBefore(currentTime) && temp.getEndTime().isAfter(currentTime)){
+                temperatureThreshold = temp;
+            }
+        }
+
+        return temperatureThreshold;
     }
 
     @Override

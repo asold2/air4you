@@ -1,6 +1,7 @@
 package SEP4Data.air4you.tempThreshold;
 
 import SEP4Data.air4you.Notification.Notification;
+import SEP4Data.air4you.common.Threshold;
 import SEP4Data.air4you.measurement.IMeasurementService;
 
 import javax.persistence.*;
@@ -10,7 +11,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "Temperature_thresholds")
-public class TemperatureThreshold {
+public class TemperatureThreshold extends Threshold {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int Id;

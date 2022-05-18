@@ -14,8 +14,8 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
     @Autowired
     private RoomRepository roomRepository;
 
-    @Autowired
-    private ISendTempThresholdToGateway sendTempThresholdToGateway;
+//    @Autowired
+//    private ISendTempThresholdToGateway sendTempThresholdToGateway;
 
     @Override
     public List<TemperatureThreshold> getAllTempThresholds() {
@@ -78,7 +78,10 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
 //            return false;
 //        }
         tempThresholdRepository.save(temperatureThreshold);
-        sendTempThresholdToGateway.sendTempThresholdToGateway(temperatureThreshold);
+        //check if the threshold is in the time frame
+        //method bellow should be removed
+        //instead look into Measurement Controller
+//        sendTempThresholdToGateway.sendTempThresholdToGateway(temperatureThreshold);
         return  true;
     }
 
@@ -93,8 +96,10 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
     }
 
     @Override
-    public void updateTempThreshold(int thresholdId, double max, double min) {
-
+    public void updateTempThreshold(TemperatureThreshold temperatureThreshold) {
+        System.out.println(temperatureThreshold.getId());
+        tempThresholdRepository.deleteById(temperatureThreshold.getId());
+        tempThresholdRepository.save(temperatureThreshold);
     }
 
 

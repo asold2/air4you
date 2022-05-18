@@ -47,4 +47,9 @@ public class TempThresholdController {
         tempThresholdService.deleteAll();
     }
 
+    @PutMapping("/updating/tempthreshold/")
+    public void updateTempThreshold(@RequestBody TemperatureThreshold temperatureThreshold){
+        tempThresholdService.updateTempThreshold(temperatureThreshold);
+    }
+
 }
