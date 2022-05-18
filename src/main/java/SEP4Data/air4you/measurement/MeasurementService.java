@@ -4,6 +4,8 @@ import SEP4Data.air4you.Notification.Data;
 import SEP4Data.air4you.Notification.MainActivity;
 import SEP4Data.air4you.Notification.PushNotification;
 import SEP4Data.air4you.Notification.Token.TokenService;
+import SEP4Data.air4you.co2Threshold.CO2Threshold;
+import SEP4Data.air4you.co2Threshold.ICO2ThresholdService;
 import SEP4Data.air4you.humidityThreshold.HumidityThreshold;
 import SEP4Data.air4you.humidityThreshold.HumidityThresholdRepository;
 import SEP4Data.air4you.humidityThreshold.IHumidityThresholdService;
@@ -41,6 +43,8 @@ public class MeasurementService implements IMeasurementService{
     @Autowired
     ITempThresholdService tempThresholdService;
 
+    @Autowired ICO2ThresholdService co2ThresholdService;
+
     @Autowired
     TokenService tokenService;
 
@@ -56,6 +60,7 @@ public class MeasurementService implements IMeasurementService{
 
         List<HumidityThreshold> humidityThresholds = humidityThresholdService.getAllHumidityThresholdsByRoomId(measurement.getRoomId());
         List<TemperatureThreshold> temperatureThresholds = tempThresholdService.getAllTempThresholdsByRoomId(measurement.getRoomId());
+        CO2Threshold co2Threshold = co2ThresholdService.getCO2Threshold();
 
         Data data;
         String to = null;
@@ -70,6 +75,20 @@ public class MeasurementService implements IMeasurementService{
         }
 //        if (!to.equals(null)) {
 
+
+
+            if (isInsideThreshold(measurement.getDate(), co2Threshold.getStartTime(), co2Threshold.getEndTime()))
+            {
+
+                if (measurement.getTemperature() > co2Threshold.getMaxCO2Value())
+                {
+                    data = new Data("Temperature is too high",
+                        "Threshold has been reached", String.valueOf(measurement.getTemperature()));
+
+                    mainActivity.sendNotification(to, data);
+
+                }
+            }
 
 
 
