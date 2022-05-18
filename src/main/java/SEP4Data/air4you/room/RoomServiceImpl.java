@@ -69,6 +69,13 @@ public class RoomServiceImpl implements RoomService{
         return roomRepository.getById(roomId);
     }
 
+    @Override
+    public void updateUserIdForRoom(String roomId, String userid) {
+        Room room = roomRepository.getById(roomId);
+        room.setUserId(userid);
+        roomRepository.save(room);
+    }
+
 //    @Override
 //    public void setLatestMeasurementForRoom(Measurement measurement) {
 //////        Room room = roomRepository.getById(measurement.getRoomId());

@@ -13,20 +13,20 @@ public class HumidityThresholdController
   @Autowired
   private IHumidityThresholdService humidityThresholdService;
 
-  @GetMapping("/thresholds/{roomId}")
+  @GetMapping("/humiditythresholds/{roomId}")
   public List<HumidityThreshold> getAllThresholdsByRoomIdHumidity(@PathVariable String roomId)
   {
     System.out.println(roomId + "!!!!!");
     return humidityThresholdService.getAllHumidityThresholdsByRoomId(roomId);
   }
 
-  @GetMapping("/all/thresholds/")
+  @GetMapping("/all/humiditythresholds/")
   public List<HumidityThreshold> getAllThrehsoldsHumidity()
   {
     return humidityThresholdService.getAllHumidityThresholds();
   }
 
-  @PostMapping("/new/threshold/")
+  @PostMapping("/new/humiditythresholds/")
   public int addThresholdHumidity(@RequestBody HumidityThreshold humidityThreshold){
     if (humidityThresholdService.addHumidityThreshold(humidityThreshold)){
       return HttpServletResponse.SC_OK;
@@ -36,14 +36,14 @@ public class HumidityThresholdController
     }
   }
 
-  @DeleteMapping("/remove/humidityThr/{roomId}/{thresholdId}")
+  @DeleteMapping("/remove/humiditythresholds/{roomId}/{thresholdId}")
   public void deleteHumidityThreshold(@PathVariable String roomId, @PathVariable int thresholdId){
     System.out.println(roomId + "!!!!!!!!");
     System.out.println(thresholdId + "AAAAAAAa");
     humidityThresholdService.deleteHumidityThreshold(roomId, thresholdId);
   }
 
-  @DeleteMapping("removal/thresh")
+  @DeleteMapping("/removal/humiditythresholds")
   public void deleteAll(){
     humidityThresholdService.deleteAll();
   }

@@ -15,18 +15,18 @@ public class TempThresholdController {
     @Autowired
     private ITempThresholdService tempThresholdService;
 
-    @GetMapping("/thresholds/{roomId}")
+    @GetMapping("/tempthresholds/{roomId}")
     public List<TemperatureThreshold> getAllThrehsoldsByRoomId(@PathVariable String roomId){
         System.out.println(roomId + "!!!!!");
         return tempThresholdService.getAllTempThresholdsByRoomId(roomId);
     }
-    @GetMapping("/all/thresholds/")
+    @GetMapping("/all/tempthresholds/")
     public List<TemperatureThreshold> getAllThrehsolds(){
         return tempThresholdService.getAllTempThresholds();
     }
 
 
-    @PostMapping("/new/threshold/")
+    @PostMapping("/new/tempthresholds/")
     public int addThreshold(@RequestBody TemperatureThreshold temperatureThreshold){
         if (tempThresholdService.addTempThreshold(temperatureThreshold)){
             return HttpServletResponse.SC_OK;
@@ -36,15 +36,13 @@ public class TempThresholdController {
         }
     }
 
-    @DeleteMapping("/remove/tempThr/{roomId}/{thresholdId}")
+    @DeleteMapping("/remove/tempthresholds/{roomId}/{thresholdId}")
     public void deleteTempThreshold(@PathVariable String roomId, @PathVariable int thresholdId){
-        System.out.println(roomId + "!!!!!!!!");
-        System.out.println(thresholdId + "AAAAAAAa");
         tempThresholdService.deleteTempThreshold(roomId, thresholdId);
     }
 
 
-    @DeleteMapping("removal/thresh")
+    @DeleteMapping("/removal/tempthresholds")
     public void deleteAll(){
         tempThresholdService.deleteAll();
     }

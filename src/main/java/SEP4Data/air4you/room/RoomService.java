@@ -20,5 +20,7 @@ public interface RoomService {
 
     Room getRoomById(String roomId);
 
+    void updateUserIdForRoom(String roomId, String userid);
+
 //    void setLatestMeasurementForRoom(Measurement measurement);
 }

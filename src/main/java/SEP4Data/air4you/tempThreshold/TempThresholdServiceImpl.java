@@ -14,6 +14,9 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
     @Autowired
     private RoomRepository roomRepository;
 
+    @Autowired
+    private ISendTempThresholdToGateway sendTempThresholdToGateway;
+
     @Override
     public List<TemperatureThreshold> getAllTempThresholds() {
         return tempThresholdRepository.findAll();
@@ -67,7 +70,15 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
         if(temperatureThreshold.getStartTime()==null || temperatureThreshold.getEndTime()==null){
             return false;
         }
+        else if(temperatureThreshold.getMax()<= temperatureThreshold.getMin()){
+            return false;
+        }
+
+//        else if(temperatureThreshold.getMin()>= temperatureThreshold.getMax()){
+//            return false;
+//        }
         tempThresholdRepository.save(temperatureThreshold);
+        sendTempThresholdToGateway.sendTempThresholdToGateway(temperatureThreshold);
         return  true;
     }
 

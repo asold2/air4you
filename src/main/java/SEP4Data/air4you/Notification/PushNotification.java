@@ -27,6 +27,10 @@ public class PushNotification {
         return to;
     }
 
+    public void setData(Data data) {
+        this.data = data;
+    }
+
     public void setTo(String recipient){
         this.to = recipient;
     }

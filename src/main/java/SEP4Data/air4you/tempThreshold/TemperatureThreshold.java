@@ -1,5 +1,8 @@
 package SEP4Data.air4you.tempThreshold;
 
+import SEP4Data.air4you.Notification.Notification;
+import SEP4Data.air4you.measurement.IMeasurementService;
+
 import javax.persistence.*;
 
 import java.time.LocalTime;
@@ -80,4 +83,5 @@ public class TemperatureThreshold {
             return  false;
         }
     }
+
 }

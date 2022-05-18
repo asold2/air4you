@@ -74,4 +74,9 @@ public class RoomController {
         roomService.deleteAll();
     }
 
+    @PostMapping("/change/user/{roomId}/{userId}")
+    public void changeUserIdForRoom(@PathVariable String roomId, @PathVariable String userId){
+        roomService.updateUserIdForRoom(roomId ,userId);
+    }
+
 }
