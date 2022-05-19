@@ -4,7 +4,6 @@ import SEP4Data.air4you.Notification.Data;
 import SEP4Data.air4you.Notification.MainActivity;
 import SEP4Data.air4you.Notification.PushNotification;
 import SEP4Data.air4you.Notification.Token.TokenService;
-import SEP4Data.air4you.common.Threshold;
 import SEP4Data.air4you.humidityThreshold.HumidityThreshold;
 import SEP4Data.air4you.humidityThreshold.HumidityThresholdRepository;
 import SEP4Data.air4you.humidityThreshold.IHumidityThresholdService;
@@ -13,6 +12,7 @@ import SEP4Data.air4you.room.RoomService;
 import SEP4Data.air4you.tempThreshold.ITempThresholdService;
 import SEP4Data.air4you.tempThreshold.TempThresholdRepository;
 import SEP4Data.air4you.tempThreshold.TemperatureThreshold;
+import SEP4Data.air4you.threshold.Threshold;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -51,9 +51,9 @@ public class MeasurementService implements IMeasurementService{
     RoomService roomService;
 
     @Override
-    public  Threshold addMeasurement(Measurement measurement) {
+    public Threshold addMeasurement(Measurement measurement) {
 
-            measurementRepository.save(measurement);
+        measurementRepository.save(measurement);
         System.out.println(returnCurrentTempThreshold(measurement.getRoomId()) + "BJHVGKHCFGCHYLYV!!!!!!!!!!!!");
 
         //TODO check if beyond threshold
@@ -71,9 +71,6 @@ public class MeasurementService implements IMeasurementService{
                 break;
             }
         }
-
-//        if (!to.equals(null)) {
-
 
 
 
@@ -119,7 +116,23 @@ public class MeasurementService implements IMeasurementService{
                 }
 
             }
-            return returnCurrentTempThreshold(measurement.getRoomId());
+
+        TemperatureThreshold tempThresh = returnCurrentTempThreshold(measurement.getRoomId());
+        HumidityThreshold humThresh = returnCurrentHumidityThreshold(measurement.getRoomId());
+
+
+
+//        try{
+//                tempThresh = returnCurrentTempThreshold(measurement.getRoomId());
+//                humThresh = returnCurrentHumidityThreshold(measurement.getRoomId());
+//        }catch(NullPointerException e){
+//            tempThresh = new TemperatureThreshold(0,0);
+//            humThresh = new HumidityThreshold(0,0);
+//            throw  e;
+//        }
+
+            Threshold thresholdToReturn = new Threshold(measurement.getRoomId(), tempThresh.getMin(), tempThresh.getMax(), humThresh.getMin(), humThresh.getMax());
+            return thresholdToReturn;
     }
 //    }
 
@@ -153,7 +166,7 @@ public class MeasurementService implements IMeasurementService{
     }
 
     @Override
-    public  Threshold returnCurrentTempThreshold(String roomId) {
+    public  TemperatureThreshold returnCurrentTempThreshold(String roomId) {
         LocalTime currentTime = LocalTime.now();
         TemperatureThreshold temperatureThreshold = null;
         for (TemperatureThreshold temp: tempThresholdService.getAllTempThresholdsByRoomId(roomId)) {
@@ -161,8 +174,25 @@ public class MeasurementService implements IMeasurementService{
                 temperatureThreshold = temp;
             }
         }
-
+        if(temperatureThreshold == null){
+            temperatureThreshold = new TemperatureThreshold(0,0);
+        }
         return temperatureThreshold;
+    }
+
+    @Override
+    public HumidityThreshold returnCurrentHumidityThreshold(String roomId) {
+        LocalTime currentTime = LocalTime.now();
+        HumidityThreshold humidityThreshold = null;
+        for (HumidityThreshold temp: humidityThresholdService.getAllHumidityThresholdsByRoomId(roomId)) {
+            if (temp.getStartTime().isBefore(currentTime) && temp.getEndTime().isAfter(currentTime)){
+                humidityThreshold = temp;
+            }
+        }
+        if(humidityThreshold == null){
+            humidityThreshold = new HumidityThreshold(0,0);
+        }
+        return humidityThreshold;
     }
 
     @Override

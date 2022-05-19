@@ -74,14 +74,8 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
             return false;
         }
 
-//        else if(temperatureThreshold.getMin()>= temperatureThreshold.getMax()){
-//            return false;
-//        }
+
         tempThresholdRepository.save(temperatureThreshold);
-        //check if the threshold is in the time frame
-        //method bellow should be removed
-        //instead look into Measurement Controller
-//        sendTempThresholdToGateway.sendTempThresholdToGateway(temperatureThreshold);
         return  true;
     }
 
@@ -92,9 +86,9 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
 
     @Override
     public void updateTempThreshold(TemperatureThreshold temperatureThreshold) {
-        System.out.println(temperatureThreshold.getId());
-        tempThresholdRepository.deleteById(temperatureThreshold.getId());
-        tempThresholdRepository.save(temperatureThreshold);
+        System.out.println(temperatureThreshold.getId() + "!!!!!!!!!!!!!!!!!!!!");
+        //Not working. add id in path
+        tempThresholdRepository.updateTempThreshold(temperatureThreshold.getMax(), temperatureThreshold.getMin(), temperatureThreshold.getId());
     }
 
 

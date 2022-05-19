@@ -60,6 +60,7 @@ public class TempThresholdController {
     @PutMapping("/updating/tempThreshold/")
     public void updateTempThreshold(@RequestBody TemperatureThreshold temperatureThreshold){
         tempThresholdService.updateTempThreshold(temperatureThreshold);
+
     }
 
 }
