@@ -79,7 +79,7 @@ public class MeasurementService implements IMeasurementService{
                         mainActivity.sendNotification(to, data);
 
                     }
-                    else if (measurement.getTemperature() > threshold.getMin())
+                    else if (measurement.getTemperature() < threshold.getMin())
                     {
                         data.setBody("Temperature is too low");
                         data.setTitle("Threshold has been reached");
@@ -103,7 +103,7 @@ public class MeasurementService implements IMeasurementService{
                         measurement.setHumidityExceeded(true);
                         mainActivity.sendNotification(to,data);
                         // Todo send notification
-                    } else if (measurement.getHumidity() > threshold.getMin()) {
+                    } else if (measurement.getHumidity() < threshold.getMin()) {
                         data.setBody("Humidity is too low");
                         data.setTitle("Threshold has been reached");
                         data.setExceeded(true);
