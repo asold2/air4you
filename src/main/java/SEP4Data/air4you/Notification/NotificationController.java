@@ -19,7 +19,7 @@ public class NotificationController {
 
     @PostMapping("/authenticate/")
     public int authenticate(@RequestBody UserToken userToken){
-        mainActivity.sendNotification(userToken.getToken() ,new Data("DataBody", "DataTitle", "Key1"));
+        mainActivity.sendNotification(userToken.getToken() ,new Data("DataBody", "DataTitle", "exceeded"));
         return 1;
     }
 

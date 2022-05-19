@@ -26,7 +26,7 @@ public class MeasurementController {
     @PostMapping("/measurement/")
     public @ResponseBody
     Threshold addMeasurement(@RequestBody Measurement measurement){
-        System.out.println(measurement.toString());
+        System.out.println(measurement.toString() + " add measurement" );
         return measurementService.addMeasurement(measurement);
     }
 

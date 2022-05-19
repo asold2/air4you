@@ -43,8 +43,8 @@ public class TokenController{
     }
 
     @PutMapping("/token/")
-    public void DeleteToken(@RequestBody UserToken userToken){
-        //tokenService.deleteToken(userToken);
+    public int DeleteToken(@RequestBody UserToken userToken){
+       return tokenService.deleteToken(userToken);
     }
 
     @DeleteMapping("delete/tokens/")

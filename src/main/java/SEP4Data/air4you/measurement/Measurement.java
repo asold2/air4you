@@ -19,8 +19,8 @@ public class Measurement implements Serializable {
     private double humidity;
     private double co2;
 
-    public Measurement(Date timestamp, String  roomId, double temperature, double humidity, double co2){
-        this.date = timestamp;
+    public Measurement(Date date, String  roomId, double temperature, double humidity, double co2){
+        this.date = date;
         this.roomId = roomId;
         this.temperature = temperature;
         this.humidity = humidity;
