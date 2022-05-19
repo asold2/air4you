@@ -5,6 +5,7 @@ import SEP4Data.air4you.Notification.MainActivity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Service
@@ -24,8 +25,9 @@ public class TokenServiceImpl implements TokenService{
 
 
     @Override
-    public void deleteToken(UserToken oldUserToken) {
+    public int deleteToken(UserToken oldUserToken) {
         tokenRepository.delete(oldUserToken);
+        return HttpServletResponse.SC_OK;
     }
 
     @Override

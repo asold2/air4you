@@ -125,7 +125,9 @@ public class MeasurementService implements IMeasurementService{
 
     @Override
     public List<Measurement> getMeasurements(String roomId) {
+
         List<Measurement> toReturn = new ArrayList<>();
+
         for (Measurement measurement:measurementRepository.findAll()) {
             if(measurement.getRoomId().equals(roomId)){
                 toReturn.add(measurement);

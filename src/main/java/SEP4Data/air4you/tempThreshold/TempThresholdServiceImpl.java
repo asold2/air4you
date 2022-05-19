@@ -85,14 +85,9 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
         return  true;
     }
 
-    @Override
-    public void deleteTempThreshold(String roomId, int thresholdId) {
-        for (TemperatureThreshold temp: tempThresholdRepository.findAll()) {
-            if(temp.getRoomId().equals(roomId) && temp.getId() == thresholdId){
-                tempThresholdRepository.deleteById(thresholdId);
-            }
-        }
-
+    public void deleteTempThreshold(int id)
+    {
+        tempThresholdRepository.deleteById(id);
     }
 
     @Override
