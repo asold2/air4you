@@ -51,6 +51,8 @@ public class MeasurementService implements IMeasurementService{
         measurement.setTemperatureExceeded(false);
 
         Data data = new Data();
+        data.setBody("");
+        data.setTitle("");
         data.setExceeded(false);
         String to = null;
 
@@ -76,8 +78,6 @@ public class MeasurementService implements IMeasurementService{
                         data.setExceeded(true);
 
                         measurement.setTemperatureExceeded(true);
-                        mainActivity.sendNotification(to, data);
-
                     }
                     else if (measurement.getTemperature() < threshold.getMin())
                     {
@@ -86,8 +86,6 @@ public class MeasurementService implements IMeasurementService{
                         data.setExceeded(true);
 
                         measurement.setTemperatureExceeded(true);
-                        mainActivity.sendNotification(to, data);
-                        // Todo send notification too low
                     }
                 }
             }
@@ -101,16 +99,12 @@ public class MeasurementService implements IMeasurementService{
                         data.setExceeded(true);
 
                         measurement.setHumidityExceeded(true);
-                        mainActivity.sendNotification(to,data);
-                        // Todo send notification
                     } else if (measurement.getHumidity() < threshold.getMin()) {
                         data.setBody("Humidity is too low");
                         data.setTitle("Threshold has been reached");
                         data.setExceeded(true);
 
                         measurement.setHumidityExceeded(true);
-                        mainActivity.sendNotification(to,data);
-                        // Todo send notification too low
                     }
                 }
 
@@ -121,8 +115,10 @@ public class MeasurementService implements IMeasurementService{
                 data.setBody("Co2 is too high");
                 data.setTitle("Threshold has been reached");
                 data.setExceeded(true);
-                mainActivity.sendNotification(to,data);
             }
+
+
+            mainActivity.sendNotification(to,data);
 
             measurementRepository.save(measurement);
 
