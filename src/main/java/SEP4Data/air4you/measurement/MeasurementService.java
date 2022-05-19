@@ -2,28 +2,18 @@ package SEP4Data.air4you.measurement;
 
 import SEP4Data.air4you.Notification.Data;
 import SEP4Data.air4you.Notification.MainActivity;
-import SEP4Data.air4you.Notification.PushNotification;
 import SEP4Data.air4you.Notification.Token.TokenService;
-import SEP4Data.air4you.common.Threshold;
 import SEP4Data.air4you.humidityThreshold.HumidityThreshold;
-import SEP4Data.air4you.humidityThreshold.HumidityThresholdRepository;
 import SEP4Data.air4you.humidityThreshold.IHumidityThresholdService;
 import SEP4Data.air4you.room.Room;
 import SEP4Data.air4you.room.RoomService;
 import SEP4Data.air4you.tempThreshold.ITempThresholdService;
-import SEP4Data.air4you.tempThreshold.TempThresholdRepository;
 import SEP4Data.air4you.tempThreshold.TemperatureThreshold;
 import SEP4Data.air4you.threshold.Threshold;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.sql.Time;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -51,13 +41,14 @@ public class MeasurementService implements IMeasurementService{
     @Override
     public Threshold addMeasurement(Measurement measurement) {
 
-        measurementRepository.save(measurement);
-        System.out.println(returnCurrentTempThreshold(measurement.getRoomId()) + "BJHVGKHCFGCHYLYV!!!!!!!!!!!!");
-
         //TODO check if beyond threshold
 
         List<HumidityThreshold> humidityThresholds = humidityThresholdService.getAllHumidityThresholdsByRoomId(measurement.getRoomId());
         List<TemperatureThreshold> temperatureThresholds = tempThresholdService.getAllTempThresholdsByRoomId(measurement.getRoomId());
+
+        measurement.setCo2Exceeded(false);
+        measurement.setHumidityExceeded(false);
+        measurement.setTemperatureExceeded(false);
 
         Data data = new Data();
         data.setExceeded(false);
@@ -138,21 +129,9 @@ public class MeasurementService implements IMeasurementService{
             mainActivity.sendNotification(to,data);
 
             measurementRepository.save(measurement);
-            return returnCurrentTempThreshold(measurement.getRoomId());
 
         TemperatureThreshold tempThresh = returnCurrentTempThreshold(measurement.getRoomId());
         HumidityThreshold humThresh = returnCurrentHumidityThreshold(measurement.getRoomId());
-
-
-
-//        try{
-//                tempThresh = returnCurrentTempThreshold(measurement.getRoomId());
-//                humThresh = returnCurrentHumidityThreshold(measurement.getRoomId());
-//        }catch(NullPointerException e){
-//            tempThresh = new TemperatureThreshold(0,0);
-//            humThresh = new HumidityThreshold(0,0);
-//            throw  e;
-//        }
 
             Threshold thresholdToReturn = new Threshold(measurement.getRoomId(), tempThresh.getMin(), tempThresh.getMax(), humThresh.getMin(), humThresh.getMax());
             return thresholdToReturn;
