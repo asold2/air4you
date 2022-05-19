@@ -1,8 +1,8 @@
 package SEP4Data.air4you.measurement;
 
-import SEP4Data.air4you.common.Threshold;
 import SEP4Data.air4you.room.RoomService;
 import SEP4Data.air4you.tempThreshold.TemperatureThreshold;
+import SEP4Data.air4you.threshold.Threshold;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,12 +51,6 @@ public class MeasurementController {
     public void removeMeasurement(){
         measurementService.deleteAll();
     }
-
-
-
-
-
-
 
 
 }

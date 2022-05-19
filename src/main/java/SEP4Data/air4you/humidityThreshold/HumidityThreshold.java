@@ -17,6 +17,10 @@ public class HumidityThreshold
   private double max;
 
   public HumidityThreshold(){}
+  public HumidityThreshold(double max, double min){
+    this.max = max;
+    this.min = min;
+  }
 
   public HumidityThreshold(String roomId, LocalTime startTime, LocalTime endTime, double min, double max)
   {

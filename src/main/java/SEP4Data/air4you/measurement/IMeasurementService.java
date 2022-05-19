@@ -1,7 +1,8 @@
 package SEP4Data.air4you.measurement;
 
-import SEP4Data.air4you.common.Threshold;
+import SEP4Data.air4you.humidityThreshold.HumidityThreshold;
 import SEP4Data.air4you.tempThreshold.TemperatureThreshold;
+import SEP4Data.air4you.threshold.Threshold;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +14,8 @@ public interface IMeasurementService {
     void deleteAllFromRoom(String roomId);
     void deleteAllFromUser(String userId);
     void deleteAll();
-    Threshold returnCurrentTempThreshold(String roomId);
+    TemperatureThreshold returnCurrentTempThreshold(String roomId);
+    HumidityThreshold returnCurrentHumidityThreshold(String roomId);
 
     Measurement getLastMeasurementByRoomId(String roomId);
 }

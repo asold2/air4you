@@ -1,8 +1,8 @@
 package SEP4Data.air4you.tempThreshold;
 
 import SEP4Data.air4you.Notification.Notification;
-import SEP4Data.air4you.common.Threshold;
 import SEP4Data.air4you.measurement.IMeasurementService;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 
@@ -11,9 +11,10 @@ import java.util.Date;
 
 @Entity
 @Table(name = "Temperature_thresholds")
-public class TemperatureThreshold extends Threshold {
+public class TemperatureThreshold {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+//    @JsonProperty("Id")
     private int Id;
     private String roomId;
     private LocalTime startTime;
@@ -22,6 +23,10 @@ public class TemperatureThreshold extends Threshold {
     private double max;
 
     public TemperatureThreshold(){}
+    public TemperatureThreshold(double max, double min){
+        this.max = max;
+        this.min = min;
+    }
 
     public TemperatureThreshold(String roomId, LocalTime startTime, LocalTime endTime, double min, double max) {
         this.roomId = roomId;
@@ -33,6 +38,10 @@ public class TemperatureThreshold extends Threshold {
 
     public int getId() {
         return Id;
+    }
+
+    public void setId(int id) {
+        Id = id;
     }
 
     public String getRoomId() {
