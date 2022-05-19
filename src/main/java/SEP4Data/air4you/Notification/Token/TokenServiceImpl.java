@@ -19,8 +19,12 @@ public class TokenServiceImpl implements TokenService{
 
     @Override
     public boolean createToken(UserToken newUserToken) {
-       tokenRepository.save(newUserToken);
-       return true;
+        if(tokenRepository.findUserTokenByUid(newUserToken.getUid()).isEmpty()){
+            tokenRepository.save(newUserToken);
+            return true;
+        }
+        tokenRepository.updateUserToken(newUserToken.getToken(), newUserToken.getUid());
+        return true;
     }
 
 
@@ -32,13 +36,13 @@ public class TokenServiceImpl implements TokenService{
 
     @Override
     public boolean updateToken(UserToken updatedUserToken) {
-       tokenRepository.save(updatedUserToken);
+       tokenRepository.updateUserToken(updatedUserToken.getToken(), updatedUserToken.getUid());
        return true;
     }
 
     @Override
     public void notifyUser(String token) {
-        mainActivity.sendNotification(token,new Data("You have been given a new token","New Token!","This is random data"));
+        mainActivity.sendNotification(token,new Data("You have been given a new token","New Token!",true));
     }
 
     @Override

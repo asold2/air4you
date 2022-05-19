@@ -33,11 +33,8 @@ public class MeasurementService implements IMeasurementService{
 
     @Autowired
     MeasurementRepository measurementRepository;
-
-
     @Autowired
     MainActivity mainActivity;
-
     @Autowired
     IHumidityThresholdService humidityThresholdService;
 
@@ -53,7 +50,6 @@ public class MeasurementService implements IMeasurementService{
     @Override
     public  Threshold addMeasurement(Measurement measurement) {
 
-            measurementRepository.save(measurement);
         System.out.println(returnCurrentTempThreshold(measurement.getRoomId()) + "BJHVGKHCFGCHYLYV!!!!!!!!!!!!");
 
         //TODO check if beyond threshold
@@ -61,8 +57,12 @@ public class MeasurementService implements IMeasurementService{
         List<HumidityThreshold> humidityThresholds = humidityThresholdService.getAllHumidityThresholdsByRoomId(measurement.getRoomId());
         List<TemperatureThreshold> temperatureThresholds = tempThresholdService.getAllTempThresholdsByRoomId(measurement.getRoomId());
 
-        Data data;
+        Data data = new Data();
+        data.setExceeded(false);
         String to = null;
+        System.out.println("Measurement 1");
+
+
 
         for (Room room:
              roomService.getAllRooms()) {
@@ -80,22 +80,28 @@ public class MeasurementService implements IMeasurementService{
             for (TemperatureThreshold threshold :
                     temperatureThresholds) {
 
+                System.out.println("Measurement 2");
+
                 if (isInsideThreshold(measurement.getDate(), threshold.getStartTime(), threshold.getEndTime()))
                 {
-
                     if (measurement.getTemperature() > threshold.getMax())
                     {
-                        data = new Data("Temperature is too high",
-                            "Threshold has been reached", String.valueOf(measurement.getTemperature()));
+                        data.setBody("Temperature is too high");
+                        data.setTitle("Threshold has been reached");
+                        data.setExceeded(true);
 
+                        measurement.setTemperatureExceeded(true);
                         mainActivity.sendNotification(to, data);
+
 
                     }
                     else if (measurement.getTemperature() > threshold.getMin())
                     {
-                        data = new Data("Temperature is too low",
-                            "Threshold has been reached", String.valueOf(measurement.getTemperature()));
+                        data.setBody("Temperature is too low");
+                        data.setTitle("Threshold has been reached");
+                        data.setExceeded(true);
 
+                        measurement.setTemperatureExceeded(true);
                         mainActivity.sendNotification(to, data);
                         // Todo send notification too low
                     }
@@ -106,19 +112,39 @@ public class MeasurementService implements IMeasurementService{
                 if (isInsideThreshold(measurement.getDate(), threshold.getStartTime(), threshold.getEndTime()))
                 {
                     if (measurement.getHumidity() > threshold.getMax()) {
-                        data = new Data("Humidity is too high", "Threshold has been reached", String.valueOf(measurement.getTemperature()));
+                        data.setBody("Humidity is too high");
+                        data.setTitle("Threshold has been reached");
+                        data.setExceeded(true);
 
+                        measurement.setHumidityExceeded(true);
                         mainActivity.sendNotification(to,data);
                         // Todo send notification
                     } else if (measurement.getHumidity() > threshold.getMin()) {
-                        data = new Data("Humidity is too low", "Threshold has been reached", String.valueOf(measurement.getTemperature()));
+                        data.setBody("Humidity is too low");
+                        data.setTitle("Threshold has been reached");
+                        data.setExceeded(true);
 
+                        measurement.setHumidityExceeded(true);
                         mainActivity.sendNotification(to,data);
                         // Todo send notification too low
                     }
                 }
 
             }
+
+            if(measurement.getCo2() > 600){
+                measurement.setCo2Exceeded(true);
+                data.setBody("Co2 is too high");
+                data.setTitle("Threshold has been reached");
+                data.setExceeded(true);
+                mainActivity.sendNotification(to,data);
+            }
+
+
+
+            mainActivity.sendNotification(to,data);
+
+            measurementRepository.save(measurement);
             return returnCurrentTempThreshold(measurement.getRoomId());
     }
 //    }
@@ -149,7 +175,7 @@ public class MeasurementService implements IMeasurementService{
 
     @Override
     public void deleteAll() {
-
+        measurementRepository.deleteAll();
     }
 
     @Override
@@ -182,15 +208,21 @@ public class MeasurementService implements IMeasurementService{
 
         int measurementHour = calendar.get(Calendar.HOUR_OF_DAY);
         int measurementMinute = calendar.get(Calendar.MINUTE);
-        int measurementSecond = calendar.get(Calendar.SECOND);
+
+        System.out.println("Time check 1");
 
         if (measurementHour > startTime.getHour() && measurementHour < endTime.getHour()){
+            System.out.println("Time check 2");
+            return true;
+
+        } else if (measurementHour == startTime.getHour() || measurementHour == endTime.getHour()){
+
             if (measurementMinute > startTime.getMinute() && measurementMinute < endTime.getMinute()){
-                if (measurementSecond > startTime.getSecond() && measurementSecond < endTime.getSecond()){
-                    System.out.println("Inside threshold");
-                    return true;
-                }
+                System.out.println("Time check 3");
+                System.out.println("Inside threshold");
+                return true;
             }
+
         }
 
         System.out.println("Inside threshold");
