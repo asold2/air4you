@@ -124,14 +124,10 @@ public class MeasurementService implements IMeasurementService{
                 mainActivity.sendNotification(to,data);
             }
 
-
-
-            mainActivity.sendNotification(to,data);
-
             measurementRepository.save(measurement);
 
-        TemperatureThreshold tempThresh = returnCurrentTempThreshold(measurement.getRoomId());
-        HumidityThreshold humThresh = returnCurrentHumidityThreshold(measurement.getRoomId());
+            TemperatureThreshold tempThresh = returnCurrentTempThreshold(measurement.getRoomId());
+            HumidityThreshold humThresh = returnCurrentHumidityThreshold(measurement.getRoomId());
 
             Threshold thresholdToReturn = new Threshold(measurement.getRoomId(), tempThresh.getMin(), tempThresh.getMax(), humThresh.getMin(), humThresh.getMax());
             return thresholdToReturn;
