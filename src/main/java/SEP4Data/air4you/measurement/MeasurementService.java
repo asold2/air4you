@@ -175,7 +175,6 @@ public class MeasurementService implements IMeasurementService{
     }
 
     private boolean isInsideThreshold(Date timestamp, LocalTime startTime, LocalTime endTime){
-
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(timestamp);
 

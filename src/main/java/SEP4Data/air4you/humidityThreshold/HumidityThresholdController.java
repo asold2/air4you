@@ -26,7 +26,7 @@ public class HumidityThresholdController
     return humidityThresholdService.getAllHumidityThresholds();
   }
 
-  @PostMapping("/new/humiditythresholds/")
+  @PostMapping("/humidityThresholds/")
   public int addThresholdHumidity(@RequestBody HumidityThreshold humidityThreshold){
     if (humidityThresholdService.addHumidityThreshold(humidityThreshold)){
       return HttpServletResponse.SC_OK;
@@ -51,8 +51,9 @@ public class HumidityThresholdController
     }
   }
 
-  @DeleteMapping("/removal/humiditythresholds")
-  public void deleteAll(){
+  @DeleteMapping("/humidityThresholds/all/")
+  public void deleteAllHumidityThresholds(){
     humidityThresholdService.deleteAll();
   }
+
 }
