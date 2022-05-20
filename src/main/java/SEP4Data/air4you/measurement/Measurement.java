@@ -29,9 +29,6 @@ public class Measurement implements Serializable {
         this.temperature = temperature;
         this.humidity = humidity;
         this.co2 = co2;
-//        this.co2Exceeded = false;
-//        this.temperatureExceeded = false;
-//        this.humidityExceeded = false;
     }
 
 

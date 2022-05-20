@@ -180,6 +180,7 @@ public class MeasurementService implements IMeasurementService{
         for (TemperatureThreshold temp: tempThresholdService.getAllTempThresholdsByRoomId(roomId)) {
             if (temp.getStartTime().isBefore(currentTime) && temp.getEndTime().isAfter(currentTime)){
                 temperatureThreshold = temp;
+                System.out.printf("TempThreshold ID: " + temp.getId());
             }
         }
         if(temperatureThreshold == null){
@@ -220,16 +221,21 @@ public class MeasurementService implements IMeasurementService{
 
         int measurementHour = calendar.get(Calendar.HOUR_OF_DAY);
         int measurementMinute = calendar.get(Calendar.MINUTE);
-        System.out.println(measurementHour + ":"+ measurementMinute+ "AAAAAAAAAAABBBBBBBBBCCCCCCCC" + startTime.getHour()+":"+ startTime.getMinute());
 
-        if (measurementHour >= startTime.getHour() && measurementHour <= endTime.getHour()){
-            return true;
-        } else if (measurementHour == startTime.getHour() || measurementHour == endTime.getHour()){
-            if (measurementMinute > startTime.getMinute() && measurementMinute < endTime.getMinute()){
+        if(startTime != null && endTime != null) {
+
+            System.out.println(measurementHour + ":" + measurementMinute + "AAAAAAAAAAABBBBBBBBBCCCCCCCC" + startTime.getHour() + ":" + startTime.getMinute());
+
+            if (measurementHour >= startTime.getHour() && measurementHour <= endTime.getHour()) {
                 return true;
+            } else if (measurementHour == startTime.getHour() || measurementHour == endTime.getHour()) {
+                if (measurementMinute > startTime.getMinute() && measurementMinute < endTime.getMinute()) {
+                    return true;
+                }
             }
+            return false;
         }
-        return false;
+        return true;
     }
 
 }

@@ -46,7 +46,7 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
     public boolean addTempThreshold(TemperatureThreshold temperatureThreshold) {
 
         System.out.println();
-        if (roomRepository.findById(temperatureThreshold.getRoomId()).isEmpty()){
+        if (roomRepository.findById(temperatureThreshold.getRoomId()).isPresent()){
             return false;
         }
 

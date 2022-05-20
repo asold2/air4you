@@ -24,11 +24,9 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
   }
 
   @Override
-  public boolean addHumidityThreshold(
-      HumidityThreshold humidityThreshold)
+  public boolean addHumidityThreshold(HumidityThreshold humidityThreshold)
   {
-    System.out.println();
-    if (roomRepository.findById(humidityThreshold.getRoomId()).isEmpty())
+    if (roomRepository.findById(humidityThreshold.getRoomId()).isPresent())
     {
       return false;
     }
@@ -48,6 +46,7 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
           && ((humidityThreshold.getStartTime().isBefore(temp.getEndTime())))
           || humidityThreshold.getStartTime().equals(temp.getEndTime()))
       {
+        System.out.println("Humdity add 3");
         return false;
       }
       else if (humidityThreshold.getEndTime().isAfter(temp.getStartTime())
@@ -55,19 +54,23 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
           (humidityThreshold.getEndTime().equals(temp.getEndTime()))
               || humidityThreshold.getEndTime().equals(temp.getStartTime())))
       {
+        System.out.println("Humdity add 4");
         return false;
       }
       else if (humidityThreshold.contains(temp))
       {
+        System.out.println("Humdity add 5");
         return false;
       }
     }
     if (humidityThreshold.getStartTime() == null
         || humidityThreshold.getEndTime() == null)
     {
+      System.out.println("Humdity add 6");
       return false;
     }
     humidityThresholdRepository.save(humidityThreshold);
+    System.out.println("Humdity add 7");
     return true;
 
   }
