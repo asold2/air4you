@@ -56,4 +56,8 @@ public class HumidityThresholdController
     humidityThresholdService.deleteAll();
   }
 
+  @PutMapping("/humidityThresholds/")
+  public void updateHumidityThreshold(@RequestBody HumidityThreshold humidityThreshold){
+    humidityThresholdService.updateHumidityThreshold((humidityThreshold));
+  }
 }

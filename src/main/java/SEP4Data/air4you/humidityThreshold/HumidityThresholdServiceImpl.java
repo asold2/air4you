@@ -79,13 +79,6 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
   }
 
   @Override
-  public void updateHumidityThreshold(int thresholdId, double max,
-      double min)
-  {
-
-  }
-
-  @Override
   public List<HumidityThreshold> getAllHumidityThresholdsByRoomId(
       String roomId)
   {
@@ -108,5 +101,12 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
   public void deleteAll()
   {
     humidityThresholdRepository.deleteAll();
+  }
+
+  @Override
+  public void updateHumidityThreshold(HumidityThreshold humidityThreshold){
+    System.out.println(humidityThreshold.getId() + "!!!!!!!!!!!!!!!!!!!!!!!!");
+    //Not working. add id in path
+    humidityThresholdRepository.updateHumidityThreshold(humidityThreshold.getMax(), humidityThreshold.getMin(), humidityThreshold.getId());
   }
 }
