@@ -18,9 +18,9 @@ public class Measurement implements Serializable {
     private double temperature;
     private double humidity;
     private double co2;
-    private Boolean co2Exceeded;
-    private Boolean temperatureExceeded;
-    private Boolean humidityExceeded;
+    private Boolean co2Exceeded = false;
+    private Boolean temperatureExceeded = false;
+    private Boolean humidityExceeded = false;
 
 
     public Measurement(Date date, String  roomId, double temperature, double humidity, double co2){
@@ -29,9 +29,34 @@ public class Measurement implements Serializable {
         this.temperature = temperature;
         this.humidity = humidity;
         this.co2 = co2;
-        this.co2Exceeded = false;
-        this.temperatureExceeded = false;
-        this.humidityExceeded = false;
+//        this.co2Exceeded = false;
+//        this.temperatureExceeded = false;
+//        this.humidityExceeded = false;
+    }
+
+
+    public Boolean getCo2Exceeded() {
+        return co2Exceeded;
+    }
+
+    public void setCo2Exceeded(Boolean co2Exceeded) {
+        this.co2Exceeded = co2Exceeded;
+    }
+
+    public Boolean getTemperatureExceeded() {
+        return temperatureExceeded;
+    }
+
+    public void setTemperatureExceeded(Boolean temperatureExceeded) {
+        this.temperatureExceeded = temperatureExceeded;
+    }
+
+    public Boolean getHumidityExceeded() {
+        return humidityExceeded;
+    }
+
+    public void setHumidityExceeded(Boolean humidityExceeded) {
+        this.humidityExceeded = humidityExceeded;
     }
 
     public boolean isCo2Exceeded() {

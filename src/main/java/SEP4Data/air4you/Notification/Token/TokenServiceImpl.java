@@ -56,7 +56,7 @@ public class TokenServiceImpl implements TokenService{
                return temp.getToken();
             }
         }
-        return null;
+        return "";
     }
 
     @Override

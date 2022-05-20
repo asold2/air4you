@@ -30,7 +30,7 @@ public class Threshold implements Serializable {
 
     }
 
-    public String getUserId() {
+    public String getRoomId() {
         return roomId;
     }
 

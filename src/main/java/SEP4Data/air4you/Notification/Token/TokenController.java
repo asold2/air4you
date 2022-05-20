@@ -49,7 +49,7 @@ public class TokenController{
 
     @DeleteMapping("delete/tokens/")
     public void deleteAllTokens(){
-        //tokenService.deleteAll();
+        tokenService.deleteAll();
     }
 
 

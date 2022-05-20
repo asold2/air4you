@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class UserToken {
 
     @SerializedName("uid")
-    private String uid;
+    private String uid = "none";
     @SerializedName("token")
     private String token;
 
