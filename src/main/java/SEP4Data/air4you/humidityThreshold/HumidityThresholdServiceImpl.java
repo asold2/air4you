@@ -26,8 +26,9 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
   @Override
   public boolean addHumidityThreshold(HumidityThreshold humidityThreshold)
   {
-    if (roomRepository.findById(humidityThreshold.getRoomId()).isPresent())
+    if (roomRepository.findById(humidityThreshold.getRoomId()).isEmpty())
     {
+      System.out.println("hum1");
       return false;
     }
 
