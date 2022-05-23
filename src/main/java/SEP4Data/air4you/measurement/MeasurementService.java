@@ -225,9 +225,10 @@ public class MeasurementService implements IMeasurementService{
                     measurementsInRoom) {
                 Calendar measurementCalendar = Calendar.getInstance();
                 measurementCalendar.setTime(measurement.getDate());
-                if(inputCalendar.YEAR == measurementCalendar.YEAR &&
-                        inputCalendar.MONTH == measurementCalendar.MONTH &&
-                        inputCalendar.DATE == measurementCalendar.DATE){
+
+                if(inputCalendar.get(Calendar.YEAR) == measurementCalendar.get(Calendar.YEAR) &&
+                        inputCalendar.get(Calendar.MONTH) == measurementCalendar.get(Calendar.MONTH) &&
+                        inputCalendar.get(Calendar.DAY_OF_MONTH) == measurementCalendar.get(Calendar.DAY_OF_MONTH)){
                     newMeasurements.add(measurement);
                 }
             }
