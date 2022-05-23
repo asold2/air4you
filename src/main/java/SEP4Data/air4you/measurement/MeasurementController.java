@@ -69,5 +69,12 @@ public class MeasurementController {
         measurementService.deleteAll();
     }
 
+    // Receive DATE and roomId and send all measurements.
+
+    @GetMapping("/measurement/{date}/{roomId}/")
+    public List<Measurement> getMeasurementsByDateAndRoomId(@PathVariable String date, @PathVariable String roomId){
+        return measurementService.getMeasurementByDateAndRoomId(date, roomId);
+    }
+
 
 }
