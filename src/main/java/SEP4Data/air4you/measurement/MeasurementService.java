@@ -3,6 +3,8 @@ package SEP4Data.air4you.measurement;
 import SEP4Data.air4you.Notification.Data;
 import SEP4Data.air4you.Notification.MainActivity;
 import SEP4Data.air4you.Notification.Token.TokenService;
+import SEP4Data.air4you.day.Day;
+import SEP4Data.air4you.day.DayService;
 import SEP4Data.air4you.humidityThreshold.HumidityThreshold;
 import SEP4Data.air4you.humidityThreshold.IHumidityThresholdService;
 import SEP4Data.air4you.room.Room;
@@ -40,6 +42,37 @@ public class MeasurementService implements IMeasurementService{
     @Autowired
     RoomService roomService;
 
+    @Autowired
+    DayService dayService;
+
+    @Override
+    public void newAddMeasurement(Measurement measurement){
+
+        List<Measurement> measurements = new ArrayList<>();
+        Day day;
+
+        if(roomService.getRoomById(measurement.getId()) != null){
+
+            if(dayService.getDayByDate(measurement.getDate()) != null){
+                day = dayService.getDayByDate(measurement.getDate());
+                measurements = day.getMeasurements();
+                measurements.add(measurement);
+                dayService.getDayByDate(measurement.getDate()).setMeasurements(measurements);
+            } else {
+                day = new Day(measurement.getDate());
+                day.setRoom(roomService.getRoomById(measurement.getId()));
+                measurements.add(measurement);
+                day.setMeasurements(measurements);
+                dayService.create(day);
+            }
+
+            measurement.setDay(day);
+
+            measurementRepository.save(measurement);
+
+        }
+    }
+
     @Override
     public Threshold addMeasurement(Measurement measurement) {
 
@@ -47,7 +80,7 @@ public class MeasurementService implements IMeasurementService{
 
         //TODO check if beyond threshold
         Date date = measurement.getDate();
-        measurement.setDate(date);
+        measurement.setDate((java.sql.Date) date);
 
         Data data = new Data();
         data.setExceeded(false);
@@ -55,7 +88,7 @@ public class MeasurementService implements IMeasurementService{
 
         for (Room room:
              roomService.getAllRooms()) {
-            if (room.getRoomId().equals(measurement.getRoomId())){
+            if (room.getId().equals(measurement.getDay().getRoom().getId())){
                 to = tokenService.getToken(room.getUserId());
                 break;
             }
@@ -63,8 +96,8 @@ public class MeasurementService implements IMeasurementService{
 
         System.out.println("Measurement date = " + measurement.getDate());
 
-        TemperatureThreshold tempThresh = returnCurrentTempThreshold(measurement.getRoomId(), measurement.getDate());
-        HumidityThreshold humThresh = returnCurrentHumidityThreshold(measurement.getRoomId(), measurement.getDate());
+        TemperatureThreshold tempThresh = returnCurrentTempThreshold(measurement.getDay().getRoom().getId(), measurement.getDate());
+        HumidityThreshold humThresh = returnCurrentHumidityThreshold(measurement.getDay().getRoom().getId(), measurement.getDate());
 
         if (isInsideThreshold(measurement.getDate(), tempThresh.getStartTime(), tempThresh.getEndTime()))
         {
@@ -117,7 +150,7 @@ public class MeasurementService implements IMeasurementService{
 
         measurementRepository.save(measurement);
 
-        Threshold thresholdToReturn = new Threshold(measurement.getRoomId(), tempThresh.getMin(), tempThresh.getMax(), humThresh.getMin(), humThresh.getMax());
+        Threshold thresholdToReturn = new Threshold(measurement.getDay().getRoom().getId(), tempThresh.getMin(), tempThresh.getMax(), humThresh.getMin(), humThresh.getMax());
 
         return thresholdToReturn;
     }
@@ -128,7 +161,7 @@ public class MeasurementService implements IMeasurementService{
         List<Measurement> toReturn = new ArrayList<>();
 
         for (Measurement measurement:measurementRepository.findAll()) {
-            if(measurement.getRoomId().equals(roomId)){
+            if(measurement.getDay().getRoom().getId().equals(roomId)){
                 toReturn.add(measurement);
             }
         }
@@ -203,7 +236,7 @@ public class MeasurementService implements IMeasurementService{
     public Measurement getLastMeasurementByRoomId(String roomId) {
         List<Measurement> roomsMeasuremnts = new ArrayList<>();
         for (Measurement measurement: measurementRepository.findAll()) {
-            if(measurement.getRoomId().equals(roomId)){
+            if(measurement.getDay().getRoom().getId().equals(roomId)){
                 roomsMeasuremnts.add(measurement);
             }
         }

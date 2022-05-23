@@ -10,30 +10,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="room")
 public class Room implements Serializable {
     @Id
-    private String roomId;
+    private String id;
     private String name;
     private String userId = "none";
     private LocalDateTime registrationDate;
-    @OneToMany(mappedBy="roomId")
+
+    @OneToMany(mappedBy = "room")
     private List<Day> days;
-//    private String notoficationToken;
-
-
-
-
 
     public Room() {
     }
 
-    public Room(String roomId, String userId, String name, LocalDateTime registrationDate){
-        this.roomId = roomId;
+    public Room(String id, String userId, String name){
+        this.id = id;
         this.userId = userId;
         this.name = name;
-        this.registrationDate = registrationDate;
-        days = new ArrayList<Day>();
+        this.registrationDate = LocalDateTime.now();
     }
 
 
@@ -46,16 +40,8 @@ public class Room implements Serializable {
         this.name = name;
     }
 
-    public List<Day> getDays() {
-        return days;
-    }
-
-    public void setDays(List<Day> days) {
-        this.days = days;
-    }
-
-    public void setRoomId(String roomId) {
-        this.roomId = roomId;
+    public void setId(String roomId) {
+        this.id = roomId;
     }
 
     public String getUserId() {
@@ -70,8 +56,8 @@ public class Room implements Serializable {
         this.registrationDate = registrationDate;
     }
 
-    public String getRoomId(){
-        return roomId;
+    public String getId(){
+        return id;
     }
 
 //    public void onlyLastMeasurement(){
@@ -87,15 +73,4 @@ public class Room implements Serializable {
         return registrationDate;
     }
 
-
-    @Override
-    public String toString() {
-        return "Room{" +
-                "roomId='" + roomId + '\'' +
-                ", name='" + name + '\'' +
-                ", userId='" + userId + '\'' +
-                ", registrationDate=" + registrationDate +
-                ", days=" + days +
-                '}';
-    }
 }

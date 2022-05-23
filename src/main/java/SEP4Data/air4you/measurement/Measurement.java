@@ -1,25 +1,28 @@
 package SEP4Data.air4you.measurement;
 
 
-
 import SEP4Data.air4you.day.Day;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 
 @Entity
-@Table(name="measurement")
 public class Measurement implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int Id;
-    private Date date;
-    private String roomId;
+    @Id @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    private String id;
 
     @ManyToOne
-    private Day dayId;
+    @JoinColumn(name = "day_id", referencedColumnName = "id")
+    private Day day;
+
+
+
+    private String roomId;
+    private Date date;
     private double temperature;
     private double humidity;
     private double co2;
@@ -28,22 +31,30 @@ public class Measurement implements Serializable {
     private Boolean humidityExceeded = false;
 
 
-    public Measurement(Date date, double temperature, double humidity, double co2){
+    public Measurement(Date date, double temperature, double humidity, double co2, String roomId) {
         this.date = date;
-        this.roomId = dayId.getRoomId().getRoomId();
         this.temperature = temperature;
         this.humidity = humidity;
         this.co2 = co2;
+        this.roomId = roomId;
     }
 
-    public Day getDayId() {
-        return dayId;
+
+    public String getId() {
+        return id;
     }
 
-    public void setDayId(Day dayId) {
-        this.dayId = dayId;
+    public void setId(String id) {
+        this.id = id;
     }
 
+    public Day getDay() {
+        return day;
+    }
+
+    public void setDay(Day day) {
+        this.day = day;
+    }
     public Boolean getCo2Exceeded() {
         return co2Exceeded;
     }
@@ -96,12 +107,8 @@ public class Measurement implements Serializable {
 
     }
 
-    public int getId() {
-        return Id;
-    }
 
-
-    public Date getDate(){
+    public Date getDate() {
         return date;
     }
 
@@ -131,17 +138,5 @@ public class Measurement implements Serializable {
 
     public void setCo2(double co2) {
         this.co2 = co2;
-    }
-
-    public String getRoomId() {
-        return roomId;
-    }
-
-    public void setRoomId(String roomId) {
-        this.roomId = roomId;
-    }
-
-    public void setId(int id) {
-        Id = id;
     }
 }

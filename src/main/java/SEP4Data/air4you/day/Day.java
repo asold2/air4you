@@ -2,58 +2,61 @@ package SEP4Data.air4you.day;
 
 import SEP4Data.air4you.measurement.Measurement;
 import SEP4Data.air4you.room.Room;
-import java.util.List;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 
 @Entity
-@Table(name = "Day")
-public class Day {
-    @Id
-    private int dayId;
+public class Day implements Serializable {
+    @Id @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    private String id;
+
+    private Date dayDate;
 
     @ManyToOne
-    private Room roomId;
+    @JoinColumn(name = "room_id", referencedColumnName = "id")
+    private Room room;
 
-    @OneToMany(mappedBy="dayId")
+    @OneToMany(mappedBy = "day")
     private List<Measurement> measurements;
-    private Date dayDate;
 
 
     public Day() {
     }
 
     public Day(Date dayDate) {
-        this.measurements = new ArrayList<>();
         long millis=System.currentTimeMillis();
         this.dayDate = new Date(millis);
     }
 
-    public Room getRoomId() {
-        return roomId;
+    public Room getRoom() {
+        return room;
     }
 
-    public void setRoomId(Room roomId) {
-        this.roomId = roomId;
-    }
-
-    public int getDayId() {
-        return dayId;
-    }
-
-    public void setDayId(int dayId) {
-        this.dayId = dayId;
+    public void setRoom(Room room) {
+        this.room = room;
     }
 
     public List<Measurement> getMeasurements() {
         return measurements;
     }
 
-    public void setMeasurements(ArrayList<Measurement> measurements) {
+    public void setMeasurements(List<Measurement> measurements) {
         this.measurements = measurements;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String dayId) {
+        this.id = id;
+    }
+
 
     public Date getDayDate() {
         return dayDate;

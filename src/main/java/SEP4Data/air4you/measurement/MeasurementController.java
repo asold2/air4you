@@ -24,26 +24,20 @@ public class MeasurementController {
     private IMeasurementService measurementService;
     @Autowired
     private RoomService roomService;
-    @Autowired
-    private ISendTempThresholdToGateway iSendTempThresholdToGateway;
+
+    //@Autowired
+    //private ISendTempThresholdToGateway iSendTempThresholdToGateway;
 
     public MeasurementController(IMeasurementService measurementService){
         this.measurementService = measurementService;
     }
 
     @PostMapping("/measurement/")
-    public @ResponseBody
-    Threshold addMeasurement(@RequestBody Measurement measurement) throws IOException {
+    public void addMeasurement(@RequestBody Measurement measurement) throws IOException {
         System.out.println(measurement.toString() + " add measurement" );
 //        iSendTempThresholdToGateway.sendTempThresholdToGateway(measurementService.addMeasurement(measurement));
-        Threshold threshold = measurementService.addMeasurement(measurement);
+        measurementService.newAddMeasurement(measurement);
 
-
-
-
-
-
-        return  threshold;
 
     }
 
