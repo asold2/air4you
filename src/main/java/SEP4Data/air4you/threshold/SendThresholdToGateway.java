@@ -1,5 +1,6 @@
-package SEP4Data.air4you.tempThreshold;
+package SEP4Data.air4you.threshold;
 
+import SEP4Data.air4you.threshold.Threshold;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class SendThresholdToGateway implements  ISendTempThresholdToGateway {
+public class SendThresholdToGateway implements ISendThresholdToGateway
+{
 
     private final RestTemplate restTemplate;
 
@@ -20,7 +22,7 @@ public class SendThresholdToGateway implements  ISendTempThresholdToGateway {
 
 
     @Override
-    public void sendTempThresholdToGateway(TemperatureThreshold temperatureThreshold) {
+    public void sendThresholdToGateway(Threshold threshold) {
         String url = "http://localhost:8080/send/tempThreshold/";
 
         HttpHeaders headers = new HttpHeaders();
@@ -30,16 +32,15 @@ public class SendThresholdToGateway implements  ISendTempThresholdToGateway {
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
         Map<String, Object> map = new HashMap<>();
-        map.put("roomId", temperatureThreshold.getRoomId());
-        map.put("startTime", temperatureThreshold.getStartTime());
-        map.put("endTime", temperatureThreshold.getEndTime());
-        map.put("max", temperatureThreshold.getMax());
-        map.put("min", temperatureThreshold.getMin());
-        map.put("id", temperatureThreshold.getId());
+        map.put("roomId", threshold.getRoomId());
+        map.put("minTemp", threshold.getMaxTemp());
+        map.put("maxTemp", threshold.getMinTemp());
+        map.put("minHumidity", threshold.getMaxHumidity());
+        map.put("maxHumidity", threshold.getMinHumidity());
 
         HttpEntity<Map<String, Object>> tempThreshold = new HttpEntity<>(map, headers);
 
-        ResponseEntity<TemperatureThreshold> response = this.restTemplate.postForEntity(url, tempThreshold, TemperatureThreshold.class);
+        ResponseEntity<Threshold> response = this.restTemplate.postForEntity(url, tempThreshold, Threshold.class);
 
         System.out.println("Sent temperature threshold to Gateway");
 

@@ -1,6 +1,7 @@
 package SEP4Data.air4you.measurement;
 
 import SEP4Data.air4you.room.RoomService;
+import SEP4Data.air4you.tempThreshold.ISendTempThresholdToGateway;
 import SEP4Data.air4you.tempThreshold.TemperatureThreshold;
 import SEP4Data.air4you.threshold.Threshold;
 import org.springframework.beans.factory.annotation.Autowired;

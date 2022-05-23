@@ -16,18 +16,18 @@ public class TempThresholdController {
     private ITempThresholdService tempThresholdService;
 
     @GetMapping("/temperatureThresholds/{roomId}")
-    public List<TemperatureThreshold> getAllThresholdsByRoomId(@PathVariable String roomId){
+    public List<TemperatureThreshold> getAllTempThresholdsByRoomId(@PathVariable String roomId){
         System.out.println(roomId + "!!!!!");
         return tempThresholdService.getAllTempThresholdsByRoomId(roomId);
     }
     @GetMapping("/temperatureThresholds/")
-    public List<TemperatureThreshold> getAllThresholds(){
+    public List<TemperatureThreshold> getAllTempThresholds(){
         return tempThresholdService.getAllTempThresholds();
     }
 
 
     @PostMapping("/temperatureThresholds/")
-    public int addThreshold(@RequestBody TemperatureThreshold temperatureThreshold){
+    public int addTempThreshold(@RequestBody TemperatureThreshold temperatureThreshold){
         if (tempThresholdService.addTempThreshold(temperatureThreshold)){
             return HttpServletResponse.SC_OK;
         }
@@ -37,10 +37,10 @@ public class TempThresholdController {
     }
 
     @DeleteMapping("/temperatureThresholds/{id}")
-    public int deleteTempThreshold(@PathVariable int id){
+    public int deleteTempThreshold(@PathVariable int thresholdId){
         try {
-            tempThresholdService.deleteTempThreshold(id);
-            System.out.println("Successfully deleted temperatureThreshold with id: " + id);
+            tempThresholdService.deleteTempThreshold(thresholdId);
+            System.out.println("Successfully deleted temperatureThreshold with id: " + thresholdId);
             return HttpServletResponse.SC_OK;
         } catch (NullPointerException nullPointerException){
             System.out.println("Could not delete temperatureThreshold because: \n " + nullPointerException.getMessage());
@@ -53,7 +53,7 @@ public class TempThresholdController {
 
 
     @DeleteMapping("/temperatureThresholds/all/")
-    public void deleteAllTemperatureThresholds(){
+    public void deleteAllTempThresholds(){
         tempThresholdService.deleteAll();
     }
 
