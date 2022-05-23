@@ -43,7 +43,7 @@ public class RoomController {
         System.out.println(userId + "!!!!!!!!!!!!!!!");
         List<Room> roomsToReturn = new ArrayList<>();
         for (Room room: roomService.getRooms(userId)) {
-            room.onlyLastMeasurement();
+//            room.onlyLastMeasurement();
             roomsToReturn.add(room);
         }
         return roomsToReturn;
