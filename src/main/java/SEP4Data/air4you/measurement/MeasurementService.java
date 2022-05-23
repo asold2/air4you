@@ -45,8 +45,6 @@ public class MeasurementService implements IMeasurementService{
     @Override
     public Threshold addMeasurement(Measurement measurement) {
 
-
-
         //TODO check if beyond threshold
         Date date = measurement.getDate();
         measurement.setDate(date);

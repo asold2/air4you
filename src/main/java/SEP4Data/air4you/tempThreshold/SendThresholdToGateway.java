@@ -1,6 +1,5 @@
 package SEP4Data.air4you.tempThreshold;
 
-import SEP4Data.air4you.threshold.Threshold;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,7 @@ public class SendThresholdToGateway implements  ISendTempThresholdToGateway {
 
 
     @Override
-    public void sendTempThresholdToGateway(Threshold temperatureThreshold) {
+    public void sendTempThresholdToGateway(TemperatureThreshold temperatureThreshold) {
         String url = "http://localhost:8080/send/tempThreshold/";
 
         HttpHeaders headers = new HttpHeaders();
@@ -32,14 +31,15 @@ public class SendThresholdToGateway implements  ISendTempThresholdToGateway {
 
         Map<String, Object> map = new HashMap<>();
         map.put("roomId", temperatureThreshold.getRoomId());
-        map.put("minTemp", temperatureThreshold.getMaxTemp());
-        map.put("maxTemp", temperatureThreshold.getMinTemp());
-        map.put("minHumidity", temperatureThreshold.getMaxHumidity());
-        map.put("maxHumidity", temperatureThreshold.getMinHumidity());
+        map.put("startTime", temperatureThreshold.getStartTime());
+        map.put("endTime", temperatureThreshold.getEndTime());
+        map.put("max", temperatureThreshold.getMax());
+        map.put("min", temperatureThreshold.getMin());
+        map.put("id", temperatureThreshold.getId());
 
         HttpEntity<Map<String, Object>> tempThreshold = new HttpEntity<>(map, headers);
 
-        ResponseEntity<Threshold> response = this.restTemplate.postForEntity(url, tempThreshold, Threshold.class);
+        ResponseEntity<TemperatureThreshold> response = this.restTemplate.postForEntity(url, tempThreshold, TemperatureThreshold.class);
 
         System.out.println("Sent temperature threshold to Gateway");
 
