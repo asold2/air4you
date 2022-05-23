@@ -2,6 +2,8 @@ package SEP4Data.air4you.measurement;
 
 
 
+import SEP4Data.air4you.day.Day;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -15,6 +17,9 @@ public class Measurement implements Serializable {
     private int Id;
     private Date date;
     private String roomId;
+
+    @ManyToOne
+    private Day dayId;
     private double temperature;
     private double humidity;
     private double co2;
@@ -23,14 +28,21 @@ public class Measurement implements Serializable {
     private Boolean humidityExceeded = false;
 
 
-    public Measurement(Date date, String  roomId, double temperature, double humidity, double co2){
+    public Measurement(Date date, double temperature, double humidity, double co2){
         this.date = date;
-        this.roomId = roomId;
+        this.roomId = dayId.getRoomId().getRoomId();
         this.temperature = temperature;
         this.humidity = humidity;
         this.co2 = co2;
     }
 
+    public Day getDayId() {
+        return dayId;
+    }
+
+    public void setDayId(Day dayId) {
+        this.dayId = dayId;
+    }
 
     public Boolean getCo2Exceeded() {
         return co2Exceeded;
