@@ -1,6 +1,8 @@
 package SEP4Data.air4you.measurement;
 
 import SEP4Data.air4you.room.RoomService;
+import SEP4Data.air4you.tempThreshold.TemperatureThreshold;
+import SEP4Data.air4you.threshold.Threshold;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,12 +24,12 @@ public class MeasurementController {
     }
 
     @PostMapping("/measurement/")
-    public void addMeasurement(@RequestBody Measurement measurement){
-        System.out.println(measurement.toString());
-//        roomService.getRoomById(measurement.getRoomId()).setMeasurements(new ArrayList<Measurement>());
-        measurementService.addMeasurement(measurement);
-//        roomService.setLatestMeasurementForRoom(measurement);
+    public @ResponseBody
+    Threshold addMeasurement(@RequestBody Measurement measurement){
+        System.out.println(measurement.toString() + " add measurement" );
+        return measurementService.addMeasurement(measurement);
     }
+
 
     @GetMapping("/measurement/{roomId}")
     public List<Measurement> getMeasurement(@PathVariable String roomId){
@@ -49,12 +51,6 @@ public class MeasurementController {
     public void removeMeasurement(){
         measurementService.deleteAll();
     }
-
-
-
-
-
-
 
 
 }

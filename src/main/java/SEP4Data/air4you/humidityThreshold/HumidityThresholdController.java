@@ -26,7 +26,7 @@ public class HumidityThresholdController
     return humidityThresholdService.getAllHumidityThresholds();
   }
 
-  @PostMapping("/new/humiditythresholds/")
+  @PostMapping("/humidityThresholds/")
   public int addThresholdHumidity(@RequestBody HumidityThreshold humidityThreshold){
     if (humidityThresholdService.addHumidityThreshold(humidityThreshold)){
       return HttpServletResponse.SC_OK;
@@ -36,15 +36,28 @@ public class HumidityThresholdController
     }
   }
 
-  @DeleteMapping("/remove/humiditythresholds/{roomId}/{thresholdId}")
-  public void deleteHumidityThreshold(@PathVariable String roomId, @PathVariable int thresholdId){
-    System.out.println(roomId + "!!!!!!!!");
-    System.out.println(thresholdId + "AAAAAAAa");
-    humidityThresholdService.deleteHumidityThreshold(roomId, thresholdId);
+  @DeleteMapping("/humidityThresholds/{id}")
+  public int deleteHumidityThreshold(@PathVariable int id){
+    try {
+      humidityThresholdService.deleteHumidityThreshold(id);
+      System.out.println("Successfully deleted humidityThreshold with id: " + id);
+      return HttpServletResponse.SC_OK;
+    } catch (NullPointerException nullPointerException){
+      System.out.println("Could not delete humidityThreshold because: \n " + nullPointerException.getMessage());
+      return HttpServletResponse.SC_NOT_FOUND;
+    } catch (Exception otherException){
+      System.out.println("Could not delete humidityThreshold because: \n " + otherException.getMessage());
+      return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+    }
   }
 
-  @DeleteMapping("/removal/humiditythresholds")
-  public void deleteAll(){
+  @DeleteMapping("/humidityThresholds/all/")
+  public void deleteAllHumidityThresholds(){
     humidityThresholdService.deleteAll();
+  }
+
+  @PutMapping("/humidityThresholds/")
+  public void updateHumidityThreshold(@RequestBody HumidityThreshold humidityThreshold){
+    humidityThresholdService.updateHumidityThreshold((humidityThreshold));
   }
 }
