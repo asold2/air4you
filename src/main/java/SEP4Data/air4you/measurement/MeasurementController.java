@@ -19,8 +19,8 @@ public class MeasurementController {
     private IMeasurementService measurementService;
     @Autowired
     private RoomService roomService;
-    @Autowired
-    private ISendTempThresholdToGateway iSendTempThresholdToGateway;
+    /*@Autowired
+    private ISendTempThresholdToGateway iSendTempThresholdToGateway;*/
 
     public MeasurementController(IMeasurementService measurementService){
         this.measurementService = measurementService;
