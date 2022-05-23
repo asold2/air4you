@@ -21,6 +21,7 @@ public class RoomController {
 
     @PostMapping("/room/")
     public int registerRoom(@RequestBody Room room){
+        System.out.println(room.getUserId());
         if(roomService.registerRoom(room)){
             return HttpServletResponse.SC_OK;
         }
@@ -42,7 +43,7 @@ public class RoomController {
         System.out.println(userId + "!!!!!!!!!!!!!!!");
         List<Room> roomsToReturn = new ArrayList<>();
         for (Room room: roomService.getRooms(userId)) {
-            room.onlyLastMeasurement();
+//            room.onlyLastMeasurement();
             roomsToReturn.add(room);
         }
         return roomsToReturn;

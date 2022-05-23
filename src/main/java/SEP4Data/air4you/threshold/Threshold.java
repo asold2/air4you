@@ -11,35 +11,31 @@ public class Threshold implements Serializable {
 
     @Id
     private int thresholdId;
-    private String userId = "none";
-    private double minTemp;
-    private double maxTemp;
-    private double minHumidity;
-    private double maxHumidity;
-    private DateTime startTime;
-    private DateTime endTime;
+    private String roomId = "none";
+    private double minTemp = 0;
+    private double maxTemp = 0;
+    private double minHumidity = 0;
+    private double maxHumidity = 0;
 
-    public Threshold(int thresholdId, String userId, double minTemp, double maxTemp, double minHumidity, double maxHumidity, DateTime startTime, DateTime endTime) {
-        this.thresholdId = thresholdId;
-        this.userId = userId;
+    public Threshold( String roomId, double minTemp, double maxTemp, double minHumidity, double maxHumidity) {
+        this.roomId = roomId;
         this.minTemp = minTemp;
         this.maxTemp = maxTemp;
         this.minHumidity = minHumidity;
         this.maxHumidity = maxHumidity;
-        this.startTime = startTime;
-        this.endTime = endTime;
+
     }
 
     public Threshold() {
 
     }
 
-    public String getUserId() {
-        return userId;
+    public String getRoomId() {
+        return roomId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
     }
 
     public double getMinTemp() {
@@ -74,19 +70,15 @@ public class Threshold implements Serializable {
         this.maxHumidity = maxHumidity;
     }
 
-    public DateTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(DateTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public DateTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(DateTime endTime) {
-        this.endTime = endTime;
+    @Override
+    public String toString() {
+        return "Threshold{" +
+                "thresholdId=" + thresholdId +
+                ", roomId='" + roomId + '\'' +
+                ", minTemp=" + minTemp +
+                ", maxTemp=" + maxTemp +
+                ", minHumidity=" + minHumidity +
+                ", maxHumidity=" + maxHumidity +
+                '}';
     }
 }

@@ -15,18 +15,18 @@ public class TempThresholdController {
     @Autowired
     private ITempThresholdService tempThresholdService;
 
-    @GetMapping("/tempthresholds/{roomId}")
-    public List<TemperatureThreshold> getAllThrehsoldsByRoomId(@PathVariable String roomId){
+    @GetMapping("/temperatureThresholds/{roomId}")
+    public List<TemperatureThreshold> getAllThresholdsByRoomId(@PathVariable String roomId){
         System.out.println(roomId + "!!!!!");
         return tempThresholdService.getAllTempThresholdsByRoomId(roomId);
     }
-    @GetMapping("/all/tempthresholds/")
-    public List<TemperatureThreshold> getAllThrehsolds(){
+    @GetMapping("/temperatureThresholds/")
+    public List<TemperatureThreshold> getAllThresholds(){
         return tempThresholdService.getAllTempThresholds();
     }
 
 
-    @PostMapping("/new/tempthresholds/")
+    @PostMapping("/temperatureThresholds/")
     public int addThreshold(@RequestBody TemperatureThreshold temperatureThreshold){
         if (tempThresholdService.addTempThreshold(temperatureThreshold)){
             return HttpServletResponse.SC_OK;
@@ -36,15 +36,31 @@ public class TempThresholdController {
         }
     }
 
-    @DeleteMapping("/remove/tempthresholds/{roomId}/{thresholdId}")
-    public void deleteTempThreshold(@PathVariable String roomId, @PathVariable int thresholdId){
-        tempThresholdService.deleteTempThreshold(roomId, thresholdId);
+    @DeleteMapping("/temperatureThresholds/{id}")
+    public int deleteTempThreshold(@PathVariable int id){
+        try {
+            tempThresholdService.deleteTempThreshold(id);
+            System.out.println("Successfully deleted temperatureThreshold with id: " + id);
+            return HttpServletResponse.SC_OK;
+        } catch (NullPointerException nullPointerException){
+            System.out.println("Could not delete temperatureThreshold because: \n " + nullPointerException.getMessage());
+            return HttpServletResponse.SC_NOT_FOUND;
+        } catch (Exception otherException){
+            System.out.println("Could not delete temperatureThreshold because: \n " + otherException.getMessage());
+            return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+        }
     }
 
 
-    @DeleteMapping("/removal/tempthresholds")
-    public void deleteAll(){
+    @DeleteMapping("/temperatureThresholds/all/")
+    public void deleteAllTemperatureThresholds(){
         tempThresholdService.deleteAll();
+    }
+
+    @PutMapping("/temperatureThresholds/")
+    public void updateTempThreshold(@RequestBody TemperatureThreshold temperatureThreshold){
+        tempThresholdService.updateTempThreshold(temperatureThreshold);
+
     }
 
 }

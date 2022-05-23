@@ -2,15 +2,17 @@ package SEP4Data.air4you.Notification.Token;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import org.springframework.boot.context.properties.bind.Name;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "tokens")
 public class UserToken {
-    @SerializedName("uID")
-    private String uid;
 
+    @SerializedName("uid")
+    private String uid = "none";
+    @SerializedName("token")
     private String token;
 
     @Id

@@ -5,6 +5,7 @@ import SEP4Data.air4you.Notification.MainActivity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Service
@@ -18,25 +19,30 @@ public class TokenServiceImpl implements TokenService{
 
     @Override
     public boolean createToken(UserToken newUserToken) {
-       tokenRepository.save(newUserToken);
-       return true;
+        if(tokenRepository.findUserTokenByUid(newUserToken.getUid()).isEmpty()){
+            tokenRepository.save(newUserToken);
+            return true;
+        }
+        tokenRepository.updateUserToken(newUserToken.getToken(), newUserToken.getUid());
+        return true;
     }
 
 
     @Override
-    public void deleteToken(UserToken oldUserToken) {
+    public int deleteToken(UserToken oldUserToken) {
         tokenRepository.delete(oldUserToken);
+        return HttpServletResponse.SC_OK;
     }
 
     @Override
     public boolean updateToken(UserToken updatedUserToken) {
-       tokenRepository.save(updatedUserToken);
+       tokenRepository.updateUserToken(updatedUserToken.getToken(), updatedUserToken.getUid());
        return true;
     }
 
     @Override
     public void notifyUser(String token) {
-        mainActivity.sendNotification(token,new Data("You have been given a new token","New Token!","This is random data"));
+        mainActivity.sendNotification(token,new Data("You have been given a new token","New Token!",true));
     }
 
     @Override
@@ -50,7 +56,7 @@ public class TokenServiceImpl implements TokenService{
                return temp.getToken();
             }
         }
-        return null;
+        return "";
     }
 
     @Override

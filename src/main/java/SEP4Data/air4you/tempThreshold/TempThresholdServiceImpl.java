@@ -14,8 +14,8 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
     @Autowired
     private RoomRepository roomRepository;
 
-    @Autowired
-    private ISendTempThresholdToGateway sendTempThresholdToGateway;
+//    @Autowired
+//    private ISendTempThresholdToGateway sendTempThresholdToGateway;
 
     @Override
     public List<TemperatureThreshold> getAllTempThresholds() {
@@ -74,27 +74,21 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
             return false;
         }
 
-//        else if(temperatureThreshold.getMin()>= temperatureThreshold.getMax()){
-//            return false;
-//        }
+
         tempThresholdRepository.save(temperatureThreshold);
-        sendTempThresholdToGateway.sendTempThresholdToGateway(temperatureThreshold);
         return  true;
     }
 
-    @Override
-    public void deleteTempThreshold(String roomId, int thresholdId) {
-        for (TemperatureThreshold temp: tempThresholdRepository.findAll()) {
-            if(temp.getRoomId().equals(roomId) && temp.getId() == thresholdId){
-                tempThresholdRepository.deleteById(thresholdId);
-            }
-        }
-
+    public void deleteTempThreshold(int id)
+    {
+        tempThresholdRepository.deleteById(id);
     }
 
     @Override
-    public void updateTempThreshold(int thresholdId, double max, double min) {
-
+    public void updateTempThreshold(TemperatureThreshold temperatureThreshold) {
+        System.out.println(temperatureThreshold.getId() + "!!!!!!!!!!!!!!!!!!!!");
+        //Not working. add id in path
+        tempThresholdRepository.updateTempThreshold(temperatureThreshold.getMax(), temperatureThreshold.getMin(), temperatureThreshold.getId());
     }
 
 
