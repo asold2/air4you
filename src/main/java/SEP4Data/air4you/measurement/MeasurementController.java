@@ -7,13 +7,8 @@ import SEP4Data.air4you.threshold.Threshold;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -33,13 +28,10 @@ public class MeasurementController {
 
     @PostMapping("/measurement/")
     public @ResponseBody
-    Threshold addMeasurement(@RequestBody Measurement measurement) throws IOException {
+    Threshold addMeasurement(@RequestBody Measurement measurement){
         System.out.println(measurement.toString() + " add measurement" );
 //        iSendTempThresholdToGateway.sendTempThresholdToGateway(measurementService.addMeasurement(measurement));
         Threshold threshold = measurementService.addMeasurement(measurement);
-
-
-
 
 
 
