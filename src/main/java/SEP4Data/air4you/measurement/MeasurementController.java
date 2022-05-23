@@ -1,7 +1,6 @@
 package SEP4Data.air4you.measurement;
 
 import SEP4Data.air4you.room.RoomService;
-import SEP4Data.air4you.tempThreshold.ISendTempThresholdToGateway;
 import SEP4Data.air4you.tempThreshold.TemperatureThreshold;
 import SEP4Data.air4you.threshold.Threshold;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +18,6 @@ public class MeasurementController {
     private IMeasurementService measurementService;
     @Autowired
     private RoomService roomService;
-    /*@Autowired
-    private ISendTempThresholdToGateway iSendTempThresholdToGateway;*/
 
     public MeasurementController(IMeasurementService measurementService){
         this.measurementService = measurementService;
@@ -30,13 +27,7 @@ public class MeasurementController {
     public @ResponseBody
     Threshold addMeasurement(@RequestBody Measurement measurement){
         System.out.println(measurement.toString() + " add measurement" );
-//        iSendTempThresholdToGateway.sendTempThresholdToGateway(measurementService.addMeasurement(measurement));
-        Threshold threshold = measurementService.addMeasurement(measurement);
-
-
-
-        return  threshold;
-
+        return measurementService.addMeasurement(measurement);
     }
 
 
