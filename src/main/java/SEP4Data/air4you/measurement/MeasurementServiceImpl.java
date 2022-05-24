@@ -17,6 +17,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -196,7 +197,8 @@ public class MeasurementServiceImpl implements IMeasurementService{
         return newMeasurements;
     }
 
-    @Override public List<Measurement> getMeasurementsBetweenDates(String startDate, String endDate, String roomId)
+    @Override
+    public List<Measurement> getMeasurementsBetweenDates(String startDate, String endDate, String roomId)
     {
         List<Measurement> measurementsInRoom = roomService.getRoomById(roomId).getMeasurements();
         List<Measurement> measurementsToReturn = new ArrayList<>();
@@ -220,7 +222,41 @@ public class MeasurementServiceImpl implements IMeasurementService{
                 }
 
 
-    }
+            }
         return measurementsToReturn;
-}
+    }
+
+    @Override
+    public List<Measurement> getMeasurementByUserAndRoomIdWeek(String userId)
+    {
+        List<Room> listOfRooms = roomService.getRooms(userId);
+        List<Measurement> listOfMeasurements = new ArrayList<>();
+        LocalDate today = LocalDate.now();
+        LocalDate oneWeekAgo = today.minus(1, ChronoUnit.WEEKS);
+        List<Measurement> measurementsToReturn = new ArrayList<>();
+
+        for(int i=0;i<listOfRooms.size();i++)
+        {
+            for(int j=0;j<listOfRooms.get(i).getMeasurements().size();j++)
+            {
+                listOfMeasurements.add(listOfRooms.get(i).getMeasurements().get(j));
+            }
+        }
+
+        for (Measurement measurement:
+            listOfMeasurements)
+        {
+
+            LocalDate measurementLocalDate = measurement.getDate().toInstant().atZone(
+                ZoneId.systemDefault()).toLocalDate();
+
+            if(measurementLocalDate.isBefore(today) && measurementLocalDate.isAfter(oneWeekAgo))
+            {
+                measurementsToReturn.add(measurement);
+            }
+        }
+
+
+        return measurementsToReturn;
+    }
 }
