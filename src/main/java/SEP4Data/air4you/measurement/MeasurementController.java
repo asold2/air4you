@@ -67,10 +67,10 @@ public class MeasurementController {
         return measurementService.getMeasurementsBetweenDates(startDate, endDate, roomId);
     }
 
-    @GetMapping("/measurement/{userId}/{roomId}")
-    public List<Measurement> getMeasurementByUserAndRoomIdWeek(@PathVariable String userId, @PathVariable String roomId)
+    @GetMapping("/measurement/week/{userId}")
+    public List<Measurement> getMeasurementByUserAndRoomIdWeek(@PathVariable String userId)
     {
-        return measurementService.getMeasurementByUserAndRoomIdWeek(userId, roomId);
+        return measurementService.getMeasurementByUserAndRoomIdWeek(userId);
     }
 
 

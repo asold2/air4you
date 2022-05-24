@@ -227,7 +227,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
     }
 
     @Override
-    public List<Measurement> getMeasurementByUserAndRoomIdWeek(String userId, String roomId)
+    public List<Measurement> getMeasurementByUserAndRoomIdWeek(String userId)
     {
         List<Room> listOfRooms = roomService.getRooms(userId);
         List<Measurement> listOfMeasurements = new ArrayList<>();
