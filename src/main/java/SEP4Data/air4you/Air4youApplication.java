@@ -1,6 +1,7 @@
 package SEP4Data.air4you;
 
 import SEP4Data.air4you.Notification.MainActivity;
+import SEP4Data.air4you.measurement.insertMeasurements;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,7 +22,6 @@ public class Air4youApplication {
 		SpringApplication.run(Air4youApplication.class, args);
 
 		//mainActivity.sendNotification("Test title", "Test content");
-
 
 	}
 

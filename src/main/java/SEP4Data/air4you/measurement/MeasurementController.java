@@ -22,22 +22,8 @@ public class MeasurementController {
 
     public MeasurementController(IMeasurementService measurementService){
         this.measurementService = measurementService;
-/*
-        Thread thread = new Thread();
-
-        Date date = new Date(1652774400000L);
-
-        Measurement measurement = new Measurement(date,"0004A30B00219CAC",50,50,600);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(measurement.getDate());
-
-        for (int i = 0; i < 300; i++) {
-            calendar.add((Calendar.MINUTE),5);
-            date.setTime(calendar.getTimeInMillis());
-            measurement.setDate(date);
-            measurementService.addMeasurement(measurement);
-        }*/
+        Thread thread = new Thread(new insertMeasurements(this.measurementService));
+        thread.start();
     }
 
     // This method will add measurement if the link is called
