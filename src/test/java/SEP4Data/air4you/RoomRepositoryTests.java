@@ -14,9 +14,6 @@ import java.time.LocalDateTime;
 @SpringBootTest
 public class RoomRepositoryTests {
 
-    @Autowired
-    private RoomRepository roomRepository;
-
     @Test
     public void saveRoomTest(){
         Room room = Room.builder()
@@ -25,8 +22,6 @@ public class RoomRepositoryTests {
                 .name("testRoomName")
                 .registrationDate(LocalDateTime.now())
                 .build();
-
-        roomRepository.save(room);
 
     }
 

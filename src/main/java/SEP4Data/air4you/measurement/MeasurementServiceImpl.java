@@ -235,12 +235,10 @@ public class MeasurementServiceImpl implements IMeasurementService{
         LocalDate oneWeekAgo = today.minus(1, ChronoUnit.WEEKS);
         List<Measurement> measurementsToReturn = new ArrayList<>();
 
+
         for(int i=0;i<listOfRooms.size();i++)
         {
-            for(int j=0;j<listOfRooms.get(i).getMeasurements().size();j++)
-            {
-                listOfMeasurements.add(listOfRooms.get(i).getMeasurements().get(j));
-            }
+            listOfMeasurements.addAll(listOfRooms.get(i).getMeasurements());
         }
 
         for (Measurement measurement:
