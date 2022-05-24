@@ -18,7 +18,6 @@ public class HumidityThresholdController
   @GetMapping("/humiditythresholds/{roomId}")
   public List<HumidityThreshold> getAllThresholdsByRoomIdHumidity(@PathVariable String roomId)
   {
-    System.out.println(roomId + "!!!!!");
     return humidityThresholdService.getAllHumidityThresholdsByRoomId(roomId);
   }
 
@@ -43,13 +42,10 @@ public class HumidityThresholdController
   public int deleteHumidityThreshold(@PathVariable int id){
     try {
       humidityThresholdService.deleteHumidityThreshold(id);
-      System.out.println("Successfully deleted humidityThreshold with id: " + id);
       return HttpServletResponse.SC_OK;
     } catch (NullPointerException nullPointerException){
-      System.out.println("Could not delete humidityThreshold because: \n " + nullPointerException.getMessage());
       return HttpServletResponse.SC_NOT_FOUND;
     } catch (Exception otherException){
-      System.out.println("Could not delete humidityThreshold because: \n " + otherException.getMessage());
       return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
     }
   }

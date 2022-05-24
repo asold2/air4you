@@ -17,6 +17,10 @@ public class TokenServiceImpl implements TokenService{
     @Autowired
     private MainActivity mainActivity;
 
+    @Autowired
+    public TokenServiceImpl() {
+    }
+
     @Override
     public boolean createToken(UserToken newUserToken) {
         if(tokenRepository.findUserTokenByUid(newUserToken.getUid()).isEmpty()){
@@ -47,10 +51,8 @@ public class TokenServiceImpl implements TokenService{
 
     @Override
     public String getToken(String uId) {
-        System.out.println(uId + "!!!!!!!!@@#@#$");
         for (UserToken temp : tokenRepository.findAll())
         {
-            System.out.println(temp.getUid()+ "AAAAAAADSECDCE");
             if (temp.getUid().equals(uId))
             {
                return temp.getToken();

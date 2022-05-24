@@ -1,18 +1,26 @@
 package SEP4Data.air4you.room;
 
-import SEP4Data.air4you.measurement.Measurement;
+//import config.StageJDBC;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class RoomServiceImpl implements RoomService{
 
     @Autowired
+    JdbcTemplate jdbcTemplate = new JdbcTemplate();
+
+    @Autowired
     private RoomRepository roomRepository;
+    @Autowired
+
+
 
     @Override
     public boolean registerRoom(Room room) {
@@ -76,17 +84,8 @@ public class RoomServiceImpl implements RoomService{
         roomRepository.save(room);
     }
 
-//    @Override
-//    public void setLatestMeasurementForRoom(Measurement measurement) {
-//////        Room room = roomRepository.getById(measurement.getRoomId());
-//////        room.setLastMeasurement(measurement);
-//////        roomRepository.save(room);
-////        roomRepository.updateRoomMeasurement(measurement, measurement.getRoomId());
-//
-//        //        room.setLastMeasuremnt(measurement);
-////        roomRepository.deleteById(measurement.getRoomId());
-////        roomRepository.save(room);
-////        System.out.println(room.toString());
-//    }
+
+
+
 
 }

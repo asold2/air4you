@@ -34,7 +34,6 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
   {
     if (roomRepository.findById(humidityThreshold.getRoomId()).isEmpty())
     {
-      System.out.println("hum1");
       return false;
     }
 
@@ -53,7 +52,6 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
           && ((humidityThreshold.getStartTime().isBefore(temp.getEndTime())))
           || humidityThreshold.getStartTime().equals(temp.getEndTime()))
       {
-        System.out.println("Humdity add 3");
         return false;
       }
       else if (humidityThreshold.getEndTime().isAfter(temp.getStartTime())
@@ -61,23 +59,19 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
           (humidityThreshold.getEndTime().equals(temp.getEndTime()))
               || humidityThreshold.getEndTime().equals(temp.getStartTime())))
       {
-        System.out.println("Humdity add 4");
         return false;
       }
       else if (humidityThreshold.contains(temp))
       {
-        System.out.println("Humdity add 5");
         return false;
       }
     }
     if (humidityThreshold.getStartTime() == null
         || humidityThreshold.getEndTime() == null)
     {
-      System.out.println("Humdity add 6");
       return false;
     }
     humidityThresholdRepository.save(humidityThreshold);
-    System.out.println("Humdity add 7");
     return true;
 
   }
@@ -93,7 +87,6 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
   public List<HumidityThreshold> getAllHumidityThresholdsByRoomId(
       String roomId)
   {
-    System.out.println(roomId + "service IMPL");
     List<HumidityThreshold> tempList = new ArrayList<>();
 
     for (HumidityThreshold temp : humidityThresholdRepository.findAll())
@@ -101,10 +94,8 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
       if (temp.getRoomId().equals(roomId))
       {
         tempList.add(temp);
-        System.out.println("equals");
       }
     }
-    System.out.println(tempList);
     return tempList;
   }
 
@@ -118,8 +109,6 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
   // Updating humidity threshold by threshold Id
   @Override
   public void updateHumidityThreshold(HumidityThreshold humidityThreshold){
-    System.out.println(humidityThreshold.getId() + "!!!!!!!!!!!!!!!!!!!!!!!!");
-    //Not working. add id in path
     humidityThresholdRepository.updateHumidityThreshold(humidityThreshold.getMax(), humidityThreshold.getMin(), humidityThreshold.getId());
   }
 

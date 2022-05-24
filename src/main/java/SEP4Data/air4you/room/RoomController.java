@@ -51,21 +51,18 @@ public class RoomController {
     //Returns array list of all possible rooms
     @PostMapping("/all/rooms/")
     public List<Room> getAllRooms(){
-        System.out.println("Getting all rooms again again again again once more and again!!!");
 
         return roomService.getAllRooms();
     }
 
     @PutMapping("empty/room/of/user/")
     public void deleteUserFromRoom(@RequestBody Room room){
-        System.out.println("testing testing");
         roomService.deleteUserFromRoom(room);
     }
 
     //For this method send a simple integer as user's Id in the body of http request
     @DeleteMapping("/abortion/")
     public void deleteAllRoomsFromUser(@RequestBody String userId){
-        System.out.println(userId + "userId to delete user from db");
         roomService.deleteAllFromUser(userId);
     }
 

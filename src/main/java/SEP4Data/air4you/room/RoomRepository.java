@@ -9,12 +9,16 @@ import org.springframework.stereotype.Repository;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Table;
+
 @Repository
+@Table()
 public interface RoomRepository extends JpaRepository<Room, String> {
     @Transactional
     @Modifying
     @Query(value="update Room room set last_Measurement = :measurement where room.room_id = :roomId", nativeQuery = true)
     void updateRoomMeasurement(@Param("measurement")Measurement measurement, @Param("roomId")String roomId);
+
 
 
 }
