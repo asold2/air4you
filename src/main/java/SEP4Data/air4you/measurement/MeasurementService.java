@@ -42,20 +42,6 @@ public class MeasurementService implements IMeasurementService{
     @Autowired
     RoomService roomService;
 
-
-    MeasurementService(){
-        Date date = new Date(1652774400000L);
-
-        Measurement measurement = new Measurement(date,"0004A30B00219CAC",50,50,600);
-
-        for (int i = 0; i < 300; i++) {
-            date.setTime(1652774400000L+300000L);
-            measurement.setDate(date);
-            addMeasurement(measurement);
-        }
-
-    }
-
     @Override
     public Threshold addMeasurement(Measurement measurement) {
 

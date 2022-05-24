@@ -5,6 +5,9 @@ import SEP4Data.air4you.threshold.Threshold;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalTime;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -19,6 +22,22 @@ public class MeasurementController {
 
     public MeasurementController(IMeasurementService measurementService){
         this.measurementService = measurementService;
+/*
+        Thread thread = new Thread();
+
+        Date date = new Date(1652774400000L);
+
+        Measurement measurement = new Measurement(date,"0004A30B00219CAC",50,50,600);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(measurement.getDate());
+
+        for (int i = 0; i < 300; i++) {
+            calendar.add((Calendar.MINUTE),5);
+            date.setTime(calendar.getTimeInMillis());
+            measurement.setDate(date);
+            measurementService.addMeasurement(measurement);
+        }*/
     }
 
     // This method will add measurement if the link is called

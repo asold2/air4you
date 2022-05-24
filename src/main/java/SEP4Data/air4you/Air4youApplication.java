@@ -22,6 +22,7 @@ public class Air4youApplication {
 
 		//mainActivity.sendNotification("Test title", "Test content");
 
+
 	}
 
 }
