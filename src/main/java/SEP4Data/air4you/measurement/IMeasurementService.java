@@ -16,7 +16,6 @@ public interface IMeasurementService {
     void deleteAllFromUser(String userId);
     void deleteAll();
     TemperatureThreshold returnCurrentTempThreshold(String roomId, Date measurementDate);
-    HumidityThreshold returnCurrentHumidityThreshold(String roomId, Date measurementDate);
 
     Measurement getLastMeasurementByRoomId(String roomId);
 
