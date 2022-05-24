@@ -1,6 +1,5 @@
 package SEP4Data.air4you.room;
 
-import SEP4Data.air4you.day.Day;
 import SEP4Data.air4you.measurement.Measurement;
 
 import javax.persistence.*;
@@ -18,7 +17,7 @@ public class Room implements Serializable {
     private String userId = "none";
     private LocalDateTime registrationDate;
     @OneToMany(mappedBy="roomId")
-    private List<Day> days;
+    private List<Measurement> measurements;
 //    private String notoficationToken;
 
 
@@ -33,10 +32,8 @@ public class Room implements Serializable {
         this.userId = userId;
         this.name = name;
         this.registrationDate = registrationDate;
-        days = new ArrayList<Day>();
+        measurements = new ArrayList<Measurement>();
     }
-
-
 
     public String getName() {
         return name;
@@ -46,12 +43,13 @@ public class Room implements Serializable {
         this.name = name;
     }
 
-    public List<Day> getDays() {
-        return days;
+
+        public List<Measurement> getMeasurements() {
+        return measurements;
     }
 
-    public void setDays(List<Day> days) {
-        this.days = days;
+    public void setMeasurements(List<Measurement> measurements) {
+        this.measurements = measurements;
     }
 
     public void setRoomId(String roomId) {
@@ -74,14 +72,14 @@ public class Room implements Serializable {
         return roomId;
     }
 
-//    public void onlyLastMeasurement(){
-//        if(!this.getMeasurements().isEmpty()){
-//            Measurement measurement = this.getMeasurements().get(this.getMeasurements().size()-1);
-//            System.out.println(measurement.getId() + "last measurement");
-//            this.getMeasurements().clear();
-//            this.getMeasurements().add(measurement);
-//        }
-//    }
+    public void onlyLastMeasurement(){
+        if(!this.getMeasurements().isEmpty()){
+            Measurement measurement = this.getMeasurements().get(this.getMeasurements().size()-1);
+            System.out.println(measurement.getId() + "last measurement");
+            this.getMeasurements().clear();
+            this.getMeasurements().add(measurement);
+        }
+    }
 
     public LocalDateTime getRegistrationDate() {
         return registrationDate;
@@ -95,7 +93,7 @@ public class Room implements Serializable {
                 ", name='" + name + '\'' +
                 ", userId='" + userId + '\'' +
                 ", registrationDate=" + registrationDate +
-                ", days=" + days +
+                ", measurements=" + measurements +
                 '}';
     }
 }

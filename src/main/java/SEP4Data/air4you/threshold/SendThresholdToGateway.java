@@ -1,4 +1,4 @@
-package SEP4Data.air4you.tempThreshold;
+package SEP4Data.air4you.threshold;
 
 import SEP4Data.air4you.threshold.Threshold;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -11,7 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class SendThresholdToGateway implements  ISendTempThresholdToGateway {
+public class SendThresholdToGateway implements ISendThresholdToGateway
+{
 
     private final RestTemplate restTemplate;
 
@@ -21,7 +22,7 @@ public class SendThresholdToGateway implements  ISendTempThresholdToGateway {
 
 
     @Override
-    public void sendTempThresholdToGateway(Threshold temperatureThreshold) {
+    public void sendThresholdToGateway(Threshold threshold) {
         String url = "http://localhost:8080/send/tempThreshold/";
 
         HttpHeaders headers = new HttpHeaders();
@@ -31,11 +32,11 @@ public class SendThresholdToGateway implements  ISendTempThresholdToGateway {
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
         Map<String, Object> map = new HashMap<>();
-        map.put("roomId", temperatureThreshold.getRoomId());
-        map.put("minTemp", temperatureThreshold.getMaxTemp());
-        map.put("maxTemp", temperatureThreshold.getMinTemp());
-        map.put("minHumidity", temperatureThreshold.getMaxHumidity());
-        map.put("maxHumidity", temperatureThreshold.getMinHumidity());
+        map.put("roomId", threshold.getRoomId());
+        map.put("minTemp", threshold.getMaxTemp());
+        map.put("maxTemp", threshold.getMinTemp());
+        map.put("minHumidity", threshold.getMaxHumidity());
+        map.put("maxHumidity", threshold.getMinHumidity());
 
         HttpEntity<Map<String, Object>> tempThreshold = new HttpEntity<>(map, headers);
 

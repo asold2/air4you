@@ -70,15 +70,5 @@ public class Threshold implements Serializable {
         this.maxHumidity = maxHumidity;
     }
 
-    @Override
-    public String toString() {
-        return "Threshold{" +
-                "thresholdId=" + thresholdId +
-                ", roomId='" + roomId + '\'' +
-                ", minTemp=" + minTemp +
-                ", maxTemp=" + maxTemp +
-                ", minHumidity=" + minHumidity +
-                ", maxHumidity=" + maxHumidity +
-                '}';
-    }
+
 }

@@ -19,4 +19,6 @@ public interface IMeasurementService {
     HumidityThreshold returnCurrentHumidityThreshold(String roomId, Date measurementDate);
 
     Measurement getLastMeasurementByRoomId(String roomId);
+
+    List<Measurement> getMeasurementByDateAndRoomId(String date, String roomId);
 }

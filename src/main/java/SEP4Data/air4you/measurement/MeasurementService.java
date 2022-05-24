@@ -13,6 +13,8 @@ import SEP4Data.air4you.threshold.Threshold;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -42,8 +44,6 @@ public class MeasurementService implements IMeasurementService{
 
     @Override
     public Threshold addMeasurement(Measurement measurement) {
-
-
 
         //TODO check if beyond threshold
         Date date = measurement.getDate();
@@ -208,6 +208,34 @@ public class MeasurementService implements IMeasurementService{
             }
         }
         return roomsMeasuremnts.get(roomsMeasuremnts.size()-1);
+    }
+
+    @Override
+    public List<Measurement> getMeasurementByDateAndRoomId(String dateInString, String roomId) {
+        List<Measurement> measurementsInRoom = roomService.getRoomById(roomId).getMeasurements();
+        List<Measurement> newMeasurements = new ArrayList<>();
+
+        try {
+            Date date = new SimpleDateFormat("dd-MM-yyyy").parse(dateInString);
+
+            Calendar inputCalendar = Calendar.getInstance();
+            inputCalendar.setTime(date);
+
+            for (Measurement measurement:
+                    measurementsInRoom) {
+                Calendar measurementCalendar = Calendar.getInstance();
+                measurementCalendar.setTime(measurement.getDate());
+
+                if(inputCalendar.get(Calendar.YEAR) == measurementCalendar.get(Calendar.YEAR) &&
+                        inputCalendar.get(Calendar.MONTH) == measurementCalendar.get(Calendar.MONTH) &&
+                        inputCalendar.get(Calendar.DAY_OF_MONTH) == measurementCalendar.get(Calendar.DAY_OF_MONTH)){
+                    newMeasurements.add(measurement);
+                }
+            }
+        } catch (ParseException e) {
+            return null;
+        }
+        return newMeasurements;
     }
 
     private boolean isInsideThreshold(Date timestamp, LocalTime startTime, LocalTime endTime){
