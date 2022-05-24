@@ -22,8 +22,6 @@ public class MeasurementController {
 
     public MeasurementController(IMeasurementService measurementService){
         this.measurementService = measurementService;
-        Thread thread = new Thread(new insertMeasurements(this.measurementService));
-        thread.start();
     }
 
     // This method will add measurement if the link is called
