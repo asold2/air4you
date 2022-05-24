@@ -2,11 +2,15 @@ package SEP4Data.air4you;
 
 import SEP4Data.air4you.room.Room;
 import SEP4Data.air4you.room.RoomRepository;
+import SEP4Data.air4you.room.RoomService;
+import SEP4Data.air4you.room.RoomServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
@@ -14,8 +18,6 @@ import java.time.LocalDateTime;
 @SpringBootTest
 public class RoomRepositoryTests {
 
-    @Autowired
-    private RoomRepository roomRepository;
 
     @Test
     public void saveRoomTest(){
@@ -25,8 +27,6 @@ public class RoomRepositoryTests {
                 .name("testRoomName")
                 .registrationDate(LocalDateTime.now())
                 .build();
-
-        roomRepository.save(room);
 
     }
 

@@ -3,6 +3,7 @@ package SEP4Data.air4you.measurement;
 import SEP4Data.air4you.room.RoomService;
 import SEP4Data.air4you.threshold.Threshold;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalTime;
@@ -18,11 +19,6 @@ public class MeasurementController {
     @Autowired
     private RoomService roomService;
 
-
-
-    public MeasurementController(IMeasurementService measurementService){
-        this.measurementService = measurementService;
-    }
 
     // This method will add measurement if the link is called
     @PostMapping("/measurement/")
