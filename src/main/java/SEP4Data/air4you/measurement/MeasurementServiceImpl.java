@@ -15,16 +15,15 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Clock;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 @Service
-public class MeasurementService implements IMeasurementService{
+public class MeasurementServiceImpl implements IMeasurementService{
 
     @Autowired
     MeasurementRepository measurementRepository;
@@ -43,7 +42,7 @@ public class MeasurementService implements IMeasurementService{
     RoomService roomService;
 
 
-    MeasurementService(){
+    MeasurementServiceImpl(){
         Date date = new Date(1652774400000L);
 
         Measurement measurement = new Measurement(date,"0004A30B00219CAC",50,50,600);
@@ -211,6 +210,31 @@ public class MeasurementService implements IMeasurementService{
         return newMeasurements;
     }
 
+    @Override public List<Measurement> getMeasurementsBetweenDates(String startDate, String endDate, String roomId)
+    {
+        List<Measurement> measurementsInRoom = roomService.getRoomById(roomId).getMeasurements();
+        List<Measurement> measurementsToReturn = new ArrayList<>();
 
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
+
+            LocalDate dateStart = LocalDate.parse(startDate, formatter);
+            LocalDate dateEnd = LocalDate.parse(endDate, formatter);
+
+
+            for (Measurement measurement:
+                measurementsInRoom) {
+
+                LocalDate measurementLocalDate = measurement.getDate().toInstant().atZone(
+                    ZoneId.systemDefault()).toLocalDate();
+
+                if(measurementLocalDate.isBefore(dateEnd) && measurementLocalDate.isAfter(dateStart));
+            {
+                    measurementsToReturn.add(measurement);
+                }
+            }
+
+        return measurementsToReturn;
+    }
 
 }

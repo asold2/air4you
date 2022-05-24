@@ -20,4 +20,5 @@ public interface IMeasurementService {
     Measurement getLastMeasurementByRoomId(String roomId);
 
     List<Measurement> getMeasurementByDateAndRoomId(String date, String roomId);
+    List<Measurement> getMeasurementsBetweenDates(String startDate, String endDate, String roomId);
 }
