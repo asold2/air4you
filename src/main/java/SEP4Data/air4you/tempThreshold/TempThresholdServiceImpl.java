@@ -84,6 +84,7 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
         return  true;
     }
 
+    @Override
     public void deleteTempThreshold(int id)
     {
         tempThresholdRepository.deleteById(id);
