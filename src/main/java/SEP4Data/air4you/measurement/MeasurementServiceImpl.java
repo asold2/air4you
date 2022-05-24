@@ -41,20 +41,6 @@ public class MeasurementServiceImpl implements IMeasurementService{
     @Autowired
     RoomService roomService;
 
-
-    MeasurementServiceImpl(){
-        Date date = new Date(1652774400000L);
-
-        Measurement measurement = new Measurement(date,"0004A30B00219CAC",50,50,600);
-
-        for (int i = 0; i < 300; i++) {
-            date.setTime(1652774400000L+300000L);
-            measurement.setDate(date);
-            addMeasurement(measurement);
-        }
-
-    }
-
     @Override
     public Threshold addMeasurement(Measurement measurement) {
 
@@ -216,10 +202,13 @@ public class MeasurementServiceImpl implements IMeasurementService{
         List<Measurement> measurementsToReturn = new ArrayList<>();
 
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
             LocalDate dateStart = LocalDate.parse(startDate, formatter);
             LocalDate dateEnd = LocalDate.parse(endDate, formatter);
+
+        System.out.println("FromDate:"+dateStart);
+        System.out.println("ToDate:"+dateEnd);
 
 
             for (Measurement measurement:
@@ -227,9 +216,9 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
                 LocalDate measurementLocalDate = measurement.getDate().toInstant().atZone(
                     ZoneId.systemDefault()).toLocalDate();
+                System.out.println("MeasurementDate:"+measurementLocalDate);
 
-                if(measurementLocalDate.isBefore(dateEnd) && measurementLocalDate.isAfter(dateStart));
-            {
+                if(measurementLocalDate.isBefore(dateEnd) && measurementLocalDate.isAfter(dateStart)){
                     measurementsToReturn.add(measurement);
                 }
             }
