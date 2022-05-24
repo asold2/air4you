@@ -22,11 +22,14 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
 //    @Autowired
 //    private ISendTempThresholdToGateway sendTempThresholdToGateway;
 
+
+    // Method to get all temperature Thresholds
     @Override
     public List<TemperatureThreshold> getAllTempThresholds() {
         return tempThresholdRepository.findAll();
     }
 
+    // Method to get all temperature Thresholds by room Id
     @Override
     public List<TemperatureThreshold> getAllTempThresholdsByRoomId(String roomId) {
         System.out.println(roomId + "service IMPL");
@@ -40,7 +43,7 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
         System.out.println(tempList);
         return tempList;
     }
-
+    //Deleting all threshold
     @Override
     public void deleteAll() {
         tempThresholdRepository.deleteAll();
@@ -83,19 +86,21 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
         tempThresholdRepository.save(temperatureThreshold);
         return  true;
     }
-
+    //Deleting threshold by Id
+    @Override
     public void deleteTempThreshold(int id)
     {
         tempThresholdRepository.deleteById(id);
     }
 
+    //Updating threshold by threshold Id
     @Override
     public void updateTempThreshold(TemperatureThreshold temperatureThreshold) {
         System.out.println(temperatureThreshold.getId() + "!!!!!!!!!!!!!!!!!!!!");
         //Not working. add id in path
         tempThresholdRepository.updateTempThreshold(temperatureThreshold.getMax(), temperatureThreshold.getMin(), temperatureThreshold.getId());
     }
-
+    // This method runs through all temperature thresholds in a specific room and find one threshold by the time
     @Override
     public TemperatureThreshold returnCurrentTempThreshold(String roomId, Date measurementDate) {
         Calendar calendar = Calendar.getInstance();
@@ -118,7 +123,7 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
         }
         return temperatureThreshold;
     }
-
+    // This method will if the temperature data from measurements is inside Min and Max threshold
     public boolean isInsideMaxAndMin(Measurement measurement, TemperatureThreshold temperatureThreshold){
         if (measurement.getTemperature() > temperatureThreshold.getMax()) {
             return false;
@@ -128,7 +133,7 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
         }
         return true;
     }
-
+    // This method will if the measurement timestamp is inside Start time and End time threshold
     public boolean isInsideStartTimeEndTime(Measurement measurement,TemperatureThreshold temperatureThreshold){
 
         Calendar calendar = Calendar.getInstance();
@@ -152,7 +157,7 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
         return true;
     }
 
-
+    // This method will check "isInsideMaxAndMin" and "isInsideStartTimeEndTime" methods
     @Override
     public Measurement isInsideThreshold(Measurement measurement, TemperatureThreshold temperatureThreshold) {
         if (isInsideStartTimeEndTime(measurement,temperatureThreshold)){

@@ -5,6 +5,9 @@ import SEP4Data.air4you.threshold.Threshold;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalTime;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @RestController
