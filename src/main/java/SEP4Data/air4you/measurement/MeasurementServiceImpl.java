@@ -207,23 +207,20 @@ public class MeasurementServiceImpl implements IMeasurementService{
             LocalDate dateStart = LocalDate.parse(startDate, formatter);
             LocalDate dateEnd = LocalDate.parse(endDate, formatter);
 
-        System.out.println("FromDate:"+dateStart);
-        System.out.println("ToDate:"+dateEnd);
-
 
             for (Measurement measurement:
                 measurementsInRoom) {
 
                 LocalDate measurementLocalDate = measurement.getDate().toInstant().atZone(
                     ZoneId.systemDefault()).toLocalDate();
-                System.out.println("MeasurementDate:"+measurementLocalDate);
 
-                if(measurementLocalDate.isBefore(dateEnd) && measurementLocalDate.isAfter(dateStart)){
+                if(measurementLocalDate.isBefore(dateEnd) && measurementLocalDate.isAfter(dateStart))
+                {
                     measurementsToReturn.add(measurement);
                 }
-            }
 
-        return measurementsToReturn;
+
     }
-
+        return measurementsToReturn;
+}
 }
