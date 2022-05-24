@@ -19,6 +19,7 @@ public class MeasurementController {
         this.measurementService = measurementService;
     }
 
+    // This method will add measurement if the link is called
     @PostMapping("/measurement/")
     public @ResponseBody
     Threshold addMeasurement(@RequestBody Measurement measurement){
@@ -26,22 +27,24 @@ public class MeasurementController {
         return measurementService.addMeasurement(measurement);
     }
 
-
+    // This method will get all measurements by roomId if the link is called
     @GetMapping("/measurement/{roomId}")
     public List<Measurement> getMeasurement(@PathVariable String roomId){
         return measurementService.getMeasurements(roomId);
     }
-
+    // This method will delete measurement by roomId if the link is called
     @DeleteMapping("/measurement/room/{roomId}")
     public void removeMeasurementFromRoom(@PathVariable String roomId){
         measurementService.deleteAllFromRoom(roomId);
     }
 
+    // This method will delete measurement by userId if the link is called
     @DeleteMapping("/measurement/user/{userId}")
     public void removeMeasurementByUser(@PathVariable String userId){
         measurementService.deleteAllFromUser(userId);
     }
 
+    //Method for deleting all measurements
     // DO NOT USE THIS UNLESS YOU ARE READY TO HAVE NO DATA ON MEASUREMENTS
     @DeleteMapping("/measurement/all/")
     public void removeMeasurement(){
@@ -49,7 +52,6 @@ public class MeasurementController {
     }
 
     // Receive DATE and roomId and send all measurements.
-
     @GetMapping("/measurement/{date}/{roomId}")
     public List<Measurement> getMeasurementsByDateAndRoomId(@PathVariable String date, @PathVariable String roomId){
         return measurementService.getMeasurementByDateAndRoomId(date, roomId);

@@ -1,10 +1,15 @@
 package SEP4Data.air4you.tempThreshold;
 
+import SEP4Data.air4you.humidityThreshold.HumidityThreshold;
+import SEP4Data.air4you.measurement.Measurement;
 import SEP4Data.air4you.room.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 @Service
 public class TempThresholdServiceImpl implements ITempThresholdService{
@@ -91,6 +96,72 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
         tempThresholdRepository.updateTempThreshold(temperatureThreshold.getMax(), temperatureThreshold.getMin(), temperatureThreshold.getId());
     }
 
+    @Override
+    public TemperatureThreshold returnCurrentTempThreshold(String roomId, Date measurementDate) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(measurementDate);
+
+        // Change Measurement Date type into LocalTime dataType.
+        LocalTime measurementTime = LocalTime.of(
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE),
+                calendar.get(Calendar.SECOND));
+
+        TemperatureThreshold temperatureThreshold = null;
+        for (TemperatureThreshold temp: getAllTempThresholdsByRoomId(roomId)) {
+            if (temp.getStartTime().isBefore(measurementTime) && temp.getEndTime().isAfter(measurementTime)){
+                temperatureThreshold = temp;
+            }
+        }
+        if(temperatureThreshold == null){
+            temperatureThreshold = new TemperatureThreshold(0,0);
+        }
+        return temperatureThreshold;
+    }
+
+    public boolean isInsideMaxAndMin(Measurement measurement, TemperatureThreshold temperatureThreshold){
+        if (measurement.getTemperature() > temperatureThreshold.getMax()) {
+            return false;
+
+        } else if (measurement.getTemperature() < temperatureThreshold.getMin()) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isInsideStartTimeEndTime(Measurement measurement,TemperatureThreshold temperatureThreshold){
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(measurement.getDate());
+
+        int measurementHour = calendar.get(Calendar.HOUR_OF_DAY);
+        int measurementMinute = calendar.get(Calendar.MINUTE);
+
+        if(temperatureThreshold.getStartTime() != null && temperatureThreshold.getEndTime() != null) {
+
+
+            if (measurementHour >= temperatureThreshold.getStartTime().getHour() && measurementHour <= temperatureThreshold.getEndTime().getHour()) {
+                return true;
+            } else if (measurementHour == temperatureThreshold.getStartTime().getHour() || measurementHour == temperatureThreshold.getEndTime().getHour()) {
+                if (measurementMinute > temperatureThreshold.getStartTime().getMinute() && measurementMinute < temperatureThreshold.getEndTime().getMinute()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return true;
+    }
+
+
+    @Override
+    public Measurement isInsideThreshold(Measurement measurement, TemperatureThreshold temperatureThreshold) {
+        if (isInsideStartTimeEndTime(measurement,temperatureThreshold)){
+            if (isInsideMaxAndMin(measurement, temperatureThreshold)){
+                measurement.setTemperatureExceeded(false);
+            }
+        }
+        return measurement;
+    }
 
 
 }

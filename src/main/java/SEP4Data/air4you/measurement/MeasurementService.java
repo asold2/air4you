@@ -42,6 +42,7 @@ public class MeasurementService implements IMeasurementService{
     @Autowired
     RoomService roomService;
 
+
     @Override
     public Threshold addMeasurement(Measurement measurement) {
 
@@ -63,46 +64,27 @@ public class MeasurementService implements IMeasurementService{
 
         System.out.println("Measurement date = " + measurement.getDate());
 
-        TemperatureThreshold tempThresh = returnCurrentTempThreshold(measurement.getRoomId(), measurement.getDate());
-        HumidityThreshold humThresh = returnCurrentHumidityThreshold(measurement.getRoomId(), measurement.getDate());
+        TemperatureThreshold tempThresh = tempThresholdService.returnCurrentTempThreshold(measurement.getRoomId(), measurement.getDate());
+        HumidityThreshold humThresh = humidityThresholdService.returnCurrentHumidityThreshold(measurement.getRoomId(), measurement.getDate());
 
-        if (isInsideThreshold(measurement.getDate(), tempThresh.getStartTime(), tempThresh.getEndTime()))
+        if (tempThresholdService.isInsideThreshold(measurement, tempThresh).getTemperatureExceeded())
         {
-            if (measurement.getTemperature() > tempThresh.getMax())
-            {
-                data.setBody("Temperature is too high");
-                data.setTitle("Threshold has been reached");
-                data.setExceeded(true);
+            data.setBody("Temperature is outside threshold");
+            data.setTitle("Threshold has been reached");
+            data.setExceeded(true);
 
-                measurement.setTemperatureExceeded(true);
-                mainActivity.sendNotification(to, data);
-            }
-            else if (measurement.getTemperature() < tempThresh.getMin())
-            {
-                data.setExceeded(true);
-                measurement.setTemperatureExceeded(true);
-                mainActivity.sendNotification(to, data);
-            }
+            measurement.setTemperatureExceeded(true);
+            mainActivity.sendNotification(to,data);
         }
 
-        if (isInsideThreshold(measurement.getDate(), humThresh.getStartTime(), humThresh.getEndTime()))
+        if (humidityThresholdService.isInsideThreshold(measurement,humThresh).getHumidityExceeded())
         {
-            if (measurement.getHumidity() > humThresh.getMax()) {
-                data.setBody("Humidity is too high");
-                data.setTitle("Threshold has been reached");
-                data.setExceeded(true);
+            data.setBody("Humidity is outside threshold");
+            data.setTitle("Threshold has been reached");
+            data.setExceeded(true);
 
-                measurement.setHumidityExceeded(true);
-                mainActivity.sendNotification(to,data);
-                // Todo send notification
-            } else if (measurement.getHumidity() < humThresh.getMin()) {
-                data.setBody("Humidity is too low");
-                data.setTitle("Threshold has been reached");
-                data.setExceeded(true);
-
-                measurement.setHumidityExceeded(true);
-                mainActivity.sendNotification(to,data);
-            }
+            measurement.setHumidityExceeded(true);
+            mainActivity.sendNotification(to,data);
         }
 
         if(measurement.getCo2() > 600){
@@ -176,28 +158,6 @@ public class MeasurementService implements IMeasurementService{
         return temperatureThreshold;
     }
 
-    @Override
-    public HumidityThreshold returnCurrentHumidityThreshold(String roomId, Date measurementDate) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(measurementDate);
-
-        // Change Measurement Date type into LocalTime dataType.
-        LocalTime measurementTime = LocalTime.of(
-                calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE),
-                calendar.get(Calendar.SECOND));
-
-        HumidityThreshold humidityThreshold = null;
-        for (HumidityThreshold temp: humidityThresholdService.getAllHumidityThresholdsByRoomId(roomId)) {
-            if (temp.getStartTime().isBefore(measurementTime) && temp.getEndTime().isAfter(measurementTime)){
-                humidityThreshold = temp;
-            }
-        }
-        if(humidityThreshold == null){
-            humidityThreshold = new HumidityThreshold(0,0);
-        }
-        return humidityThreshold;
-    }
 
     @Override
     public Measurement getLastMeasurementByRoomId(String roomId) {
@@ -238,27 +198,6 @@ public class MeasurementService implements IMeasurementService{
         return newMeasurements;
     }
 
-    private boolean isInsideThreshold(Date timestamp, LocalTime startTime, LocalTime endTime){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(timestamp);
 
-        int measurementHour = calendar.get(Calendar.HOUR_OF_DAY);
-        int measurementMinute = calendar.get(Calendar.MINUTE);
-
-        if(startTime != null && endTime != null) {
-
-            System.out.println(measurementHour + ":" + measurementMinute + "AAAAAAAAAAABBBBBBBBBCCCCCCCC" + startTime.getHour() + ":" + startTime.getMinute());
-
-            if (measurementHour >= startTime.getHour() && measurementHour <= endTime.getHour()) {
-                return true;
-            } else if (measurementHour == startTime.getHour() || measurementHour == endTime.getHour()) {
-                if (measurementMinute > startTime.getMinute() && measurementMinute < endTime.getMinute()) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        return true;
-    }
 
 }
