@@ -37,10 +37,10 @@ public class TempThresholdController {
     }
 
     @DeleteMapping("/temperatureThresholds/{id}")
-    public int deleteTempThreshold(@PathVariable int thresholdId){
+    public int deleteTempThreshold(@PathVariable int id){
         try {
-            tempThresholdService.deleteTempThreshold(thresholdId);
-            System.out.println("Successfully deleted temperatureThreshold with id: " + thresholdId);
+            tempThresholdService.deleteTempThreshold(id);
+            System.out.println("Successfully deleted temperatureThreshold with id: " + id);
             return HttpServletResponse.SC_OK;
         } catch (NullPointerException nullPointerException){
             System.out.println("Could not delete temperatureThreshold because: \n " + nullPointerException.getMessage());
