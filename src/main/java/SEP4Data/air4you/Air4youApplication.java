@@ -19,8 +19,8 @@ public class Air4youApplication {
 		SpringApplication.run(Air4youApplication.class, args);
 		RoomService roomService = new RoomServiceImpl();
 
-//		Extract extract = new Extract();
-//		extract.extractRoomToStage();
+	Extract extract = new Extract();
+	extract.stageDimHumidityThresholdCreation();
 		//mainActivity.sendNotification("Test title", "Test content");
 
 	}
