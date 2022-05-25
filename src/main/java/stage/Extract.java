@@ -6,15 +6,20 @@ public class Extract {
     public Extract(){
         jdbcManager = JDBCManager.getInstance();
         stageDimRoomCreation();
-        stageDimUserCreation();
-        //stageDimHumidityThresholdCreation();
-        //extractDimHumidityThresholdToStage();
-        stageDimTemperatureThresholdCreation();
-        extractTemperatureThresholdToStage();
+        extractRoomToStage();
+//        stageDimUserCreation();
+//        stageDimMeasurementCreation();
+//        System.out.println("Somthing");
+//        stageDimHumidityThresholdCreation();
+//        extractDimHumidityThresholdToStage();
+//        stageDimTokenCreation();
+//        extractTokenToStage();
+        extractDimUserToStage();
+        stageDimHumidityThresholdCreation();
     }
 
     public void stageDimRoomCreation(){
-        jdbcManager.execute("create table if not exists stage_air4you.DimRoom (" +
+        jdbcManager.execute("create table if not exists stage_air4you.Dim_Room (" +
                 "room_id VARCHAR(255) not null primary key," +
                 "name VARCHAR(255)," +
                 "registration_date timestamp," +
@@ -22,11 +27,16 @@ public class Extract {
                 ")");
 
     }
-
-
+    public void stageDimTokenCreation(){
+        jdbcManager.execute("create table if not exists stage_air4you.Dim_Token(" +
+                "id integer not null primary key," +
+                "uid varchar(255)," +
+                "token varchar(255)" +
+                ")");
+    }
     public void stageDimUserCreation(){
-        jdbcManager.execute("create table if not exists stage_air4you.DimUser(" +
-                "userId varchar(255) not null primary key," +
+        jdbcManager.execute("create table if not exists stage_air4you.Dim_User(" +
+                "user_Id varchar(255) not null primary key," +
                 "token varchar(255)," +
                 "email varchar(255)," +
                 "name varchar(255)" +
@@ -36,9 +46,9 @@ public class Extract {
 
 
     public void stageDimMeasurementCreation(){
-        jdbcManager.execute("create table if not exists stage_air4you.DimMeasurement (" +
+        jdbcManager.execute("create table if not exists stage_air4you.Dim_Measurement (" +
                 "measurement_Id VARCHAR(255) not null primary key," +
-                "room_Id VARCHAR(255) FOREIGN KEY REFERENCES stage_air4you.DimRoom(roomId)," +
+                "room_Id VARCHAR(255)," +
                 "date timestamp," +
                 "temperature DECIMAL(5,2)," +
                 "humidity DECIMAL(5,2)," +
@@ -46,7 +56,7 @@ public class Extract {
                 "temperature_Exceeded BOOLEAN," +
                 "humidity_Exceeded BOOLEAN," +
                 "co2_Exceeded BOOLEAN," +
-                "FOREIGN KEY (room_Id) REFERENCES stage_air4you.DimRoom (room_Id)"+
+                "FOREIGN KEY (room_Id) REFERENCES stage_air4you.Dim_Room (room_Id)"+
                 ")");
     }
 
@@ -58,10 +68,17 @@ public class Extract {
     }
 
     public void extractRoomToStage(){
-        jdbcManager.execute("Insert into stage_air4you.room " +
+        jdbcManager.execute("Insert into stage_air4you.Dim_Room " +
             "select room_id, name, registration_date, user_id from room " +
-            "except select room_id, name, registration_date, user_id " +
-            "from stage_air4you.room");
+                "except select room_id, name, registration_date, user_id from stage_air4you.Dim_Room  "
+
+        );
+    }
+    public void extractTokenToStage(){
+        jdbcManager.execute("insert into stage_air4you.dim_token " +
+                "select id, uid, token from tokens " +
+                "except select id, uid, token from stage_air4you.dim_token "
+        );
     }
 
     public void stageDimTemperatureThresholdCreation(){
@@ -104,9 +121,14 @@ public class Extract {
             );
     }
 
+    //Need to take data from Dim_Room and Dim_Token from stage.
     public void extractDimUserToStage(){
-        jdbcManager.execute("insert into stage_air4you.DimUser" +
-                "select stage_air4you.DimRoom.user_id");
+        jdbcManager.execute("insert into stage_air4you.Dim_User\n" +
+                "                select stage_air4you.Dim_Room.user_id, stage_air4you.dim_token.token\n" +
+                "                from stage_air4you.Dim_Room\n" +
+                "                inner join stage_air4you.Dim_Token\n" +
+                "            on stage_air4you.Dim_Room.user_id = stage_air4you.Dim_Token.uid " +
+                "except select user_id, token from stage_air4you.Dim_User");
     }
 
 

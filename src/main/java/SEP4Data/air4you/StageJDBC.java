@@ -1,4 +1,4 @@
-package config;
+package SEP4Data.air4you;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

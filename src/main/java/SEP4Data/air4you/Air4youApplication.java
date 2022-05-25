@@ -9,7 +9,8 @@ import org.springframework.context.annotation.ComponentScan;
 import stage.Extract;
 
 @SpringBootApplication
-@ComponentScan({"config.StageJDBC"})
+@ComponentScan
+@ComponentScan({"SEP4Data.air4you.StageJDBC"})
 
 public class Air4youApplication {
 
@@ -17,7 +18,6 @@ public class Air4youApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Air4youApplication.class, args);
-		RoomService roomService = new RoomServiceImpl();
 
 		Extract extract = new Extract();
 //		extract.stageDimUserCreation();

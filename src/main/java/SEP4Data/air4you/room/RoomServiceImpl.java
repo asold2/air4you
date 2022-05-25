@@ -1,6 +1,6 @@
 package SEP4Data.air4you.room;
 
-//import config.StageJDBC;
+//import SEP4Data.air4you.StageJDBC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -24,6 +24,7 @@ public class RoomServiceImpl implements RoomService{
     @Override
     public boolean registerRoom(Room room) {
         room.setRegistrationDate(LocalDateTime.now());
+        if(room.getRoomId()!=null){
         if(roomRepository.existsById(room.getRoomId())){
             return false;
         }
@@ -31,6 +32,9 @@ public class RoomServiceImpl implements RoomService{
             roomRepository.save(room);
             return true;
         }
+        }
+        return false;
+
     }
 
     @Override

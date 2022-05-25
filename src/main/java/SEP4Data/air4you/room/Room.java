@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,11 +14,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+//@Data
+//@AllArgsConstructor
+//@NoArgsConstructor
+//@Builder
 @Entity
+@Component
 @Table(name="room")
 public class Room implements Serializable {
     @Id
@@ -28,6 +31,9 @@ public class Room implements Serializable {
     private List<Measurement> measurements;
 //    private String notoficationToken;
 
+
+    public Room() {
+    }
 
     public Room(String roomId, String userId, String name, LocalDateTime registrationDate){
         this.roomId = roomId;
