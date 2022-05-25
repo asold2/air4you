@@ -33,6 +33,28 @@ public class Extract {
 
 
 
+    public void stageDimMeasurementCreation(){
+        jdbcManager.execute("create table if not exists stage_air4you.DimMeasurement (" +
+                "measurement_Id VARCHAR(255) not null primary key," +
+                "room_Id VARCHAR(255) FOREIGN KEY REFERENCES stage_air4you.DimRoom(roomId)," +
+                "date timestamp," +
+                "temperature DECIMAL(5,2)," +
+                "humidity DECIMAL(5,2)," +
+                "co2 DECIMAL(5,2) ," +
+                "temperature_Exceeded BOOLEAN," +
+                "humidity_Exceeded BOOLEAN," +
+                "co2_Exceeded BOOLEAN," +
+                "FOREIGN KEY (room_Id) REFERENCES stage_air4you.DimRoom (room_Id)"+
+                ")");
+    }
+
+    public void extractDimMeasurementToStage(){
+        jdbcManager.execute("Insert into stage_air4you.DimMeasurement " +
+                "select measurement_Id, room_Id, date, temperature, humidity, co2, temperature_Exceeded, humidity_Exceeded, co2_Exceeded from measurement" +
+                "except measurement_Id, room_Id, date, temperature, humidity, co2, temperature_Exceeded, humidity_Exceeded, co2_Exceeded" +
+                "from stage_air4you.DimMeasurement");
+    }
+
     public void extractRoomToStage(){
         jdbcManager.execute("Insert into stage_air4you.room " +
             "select room_id, name, registration_date, user_id from room " +

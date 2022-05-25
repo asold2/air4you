@@ -12,11 +12,12 @@ public
 class Air4youApplicationTests {
 
 	// CHECKING CONTROLLERS IS NOT NULL
-
+	@Autowired
+	private RoomController roomController;
 
 	@Test
 	void contextLoads() {
-
+		assertThat(roomController).isNotNull();
 	}
 
 }
