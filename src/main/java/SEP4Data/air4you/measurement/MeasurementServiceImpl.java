@@ -42,6 +42,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
     @Autowired
     RoomService roomService;
 
+    //Adding measurement
     @Override
     public Threshold addMeasurement(Measurement measurement) {
 
@@ -103,6 +104,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
         return thresholdToReturn;
     }
 
+    //Get measurements by room id
     @Override
     public List<Measurement> getMeasurements(String roomId) {
 
@@ -126,10 +128,12 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
     }
 
+    //Delete all measurements
     @Override
     public void deleteAll() {
         measurementRepository.deleteAll();
     }
+
 
     @Override
     public  TemperatureThreshold returnCurrentTempThreshold(String roomId, Date measurementDate) {
@@ -157,7 +161,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
         return temperatureThreshold;
     }
 
-
+    // This method will return measurements by room id
     @Override
     public Measurement getLastMeasurementByRoomId(String roomId) {
         List<Measurement> roomsMeasuremnts = new ArrayList<>();
@@ -169,6 +173,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
         return roomsMeasuremnts.get(roomsMeasuremnts.size()-1);
     }
 
+    //This method will return measurements by date and room id
     @Override
     public List<Measurement> getMeasurementByDateAndRoomId(String dateInString, String roomId) {
         List<Measurement> measurementsInRoom = roomService.getRoomById(roomId).getMeasurements();
@@ -197,6 +202,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
         return newMeasurements;
     }
 
+    //This method will return measurements between two dates
     @Override
     public List<Measurement> getMeasurementsBetweenDates(String startDate, String endDate, String roomId)
     {
@@ -226,6 +232,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
         return measurementsToReturn;
     }
 
+    //This method will return measurements for week by user id
     @Override
     public List<Measurement> getMeasurementByUserAndRoomIdWeek(String userId)
     {
