@@ -30,11 +30,10 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
 
   // Adding humidity threshold 
   @Override
-  public boolean addHumidityThreshold(HumidityThreshold humidityThreshold)
-  {
+  public boolean addHumidityThreshold(HumidityThreshold humidityThreshold) throws Exception {
     if (roomRepository.findById(humidityThreshold.getRoomId()).isEmpty())
     {
-      return false;
+      throw new Exception("noRoom");
     }
 
     List<HumidityThreshold> roomsThresholds = new ArrayList<>();
@@ -52,24 +51,24 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
           && ((humidityThreshold.getStartTime().isBefore(temp.getEndTime())))
           || humidityThreshold.getStartTime().equals(temp.getEndTime()))
       {
-        return false;
+        throw new Exception("insideTimeZone");
       }
       else if (humidityThreshold.getEndTime().isAfter(temp.getStartTime())
           && (humidityThreshold.getEndTime().isBefore(temp.getEndTime())) || (
           (humidityThreshold.getEndTime().equals(temp.getEndTime()))
               || humidityThreshold.getEndTime().equals(temp.getStartTime())))
       {
-        return false;
+        throw new Exception("insideTimeZone");
       }
       else if (humidityThreshold.contains(temp))
       {
-        return false;
+        throw new Exception("alreadyContains");
       }
     }
     if (humidityThreshold.getStartTime() == null
         || humidityThreshold.getEndTime() == null)
     {
-      return false;
+      throw new Exception("noTime");
     }
     humidityThresholdRepository.save(humidityThreshold);
     return true;

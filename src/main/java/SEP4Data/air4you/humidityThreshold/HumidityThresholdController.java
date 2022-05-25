@@ -1,6 +1,5 @@
 package SEP4Data.air4you.humidityThreshold;
 
-import SEP4Data.air4you.tempThreshold.TemperatureThreshold;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,12 +29,27 @@ public class HumidityThresholdController
   // This method will add humidity threshold if the link is called
   @PostMapping("/humidityThresholds/")
   public int addThresholdHumidity(@RequestBody HumidityThreshold humidityThreshold){
-    if (humidityThresholdService.addHumidityThreshold(humidityThreshold)){
-      return HttpServletResponse.SC_OK;
+    try {
+      if (humidityThresholdService.addHumidityThreshold(humidityThreshold)){
+        return HttpServletResponse.SC_OK;
+      }
+    } catch (Exception e) {
+      switch (e.getMessage()){
+        case "noRoom":
+          // There is no room to have threshold inside.
+          return HttpServletResponse.SC_CONFLICT;
+        case "insideTimeZone":
+          // Creating threshold that is inside other threshold's startTime/endTime
+          return HttpServletResponse.SC_BAD_REQUEST;
+        case "alreadyContains":
+          // There is already a threshold like this inside the room.
+          return HttpServletResponse.SC_NOT_ACCEPTABLE;
+        case "noTime":
+          // startTime or/and endTime is not inside Request.
+          return HttpServletResponse.SC_EXPECTATION_FAILED;
+      }
     }
-    else{
-      return  HttpServletResponse.SC_FORBIDDEN;
-    }
+    return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
   }
   // This method will delete humidity threshold by Id if the link is called
   @DeleteMapping("/humidityThresholds/{id}")

@@ -7,8 +7,8 @@ public class Extract {
         jdbcManager = JDBCManager.getInstance();
         stageDimRoomCreation();
         stageDimUserCreation();
-        //stageDimHumidityThresholdCreation();
-        //extractDimHumidityThresholdToStage();
+        stageDimHumidityThresholdCreation();
+        extractDimHumidityThresholdToStage();
         stageDimTemperatureThresholdCreation();
         extractTemperatureThresholdToStage();
     }
@@ -84,24 +84,23 @@ public class Extract {
     }
 
     public void stageDimHumidityThresholdCreation(){
-        jdbcManager.execute("CREATE TABLE IF NOT EXISTS stage_air4you.Dim_HumidityThreshold ("+
-            "humidity_threshold_id VARCHAR(255) not null primary key,"+
-            "room_id VARCHAR(255),"+
-            "start_time timestamp,"+
-            "end_time timestamp,"+
-            "minimum_value DECIMAL(5,2),"+
-            "maximum_value DECIMAL(5,2)," +
-                "FOREIGN KEY (room_id) REFERENCES stage_air4you.DimRoom (room_id)"+
-            ")");
+        jdbcManager.execute("create table if not exists stage_air4you.dim_humidity_threshold(" +
+                "humidity_threshold_id INT not null primary key," +
+                "room_id VARCHAR(255)," +
+                "minimum_value DECIMAL(4,2)," +
+                "maximum_value DECIMAL(4,2)," +
+                "start_time TIME(10)," +
+                "end_time TIME(10)," +
+                "FOREIGN KEY (room_id) REFERENCES stage_air4you.DimRoom (room_id)" +
+                ")");
     }
 
     public void extractDimHumidityThresholdToStage()
     {
-        jdbcManager.execute("Insert into stage_air4you.Dim_HumidityThreshold ( " +
-            "humidity_threshold_id, room_id, start_time, end_time, minimum_value, maximum_value from Dim_HumidityThreshold "+
-            "except select humidity_threshold_id, room_id, start_time, end_time, minimum_value, maximum_value "+
-            "from stage_air4you.Dim_HumidityThreshold) "
-            );
+        jdbcManager.execute("Insert into stage_air4you.dim_humidity_threshold (" +
+                "select humidity_threshold_id,room_id, minimum_value,maximum_value,start_time,end_time from stage_air4you.dim_humidity_threshold " +
+                "except select id,room_id, min,max,start_time,end_time " +
+                "from public.humidity_thresholds) ");
     }
 
     public void extractDimUserToStage(){
