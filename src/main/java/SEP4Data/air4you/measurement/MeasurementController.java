@@ -16,8 +16,6 @@ public class MeasurementController {
 
     @Autowired
     private IMeasurementService measurementService;
-    @Autowired
-    private RoomService roomService;
 
 
     // This method will add measurement if the link is called

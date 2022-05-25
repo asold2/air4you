@@ -31,6 +31,10 @@ public class HumidityThreshold
     this.max = max;
   }
 
+  public void setId(int id) {
+    Id = id;
+  }
+
   public int getId() {
     return Id;
   }

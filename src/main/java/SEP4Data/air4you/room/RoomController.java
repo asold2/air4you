@@ -14,8 +14,6 @@ public class RoomController {
 
     @Autowired
     private RoomService roomService;
-    @Autowired
-    private IMeasurementService measurementService;
 
 
 
