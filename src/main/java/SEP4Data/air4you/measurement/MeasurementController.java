@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
@@ -33,8 +34,12 @@ public class MeasurementController {
     }
     // This method will delete measurement by roomId if the link is called
     @DeleteMapping("/measurement/room/{roomId}")
-    public void removeMeasurementFromRoom(@PathVariable String roomId){
-        measurementService.deleteAllFromRoom(roomId);
+    public int removeMeasurementFromRoom(@PathVariable String roomId){
+        if(measurementService.deleteAllFromRoom(roomId)){
+            return HttpServletResponse.SC_OK;
+        } else {
+            return HttpServletResponse.SC_NOT_FOUND;
+        }
     }
 
     // This method will delete measurement by userId if the link is called

@@ -29,6 +29,7 @@ public class HumidityThresholdController
     return humidityThresholdService.getAllHumidityThresholds();
   }
   // This method will add humidity threshold if the link is called
+
   @PostMapping("/humidityThresholds/")
   public int addThresholdHumidity(@RequestBody HumidityThreshold humidityThreshold){
     try {

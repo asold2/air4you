@@ -6,6 +6,7 @@ import SEP4Data.air4you.Notification.Token.TokenService;
 import SEP4Data.air4you.humidityThreshold.HumidityThreshold;
 import SEP4Data.air4you.humidityThreshold.IHumidityThresholdService;
 import SEP4Data.air4you.room.Room;
+import SEP4Data.air4you.room.RoomRepository;
 import SEP4Data.air4you.room.RoomService;
 import SEP4Data.air4you.tempThreshold.ITempThresholdService;
 import SEP4Data.air4you.tempThreshold.TemperatureThreshold;
@@ -28,6 +29,9 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
     @Autowired
     MeasurementRepository measurementRepository;
+
+    @Autowired
+    RoomRepository roomRepository;
     @Autowired
     MainActivity mainActivity;
     @Autowired
@@ -119,8 +123,13 @@ public class MeasurementServiceImpl implements IMeasurementService{
     }
 
     @Override
-    public void deleteAllFromRoom(String roomId) {
-
+    public boolean deleteAllFromRoom(String roomId) {
+        if(roomRepository.existsById(roomId)) {
+            measurementRepository.deleteMeasurementsByRoomId(roomId);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
