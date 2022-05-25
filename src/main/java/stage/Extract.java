@@ -25,5 +25,24 @@ public class Extract {
                 "from stage_air4you.room");
     }
 
+    public void stageDimTemperatureThresholdCreation(){
+        jdbcManager.execute("create table if not exists stage_air4you.DimTemperatureThreshold(" +
+                "temperatureThresholdId VARCHAR(255) not null primary key," +
+                "roomId VARCHAR(255)," +
+                "minValue DECIMAL(4,2)," +
+                "maxValue DECIMAL(4,2)," +
+                "startTime TIME(10)," +
+                "endTIme TIME(10)," +
+                "FOREIGN KEY (roomId) REFERENCES stage_air4you.DimRoom (room_id)" +
+                ")");
+    }
+
+    public void extractTemperatureThresholdToStage(){
+        jdbcManager.execute("Insert into stage_air4you.DimTemperatureThreshold (" +
+                "select temperatureThresholdId,roomId, minValue,maxValue,startTime,endTime from DimTemperatureThreshold " +
+                "except select id,room_id, min,max,start_time,end_time " +
+                "from stage_air4you.temperature_thresholds) ");
+    }
+
 
 }

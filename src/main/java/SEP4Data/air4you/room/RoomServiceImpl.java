@@ -18,7 +18,6 @@ public class RoomServiceImpl implements RoomService{
 
     @Autowired
     private RoomRepository roomRepository;
-    @Autowired
 
 
 
