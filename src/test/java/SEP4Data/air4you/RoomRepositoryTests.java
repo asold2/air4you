@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 @SpringBootTest
 public class RoomRepositoryTests {
 
-
     @Test
     public void saveRoomTest(){
         Room room = Room.builder()
