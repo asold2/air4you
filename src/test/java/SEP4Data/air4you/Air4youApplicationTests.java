@@ -11,13 +11,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public
 class Air4youApplicationTests {
 
-	// CHECKING CONTROLLERS IS NOT NULL
-	@Autowired
-	private RoomController roomController;
-
 	@Test
 	void contextLoads() {
-		assertThat(roomController).isNotNull();
 	}
 
 }

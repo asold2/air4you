@@ -30,12 +30,11 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
 
   // Adding humidity threshold 
   @Override
-  public boolean addHumidityThreshold(HumidityThreshold humidityThreshold)
-  {
+  public boolean addHumidityThreshold(HumidityThreshold humidityThreshold) throws Exception {
+    System.out.println("das");
     if (roomRepository.findById(humidityThreshold.getRoomId()).isEmpty())
     {
-      System.out.println("hum1");
-      return false;
+      throw new Exception("noRoom");
     }
 
     List<HumidityThreshold> roomsThresholds = new ArrayList<>();
@@ -49,35 +48,30 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
     for (HumidityThreshold temp : roomsThresholds)
     {
       if ((humidityThreshold.getStartTime().isAfter(temp.getStartTime())
-          || humidityThreshold.getStartTime().equals(temp.getStartTime()))
-          && ((humidityThreshold.getStartTime().isBefore(temp.getEndTime())))
-          || humidityThreshold.getStartTime().equals(temp.getEndTime()))
+              || humidityThreshold.getStartTime().equals(temp.getStartTime()))
+              && ((humidityThreshold.getStartTime().isBefore(temp.getEndTime())))
+              || humidityThreshold.getStartTime().equals(temp.getEndTime()))
       {
-        System.out.println("Humdity add 3");
-        return false;
+        throw new Exception("insideTimeZone");
       }
       else if (humidityThreshold.getEndTime().isAfter(temp.getStartTime())
-          && (humidityThreshold.getEndTime().isBefore(temp.getEndTime())) || (
-          (humidityThreshold.getEndTime().equals(temp.getEndTime()))
-              || humidityThreshold.getEndTime().equals(temp.getStartTime())))
+              && (humidityThreshold.getEndTime().isBefore(temp.getEndTime())) || (
+              (humidityThreshold.getEndTime().equals(temp.getEndTime()))
+                      || humidityThreshold.getEndTime().equals(temp.getStartTime())))
       {
-        System.out.println("Humdity add 4");
-        return false;
+        throw new Exception("insideTimeZone");
       }
       else if (humidityThreshold.contains(temp))
       {
-        System.out.println("Humdity add 5");
-        return false;
+        throw new Exception("alreadyContains");
       }
     }
     if (humidityThreshold.getStartTime() == null
-        || humidityThreshold.getEndTime() == null)
+            || humidityThreshold.getEndTime() == null)
     {
-      System.out.println("Humdity add 6");
-      return false;
+      throw new Exception("noTime");
     }
     humidityThresholdRepository.save(humidityThreshold);
-    System.out.println("Humdity add 7");
     return true;
 
   }
