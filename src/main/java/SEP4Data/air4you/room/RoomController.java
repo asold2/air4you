@@ -66,6 +66,16 @@ public class RoomController {
         System.out.println(userId + "userId to delete user from db");
         roomService.deleteAllFromUser(userId);
     }
+    //This
+    @DeleteMapping("/room/{roomId}/")
+    public int deleteRoom(@PathVariable String roomId){
+        System.out.println(roomId + "userId to delete user from db");
+        if (roomService.deleteRoom(roomId)){
+            return HttpServletResponse.SC_OK;
+        }else
+            return HttpServletResponse.SC_NOT_FOUND;
+
+    }
 
     @DeleteMapping("/deletion/")
     public void deleteAllRooms(){
