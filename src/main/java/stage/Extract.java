@@ -41,23 +41,23 @@ public class Extract {
     }
 
     public void stageDimHumidityThresholdCreation(){
-        jdbcManager.execute("CREATE TABLE IF NOT EXISTS stage_air4you.DimHumidityThreshold ("+
-            "humidityThresholdId VARCHAR(255) not null primary key,"+
-            "roomId VARCHAR(255),"+
-            "startTime timestamp,"+
-            "endTime timestamp,"+
-            "minimumValue DECIMAL(5,2),"+
-            "maximumValue DECIMAL(5,2)," +
-                "FOREIGN KEY (roomId) REFERENCES stage_air4you.DimRoom (room_id)"+
+        jdbcManager.execute("CREATE TABLE IF NOT EXISTS stage_air4you.Dim_HumidityThreshold ("+
+            "humidity_threshold_id VARCHAR(255) not null primary key,"+
+            "room_id VARCHAR(255),"+
+            "start_time timestamp,"+
+            "end_time timestamp,"+
+            "minimum_value DECIMAL(5,2),"+
+            "maximum_value DECIMAL(5,2)," +
+                "FOREIGN KEY (room_id) REFERENCES stage_air4you.Dim_Room (room_id)"+
             ")");
     }
 
     public void extractDimHumidityThresholdToStage()
     {
-        jdbcManager.execute("Insert into stage_air4you.DimHumidityThreshold ( " +
-            "humidityThresholdId, roomId, startTime, endTime, minimumValue, maximumValue from DImHumidityThreshold "+
-            "except select humidityThresholdId, roomId, startTime, endTime, minimumValue, maximumValue "+
-            "from stage_air4you.DimHumidityThreshold) "
+        jdbcManager.execute("Insert into stage_air4you.Dim_HumidityThreshold ( " +
+            "humidity_threshold_id, room_id, start_time, end_time, minimum_value, maximum_value from Dim_HumidityThreshold "+
+            "except select humidity_threshold_id, room_id, start_time, end_time, minimum_value, maximum_value "+
+            "from stage_air4you.Dim_HumidityThreshold) "
             );
     }
 
