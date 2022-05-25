@@ -3,7 +3,10 @@ package SEP4Data.air4you.room;
 import SEP4Data.air4you.measurement.Measurement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +57,20 @@ public class RoomServiceImpl implements RoomService{
         room.setUserId("none");
         roomRepository.save(room);
     }
+
+    @Override
+    public boolean deleteRoom(String roomId) {
+
+        if (roomRepository.existsById(roomId)){
+            roomRepository.deleteById(roomId);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+
 
     @Override
     public void deleteAllFromUser(String userId) {
