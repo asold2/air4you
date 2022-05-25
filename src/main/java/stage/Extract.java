@@ -5,11 +5,14 @@ public class Extract {
 
     public Extract(){
         jdbcManager = JDBCManager.getInstance();
-//        stageSchemaCreation();
+        stageDimRoomCreation();
+        stageDimUserCreation();
+        stageDimHumidityThresholdCreation();
+        extractDimHumidityThresholdToStage();
     }
 
-    public void stageSchemaCreation(){
-        jdbcManager.execute("create table if not exists stage_air4you.room (" +
+    public void stageDimRoomCreation(){
+        jdbcManager.execute("create table if not exists stage_air4you.DimRoom (" +
                 "room_id VARCHAR(255) not null primary key," +
                 "name VARCHAR(255)," +
                 "registration_date timestamp," +
@@ -17,6 +20,17 @@ public class Extract {
                 ")");
 
     }
+
+
+    public void stageDimUserCreation(){
+        jdbcManager.execute("create table if not exists stage_air4you.DimUser(" +
+                "userId varchar(255) not null primary key," +
+                "token varchar(255)," +
+                "email varchar(255)," +
+                "name varchar(255)" +
+                ")");
+    }
+
 
 
     public void extractRoomToStage(){
@@ -29,11 +43,12 @@ public class Extract {
     public void stageDimHumidityThresholdCreation(){
         jdbcManager.execute("CREATE TABLE IF NOT EXISTS stage_air4you.DimHumidityThreshold ("+
             "humidityThresholdId VARCHAR(255) not null primary key,"+
-            "roomId VARCHAR(255) FOREIGN KEY REFERENCES DimRoom(roomId)"+
+            "roomId VARCHAR(255),"+
             "startTime timestamp,"+
             "endTime timestamp,"+
             "minimumValue DECIMAL(5,2),"+
-            "maximumValue DECIMAL(5,2)"+
+            "maximumValue DECIMAL(5,2)," +
+                "FOREIGN KEY (roomId) REFERENCES stage_air4you.DimRoom (room_id)"+
             ")");
     }
 
@@ -45,6 +60,15 @@ public class Extract {
             "from stage_air4you.DimHumidityThreshold) "
             );
     }
+
+    public void extractDimUserToStage(){
+        jdbcManager.execute("insert into stage_air4you.DimUser" +
+                "select stage_air4you.DimRoom.user_id");
+    }
+
+
+
+
 
 
 
