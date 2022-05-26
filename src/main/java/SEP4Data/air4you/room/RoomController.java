@@ -15,8 +15,6 @@ public class RoomController {
     @Autowired
     private RoomService roomService;
 
-
-
     @PostMapping("/room/")
     public int registerRoom(@RequestBody Room room){
         System.out.println(room.getUserId());
@@ -26,6 +24,15 @@ public class RoomController {
         else {
             // Changed from Forbidden (403) to Expectation_Failed (417)
             return HttpServletResponse.SC_EXPECTATION_FAILED;
+        }
+    }
+
+    @PutMapping("/room/")
+    public int changeRoom(@RequestBody Room room){
+        if(roomService.updateRoom(room)){
+            return HttpServletResponse.SC_OK;
+        } else {
+            return HttpServletResponse.SC_NOT_FOUND;
         }
     }
 

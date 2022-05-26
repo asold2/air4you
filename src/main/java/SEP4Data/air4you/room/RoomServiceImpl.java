@@ -87,6 +87,15 @@ public class RoomServiceImpl implements RoomService{
     }
 
     @Override
+    public boolean updateRoom(Room room) {
+        if(roomRepository.existsById(room.getRoomId())){
+            roomRepository.updateRoomName(room.getName(), room.getRoomId(), room.getUserId());
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public void updateUserIdForRoom(String roomId, String userid) {
         Room room = roomRepository.getById(roomId);
         room.setUserId(userid);
