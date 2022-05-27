@@ -27,6 +27,7 @@ public class TempThresholdController {
 
     @PostMapping("/temperatureThresholds/")
     public int addTempThreshold(@RequestBody TemperatureThreshold temperatureThreshold){
+        System.out.println("");
         try {
             if (tempThresholdService.addTempThreshold(temperatureThreshold)) {
                 return HttpServletResponse.SC_OK;
