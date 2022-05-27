@@ -29,7 +29,6 @@ public class MainActivity {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if(!response.isSuccessful()){
-                    System.out.println(String.valueOf(response.code()));
                     return;
                 }
             }

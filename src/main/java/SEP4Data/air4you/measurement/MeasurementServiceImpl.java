@@ -66,7 +66,6 @@ public class MeasurementServiceImpl implements IMeasurementService{
             }
         }
 
-        System.out.println("Measurement date = " + measurement.getDate());
 
         TemperatureThreshold tempThresh = tempThresholdService.returnCurrentTempThreshold(measurement.getRoomId(), measurement.getDate());
         HumidityThreshold humThresh = humidityThresholdService.returnCurrentHumidityThreshold(measurement.getRoomId(), measurement.getDate());

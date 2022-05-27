@@ -17,7 +17,6 @@ public class TempThresholdController {
 
     @GetMapping("/temperatureThresholds/{roomId}")
     public List<TemperatureThreshold> getAllTempThresholdsByRoomId(@PathVariable String roomId){
-        System.out.println(roomId + "!!!!!");
         return tempThresholdService.getAllTempThresholdsByRoomId(roomId);
     }
     @GetMapping("/temperatureThresholds/")
@@ -58,16 +57,13 @@ public class TempThresholdController {
     }
 
     @DeleteMapping("/temperatureThresholds/{id}")
-    public int deleteTempThreshold(@PathVariable int id){
+    public int deleteTempThreshold(@PathVariable int thresholdId){
         try {
-            tempThresholdService.deleteTempThreshold(id);
-            System.out.println("Successfully deleted temperatureThreshold with id: " + id);
+            tempThresholdService.deleteTempThreshold(thresholdId);
             return HttpServletResponse.SC_OK;
         } catch (NullPointerException nullPointerException){
-            System.out.println("Could not delete temperatureThreshold because: \n " + nullPointerException.getMessage());
             return HttpServletResponse.SC_NOT_FOUND;
         } catch (Exception otherException){
-            System.out.println("Could not delete temperatureThreshold because: \n " + otherException.getMessage());
             return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
         }
     }

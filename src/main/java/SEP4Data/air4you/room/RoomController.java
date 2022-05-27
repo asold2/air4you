@@ -17,7 +17,6 @@ public class RoomController {
 
     @PostMapping("/room/")
     public int registerRoom(@RequestBody Room room){
-        System.out.println(room.getUserId());
         if(roomService.registerRoom(room)){
             return HttpServletResponse.SC_OK;
         }
@@ -45,7 +44,6 @@ public class RoomController {
     //returns array list of rooms
     @PostMapping("/room/last/{userId}")
     public List<Room> getRoomsLastMeasurment(@PathVariable String userId){
-        System.out.println(userId + "!!!!!!!!!!!!!!!");
         List<Room> roomsToReturn = new ArrayList<>();
         for (Room room: roomService.getRooms(userId)) {
             room.onlyLastMeasurement();
@@ -56,6 +54,7 @@ public class RoomController {
     //Returns array list of all possible rooms
     @GetMapping("/all/rooms/")
     public List<Room> getAllRooms(){
+
         return roomService.getAllRooms();
     }
 
@@ -72,14 +71,12 @@ public class RoomController {
 
     @PutMapping("empty/room/of/user/")
     public void deleteUserFromRoom(@RequestBody Room room){
-        System.out.println("testing testing");
         roomService.deleteUserFromRoom(room);
     }
 
     //For this method send a simple integer as user's Id in the body of http request
     @DeleteMapping("/abortion/")
     public void deleteAllRoomsFromUser(@RequestBody String userId){
-        System.out.println(userId + "userId to delete user from db");
         roomService.deleteAllFromUser(userId);
     }
     //This

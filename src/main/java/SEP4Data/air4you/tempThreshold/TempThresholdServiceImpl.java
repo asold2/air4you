@@ -96,7 +96,6 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
     //Updating threshold by threshold Id
     @Override
     public void updateTempThreshold(TemperatureThreshold temperatureThreshold) {
-        System.out.println(temperatureThreshold.getId() + "!!!!!!!!!!!!!!!!!!!!");
         //Not working. add id in path
         tempThresholdRepository.updateTempThreshold(temperatureThreshold.getMax(), temperatureThreshold.getMin(), temperatureThreshold.getId());
     }

@@ -10,7 +10,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.persistence.Table;
+
 @Repository
+@Table()
 public interface RoomRepository extends JpaRepository<Room, String> {
     @Transactional
     @Modifying
@@ -27,5 +30,6 @@ public interface RoomRepository extends JpaRepository<Room, String> {
     void deleteRoomsByUserId(@Param(value = "userId") String userId);
 
     boolean existsByUserId(String userId);
+
 
 }
