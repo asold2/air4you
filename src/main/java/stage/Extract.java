@@ -99,15 +99,28 @@ public class Extract {
                 ")");
     }
 
+//    public void stageDimDateCreation(){
+//        jdbcManager.execute("create table if not exists stage_air4you.dim_date (\n" +
+//                "    date_id serial not null primary key,\n" +
+//                "    year varchar(10),\n" +
+//                "    month varchar (20),\n" +
+//                "    week varchar(20),\n" +
+//                "    day varchar (20),\n" +
+//                "    hour varchar(20),\n" +
+//                "    minute varchar(20),\n" +
+//                "    fact_type varchar(40)" +
+//                ")");
+//    }
+
     public void stageDimDateCreation(){
         jdbcManager.execute("create table if not exists stage_air4you.dim_date (\n" +
                 "    date_id serial not null primary key,\n" +
-                "    year varchar(10),\n" +
-                "    month varchar (20),\n" +
-                "    week varchar(20),\n" +
-                "    day varchar (20),\n" +
-                "    hour varchar(20),\n" +
-                "    minute varchar(20),\n" +
+                "    year int,\n" +
+                "    month int,\n" +
+                "    week int,\n" +
+                "    day int,\n" +
+                "    hour int,\n" +
+                "    minute int,\n" +
                 "    fact_type varchar(40)" +
                 ")");
     }
