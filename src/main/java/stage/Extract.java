@@ -6,7 +6,7 @@ public class Extract {
     private JDBCManager jdbcManager = null;
 
     public Extract(){
-        jdbcManager = JDBCManager.getInstance();
+//        jdbcManager = JDBCManager.getInstance();
 //        stageDimRoomCreation();
 //        stageDimUserCreation();
 //        stageDimMeasurementCreation();

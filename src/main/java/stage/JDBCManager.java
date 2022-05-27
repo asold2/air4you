@@ -9,7 +9,7 @@ public class JDBCManager extends JdbcTemplate {
     private StageJDBC stageJDBC = null;
 
     private JDBCManager(){
-        stageJDBC = new StageJDBC();
+//        stageJDBC = new StageJDBC();
         this.setDataSource(stageJDBC.stageDataSource());
 
     }
