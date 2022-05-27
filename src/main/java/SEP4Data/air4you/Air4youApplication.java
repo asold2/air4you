@@ -6,11 +6,11 @@ import SEP4Data.air4you.room.RoomServiceImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
-import stage.Extract;
+//import stage.Extract;
 
 @SpringBootApplication
 @ComponentScan
-@ComponentScan({"SEP4Data.air4you.StageJDBC"})
+//@ComponentScan({"SEP4Data.air4you.StageJDBC"})
 
 public class Air4youApplication {
 
@@ -19,7 +19,7 @@ public class Air4youApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(Air4youApplication.class, args);
 
-		Extract extract = new Extract();
+//		Extract extract = new Extract();
 //		extract.stageDimUserCreation();
 //
 //		kj
