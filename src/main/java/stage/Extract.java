@@ -7,32 +7,32 @@ public class Extract {
 
     public Extract(){
         jdbcManager = JDBCManager.getInstance();
-        stageDimRoomCreation();
-        stageDimUserCreation();
-        stageDimMeasurementCreation();
-        stageDimHumidityThresholdCreation();
-        stageDimTemperatureThresholdCreation();
-        stageDimTokenCreation();
-        stageDimDateCreation();
-        satgeRegistrationFactCreation();
-        stageFactMeasurementCreation();
-
-
-
+//        stageDimRoomCreation();
+//        stageDimUserCreation();
+//        stageDimMeasurementCreation();
+//        stageDimHumidityThresholdCreation();
+//        stageDimTemperatureThresholdCreation();
+//        stageDimTokenCreation();
+//        stageDimDateCreation();
+//        satgeRegistrationFactCreation();
 //        stageFactMeasurementCreation();
-
-        //
 //
-        extractRoomToStage();
-        extractDimMeasurementToStage();
-        extractTemperatureThresholdToStage();
-        extractDimHumidityThresholdToStage();
-        extractTokenToStage();
-        extractDimUserToStage();
-
-        extractDimDateFromRoomToStage();
-        extractDimDateFromMeasurementToStage();
-        extractFactRegistrationToStage();
+//
+//
+////        stageFactMeasurementCreation();
+//
+//        //
+////
+//        extractRoomToStage();
+//        extractDimMeasurementToStage();
+//        extractTemperatureThresholdToStage();
+//        extractDimHumidityThresholdToStage();
+//        extractTokenToStage();
+//        extractDimUserToStage();
+//
+//        extractDimDateFromRoomToStage();
+//        extractDimDateFromMeasurementToStage();
+//        extractFactRegistrationToStage();
 
     }
 
