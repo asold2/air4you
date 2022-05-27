@@ -1,29 +1,24 @@
 package SEP4Data.air4you;
 
-import SEP4Data.air4you.room.*;
-import org.hamcrest.Matchers;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import SEP4Data.air4you.room.Room;
+import SEP4Data.air4you.room.RoomRepository;
+import SEP4Data.air4you.room.RoomService;
+import SEP4Data.air4you.room.RoomServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class TestRoomService{
@@ -56,7 +51,7 @@ public class TestRoomService{
     }
 
     @Test
-    public void testCreateOrSaveRoom(){
+    public void testSaveRoom(){
         Room room = new Room("roomId4","userId4","roomName4", LocalDateTime.now());
 
         roomService.registerRoom(room);
