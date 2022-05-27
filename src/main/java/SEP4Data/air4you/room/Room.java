@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +20,6 @@ import java.util.List;
 //@NoArgsConstructor
 //@Builder
 @Entity
-@Component
 @Table(name="room")
 public class Room implements Serializable {
     @Id
@@ -27,7 +27,9 @@ public class Room implements Serializable {
     private String name;
     private String userId = "none";
     private LocalDateTime registrationDate;
-    @OneToMany(mappedBy="roomId")
+
+
+    @OneToMany(mappedBy="roomId", cascade = {CascadeType.REMOVE})
     private List<Measurement> measurements;
 //    private String notoficationToken;
 

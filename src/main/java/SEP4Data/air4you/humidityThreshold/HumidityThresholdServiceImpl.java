@@ -30,11 +30,11 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
 
   // Adding humidity threshold 
   @Override
-  public boolean addHumidityThreshold(HumidityThreshold humidityThreshold)
-  {
+  public boolean addHumidityThreshold(HumidityThreshold humidityThreshold) throws Exception {
+    System.out.println("das");
     if (roomRepository.findById(humidityThreshold.getRoomId()).isEmpty())
     {
-      return false;
+      throw new Exception("noRoom");
     }
 
     List<HumidityThreshold> roomsThresholds = new ArrayList<>();
@@ -48,28 +48,28 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
     for (HumidityThreshold temp : roomsThresholds)
     {
       if ((humidityThreshold.getStartTime().isAfter(temp.getStartTime())
-          || humidityThreshold.getStartTime().equals(temp.getStartTime()))
-          && ((humidityThreshold.getStartTime().isBefore(temp.getEndTime())))
-          || humidityThreshold.getStartTime().equals(temp.getEndTime()))
+              || humidityThreshold.getStartTime().equals(temp.getStartTime()))
+              && ((humidityThreshold.getStartTime().isBefore(temp.getEndTime())))
+              || humidityThreshold.getStartTime().equals(temp.getEndTime()))
       {
-        return false;
+        throw new Exception("insideTimeZone");
       }
       else if (humidityThreshold.getEndTime().isAfter(temp.getStartTime())
-          && (humidityThreshold.getEndTime().isBefore(temp.getEndTime())) || (
-          (humidityThreshold.getEndTime().equals(temp.getEndTime()))
-              || humidityThreshold.getEndTime().equals(temp.getStartTime())))
+              && (humidityThreshold.getEndTime().isBefore(temp.getEndTime())) || (
+              (humidityThreshold.getEndTime().equals(temp.getEndTime()))
+                      || humidityThreshold.getEndTime().equals(temp.getStartTime())))
       {
-        return false;
+        throw new Exception("insideTimeZone");
       }
       else if (humidityThreshold.contains(temp))
       {
-        return false;
+        throw new Exception("alreadyContains");
       }
     }
     if (humidityThreshold.getStartTime() == null
-        || humidityThreshold.getEndTime() == null)
+            || humidityThreshold.getEndTime() == null)
     {
-      return false;
+      throw new Exception("noTime");
     }
     humidityThresholdRepository.save(humidityThreshold);
     return true;
@@ -87,6 +87,7 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
   public List<HumidityThreshold> getAllHumidityThresholdsByRoomId(
       String roomId)
   {
+    System.out.println(roomId + "service IMPL");
     List<HumidityThreshold> tempList = new ArrayList<>();
 
     for (HumidityThreshold temp : humidityThresholdRepository.findAll())
@@ -94,8 +95,10 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
       if (temp.getRoomId().equals(roomId))
       {
         tempList.add(temp);
+        System.out.println("equals");
       }
     }
+    System.out.println(tempList);
     return tempList;
   }
 
@@ -109,6 +112,8 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
   // Updating humidity threshold by threshold Id
   @Override
   public void updateHumidityThreshold(HumidityThreshold humidityThreshold){
+    System.out.println(humidityThreshold.getId() + "!!!!!!!!!!!!!!!!!!!!!!!!");
+    //Not working. add id in path
     humidityThresholdRepository.updateHumidityThreshold(humidityThreshold.getMax(), humidityThreshold.getMin(), humidityThreshold.getId());
   }
 

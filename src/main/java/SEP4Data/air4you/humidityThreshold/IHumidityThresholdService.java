@@ -9,7 +9,7 @@ import java.util.List;
 public interface IHumidityThresholdService
 {
   List<HumidityThreshold> getAllHumidityThresholds();
-  boolean addHumidityThreshold(HumidityThreshold humidityThreshold);
+  boolean addHumidityThreshold(HumidityThreshold humidityThreshold) throws Exception;
   void deleteHumidityThreshold(int id);
   HumidityThreshold returnCurrentHumidityThreshold(String roomId, Date measurementDate);
   Measurement isInsideThreshold(Measurement measurement, HumidityThreshold humidityThreshold);
