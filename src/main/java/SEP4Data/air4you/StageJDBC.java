@@ -10,15 +10,15 @@ import javax.sql.DataSource;
 @Configuration
 @ComponentScan
 public class StageJDBC {
-    @Bean
-    public DataSource stageDataSource(){
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-//        dataSource.setDriverClassName("com.postgres.jdbc.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
-        dataSource.setUsername("postgres");
-        dataSource.setPassword("postgres");
-
-        return dataSource;
-    }
+//    @Bean
+//    public DataSource stageDataSource(){
+//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+////        dataSource.setDriverClassName("com.postgres.jdbc.Driver");
+//        dataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
+//        dataSource.setUsername("postgres");
+//        dataSource.setPassword("postgres");
+//
+//        return dataSource;
+//    }
 
 }
