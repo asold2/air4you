@@ -102,6 +102,16 @@ public class RoomServiceImpl implements RoomService{
         roomRepository.save(room);
     }
 
+    @Override
+    public boolean deleteRoomsByUserId(String userId) {
+        if(roomRepository.existsByUserId(userId)){
+            roomRepository.deleteRoomsByUserId(userId);
+            return true;
+        }
+
+        return false;
+    }
+
 //    @Override
 //    public void setLatestMeasurementForRoom(Measurement measurement) {
 //////        Room room = roomRepository.getById(measurement.getRoomId());

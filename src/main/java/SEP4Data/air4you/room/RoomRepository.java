@@ -22,4 +22,10 @@ public interface RoomRepository extends JpaRepository<Room, String> {
     @Query(value = "update Room r set r.name = :name where r.roomId = :roomId AND r.userId = :userId")
     void updateRoomName(@Param(value = "name") String name, @Param("roomId") String roomId, @Param("userId") String userId);
 
+    @Modifying
+    @Transactional
+    void deleteRoomsByUserId(@Param(value = "userId") String userId);
+
+    boolean existsByUserId(String userId);
+
 }

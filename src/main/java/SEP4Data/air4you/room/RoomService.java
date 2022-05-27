@@ -25,5 +25,7 @@ public interface RoomService {
 
     void updateUserIdForRoom(String roomId, String userid);
 
+    boolean deleteRoomsByUserId(String userId);
+
 //    void setLatestMeasurementForRoom(Measurement measurement);
 }

@@ -61,6 +61,17 @@ public class RoomController {
         return roomService.getAllRooms();
     }
 
+    @DeleteMapping("/user/{userId}")
+    public int deleteRoomsByUserId(@PathVariable String userId){
+
+        if(roomService.deleteRoomsByUserId(userId)){
+            return HttpServletResponse.SC_OK;
+        } else {
+            return HttpServletResponse.SC_NOT_FOUND;
+        }
+
+    }
+
     @PutMapping("empty/room/of/user/")
     public void deleteUserFromRoom(@RequestBody Room room){
         System.out.println("testing testing");
