@@ -22,6 +22,7 @@ public class Air4youApplication {
 		Extract extract = new Extract();
 //		extract.stageDimUserCreation();
 //
+//		kj
 //	extract.stageDimHumidityThresholdCreation();
 		//mainActivity.sendNotification("Test title", "Test content");
 
