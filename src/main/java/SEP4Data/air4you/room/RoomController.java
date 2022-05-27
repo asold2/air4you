@@ -42,7 +42,7 @@ public class RoomController {
 
     //Gets rooms with last measurement. Body is userId as String
     //returns array list of rooms
-    @PostMapping("/room/last/{userId}")
+    @GetMapping("/room/last/{userId}")
     public List<Room> getRoomsLastMeasurment(@PathVariable String userId){
         List<Room> roomsToReturn = new ArrayList<>();
         for (Room room: roomService.getRooms(userId)) {
