@@ -89,6 +89,8 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
         if(measurement.getTemperatureExceeded() || measurement.getHumidityExceeded() || measurement.getCo2Exceeded()){
 
+            data.setExceeded(true);
+
             String body = "Exceeded values are: ";
 
             if(measurement.getTemperatureExceeded()){
