@@ -181,6 +181,34 @@ public class MeasurementServiceImpl implements IMeasurementService{
         return roomsMeasuremnts.get(roomsMeasuremnts.size()-1);
     }
 
+    @Override
+    public List<Double> getAverageTemp(String roomId) {
+        ArrayList<Double> temperatures = new ArrayList<Double>();
+        for (int i = 0; i < 7; i++) {
+            temperatures.add(measurementRepository.countAverageTemperature(roomId, i));
+        }
+        return temperatures;
+    }
+
+
+    @Override
+    public List<Double> getAverageHumidity(String roomId) {
+        ArrayList<Double> humidities = new ArrayList<Double>();
+        for (int i = 0; i < 7; i++) {
+            humidities.add(measurementRepository.countAverageHumidity(roomId, i));
+        }
+        return humidities;
+    }
+
+    @Override
+    public List<Double> getAverageCo2(String roomId) {
+        ArrayList<Double> temperatures = new ArrayList<Double>();
+        for (int i = 0; i < 7; i++) {
+            temperatures.add(measurementRepository.countAverageCo2(roomId, i));
+        }
+        return temperatures;
+    }
+
     //This method will return measurements by date and room id
     @Override
     public List<Measurement> getMeasurementByDateAndRoomId(String dateInString, String roomId) {
@@ -272,4 +300,6 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
         return measurementsToReturn;
     }
+
+
 }

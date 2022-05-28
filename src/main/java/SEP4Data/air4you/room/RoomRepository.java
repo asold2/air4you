@@ -28,7 +28,6 @@ public interface RoomRepository extends JpaRepository<Room, String> {
     @Modifying
     @Transactional
     void deleteRoomsByUserId(@Param(value = "userId") String userId);
-
     boolean existsByUserId(String userId);
 
 

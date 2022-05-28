@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.sql.Timestamp;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -69,6 +71,29 @@ public class MeasurementController {
     public List<Measurement> getMeasurementByUserAndRoomIdWeek(@PathVariable String userId)
     {
         return measurementService.getMeasurementByUserAndRoomIdWeek(userId);
+    }
+
+    //When this link(method) is called it takes room id and it will return List of average temperatures for each day from last week
+    @GetMapping("/measurement/averageTemp/{roomId}")
+    public List<Double> getAverageTemp(@PathVariable String roomId){
+
+        return measurementService.getAverageTemp(roomId);
+
+    }
+    //When this link(method) is called it takes room id and it will return List of average humidity for each day from last week
+    @GetMapping("/measurement/averageHumidity/{roomId}")
+    public List<Double> getAverageHumidity(@PathVariable String roomId){
+
+        return measurementService.getAverageHumidity(roomId);
+
+    }
+
+    //When this link(method) is called it takes room id and it will return List of average Co2 for each day from last week
+    @GetMapping("/measurement/averageCo2/{roomId}")
+    public List<Double> getAverageCo2(@PathVariable String roomId){
+
+        return measurementService.getAverageCo2(roomId);
+
     }
 
 

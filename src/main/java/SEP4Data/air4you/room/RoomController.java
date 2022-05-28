@@ -14,7 +14,7 @@ public class RoomController {
 
     @Autowired
     private RoomService roomService;
-
+  //Creating new room
     @PostMapping("/room/")
     public int registerRoom(@RequestBody Room room){
         if(roomService.registerRoom(room)){
@@ -35,6 +35,7 @@ public class RoomController {
         }
     }
 
+    //Get room by userId
     @GetMapping("/rooms/{userId}")
     public List<Room> getRooms(@PathVariable String userId){
         return roomService.getRooms(userId);
@@ -69,6 +70,7 @@ public class RoomController {
 
     }
 
+    //Delete user from room
     @PutMapping("empty/room/of/user/")
     public void deleteUserFromRoom(@RequestBody Room room){
         roomService.deleteUserFromRoom(room);
@@ -79,7 +81,8 @@ public class RoomController {
     public void deleteAllRoomsFromUser(@RequestBody String userId){
         roomService.deleteAllFromUser(userId);
     }
-    //This
+
+    //This Method will remove room by roomId and all measurements it contains
     @DeleteMapping("/room/{roomId}/")
     public int deleteRoom(@PathVariable String roomId){
         System.out.println(roomId + "userId to delete user from db");
@@ -89,13 +92,14 @@ public class RoomController {
             return HttpServletResponse.SC_NOT_FOUND;
 
     }
-
+    // This method will delete all rom if the link is called
     @DeleteMapping("/deletion/")
     public void deleteAllRooms(){
 
         roomService.deleteAll();
     }
 
+    // This method will change user id for a room if the link is called it take room id and new user id
     @PostMapping("/change/user/{roomId}/{userId}")
     public void changeUserIdForRoom(@PathVariable String roomId, @PathVariable String userId){
         roomService.updateUserIdForRoom(roomId ,userId);
