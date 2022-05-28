@@ -74,14 +74,14 @@ public class MeasurementController {
     }
 
     //When this link(method) is called it takes room id and it will return List of average temperatures for each day from last week
-    @GetMapping("/measurement/averageTemp/{roomId}")
+    @GetMapping("statistics/temp/{roomId}")
     public List<Double> getAverageTemp(@PathVariable String roomId){
 
         return measurementService.getAverageTemp(roomId);
 
     }
     //When this link(method) is called it takes room id and it will return List of average humidity for each day from last week
-    @GetMapping("/measurement/averageHumidity/{roomId}")
+    @GetMapping("statistics/hum/{roomId}")
     public List<Double> getAverageHumidity(@PathVariable String roomId){
 
         return measurementService.getAverageHumidity(roomId);
@@ -89,7 +89,7 @@ public class MeasurementController {
     }
 
     //When this link(method) is called it takes room id and it will return List of average Co2 for each day from last week
-    @GetMapping("/measurement/averageCo2/{roomId}")
+    @GetMapping("statistics/co2/{roomId}")
     public List<Double> getAverageCo2(@PathVariable String roomId){
 
         return measurementService.getAverageCo2(roomId);
