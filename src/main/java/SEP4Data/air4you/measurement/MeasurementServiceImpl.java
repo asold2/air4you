@@ -11,6 +11,7 @@ import SEP4Data.air4you.room.RoomService;
 import SEP4Data.air4you.tempThreshold.ITempThresholdService;
 import SEP4Data.air4you.tempThreshold.TemperatureThreshold;
 import SEP4Data.air4you.threshold.Threshold;
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,17 +20,13 @@ import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class MeasurementServiceImpl implements IMeasurementService{
 
     @Autowired
     MeasurementRepository measurementRepository;
-
     @Autowired
     RoomRepository roomRepository;
     @Autowired
@@ -56,38 +53,42 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
         Data data = new Data();
         data.setExceeded(false);
-        String to = null;
+        String to = measurementRepository.getTokenFromRoomId(measurement.getRoomId());
+        System.out.println("TOKEN = " + to);
 
-        for (Room room:
-             roomService.getAllRooms()) {
-            if (room.getRoomId().equals(measurement.getRoomId())){
-                to = tokenService.getToken(room.getUserId());
-                break;
-            }
+        LocalDateTime ldt = LocalDateTime.ofInstant(measurement.getDate().toInstant(),ZoneId.systemDefault());
+        LocalTime localTime = ldt.toLocalTime();
+        System.out.println(localTime);
+
+        HumidityThreshold humThresh;
+        TemperatureThreshold tempThresh;
+
+        humThresh = measurementRepository.getCurrentHumidityThreshold(localTime, measurement.getRoomId());
+        tempThresh = measurementRepository.getCurrentTemperatureThreshold(localTime, measurement.getRoomId());
+
+        if(humThresh == null){
+            humThresh = new HumidityThreshold();
+        }
+        if(tempThresh == null){
+            tempThresh = new TemperatureThreshold();
         }
 
-
-        TemperatureThreshold tempThresh = tempThresholdService.returnCurrentTempThreshold(measurement.getRoomId(), measurement.getDate());
-        HumidityThreshold humThresh = humidityThresholdService.returnCurrentHumidityThreshold(measurement.getRoomId(), measurement.getDate());
-
-        if (tempThresholdService.isInsideThreshold(measurement, tempThresh).getTemperatureExceeded())
-        {
+        if(tempThresh != null && measurementRepository.isInsideTemperatureThreshold(measurement.getTemperature(), measurement.getRoomId()) == 0){
             data.setBody("Temperature is outside threshold");
             data.setTitle("Threshold has been reached");
             data.setExceeded(true);
 
             measurement.setTemperatureExceeded(true);
-            mainActivity.sendNotification(to,data);
+            mainActivity.sendNotification(to, data);
         }
 
-        if (humidityThresholdService.isInsideThreshold(measurement,humThresh).getHumidityExceeded())
-        {
+        if(humThresh != null && measurementRepository.isInsideHumidityThreshold(measurement.getHumidity(), measurement.getRoomId()) == 0){
             data.setBody("Humidity is outside threshold");
             data.setTitle("Threshold has been reached");
             data.setExceeded(true);
 
             measurement.setHumidityExceeded(true);
-            mainActivity.sendNotification(to,data);
+            mainActivity.sendNotification(to, data);
         }
 
         if(measurement.getCo2() > 600){

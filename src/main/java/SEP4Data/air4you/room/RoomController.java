@@ -1,7 +1,5 @@
 package SEP4Data.air4you.room;
 
-import SEP4Data.air4you.measurement.IMeasurementService;
-import SEP4Data.air4you.measurement.Measurement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,7 +42,7 @@ public class RoomController {
     //Gets rooms with last measurement. Body is userId as String
     //returns array list of rooms
     @GetMapping("/room/last/{userId}")
-    public List<Room> getRoomsLastMeasurment(@PathVariable String userId){
+    public List<Room> getRoomsLastMeasurement(@PathVariable String userId){
         List<Room> roomsToReturn = new ArrayList<>();
         for (Room room: roomService.getRooms(userId)) {
             room.onlyLastMeasurement();

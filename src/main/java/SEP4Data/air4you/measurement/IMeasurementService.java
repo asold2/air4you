@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 
-@Service
 public interface IMeasurementService {
     Threshold addMeasurement(Measurement measurement);
     List<Measurement> getMeasurements(String roomId);

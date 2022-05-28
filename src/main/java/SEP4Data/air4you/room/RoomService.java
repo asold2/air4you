@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public interface RoomService {
     boolean registerRoom(Room room);
     List<Room> getRooms(String userId);
