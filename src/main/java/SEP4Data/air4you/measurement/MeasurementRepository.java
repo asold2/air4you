@@ -1,6 +1,7 @@
 package SEP4Data.air4you.measurement;
 
 import SEP4Data.air4you.humidityThreshold.HumidityThreshold;
+import SEP4Data.air4you.room.Room;
 import SEP4Data.air4you.tempThreshold.TemperatureThreshold;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -45,4 +46,7 @@ public interface MeasurementRepository extends JpaRepository<Measurement, Intege
 
     @Query(value = "SELECT token FROM room INNER JOIN tokens on user_id = uid WHERE room_id = :roomId", nativeQuery = true)
     String getTokenFromRoomId(@Param(value = "roomId") String roomId);
+
+    @Query(value = "SELECT r FROM Room r WHERE r.roomId = :roomId")
+    Room getRoom(@Param(value = "roomId") String roomId);
 }

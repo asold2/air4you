@@ -73,9 +73,11 @@ public class MeasurementServiceImpl implements IMeasurementService{
             tempThresh = new TemperatureThreshold();
         }
 
+        data.setTitle(measurementRepository.getRoom(measurement.getRoomId()).getName());
+
+
         if(tempThresh != null && measurementRepository.isInsideTemperatureThreshold(measurement.getTemperature(), measurement.getRoomId()) == 0){
             data.setBody("Temperature is outside threshold");
-            data.setTitle("Threshold has been reached");
             data.setExceeded(true);
 
             measurement.setTemperatureExceeded(true);
@@ -84,7 +86,6 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
         if(humThresh != null && measurementRepository.isInsideHumidityThreshold(measurement.getHumidity(), measurement.getRoomId()) == 0){
             data.setBody("Humidity is outside threshold");
-            data.setTitle("Threshold has been reached");
             data.setExceeded(true);
 
             measurement.setHumidityExceeded(true);
@@ -94,7 +95,6 @@ public class MeasurementServiceImpl implements IMeasurementService{
         if(measurement.getCo2() > 600){
             measurement.setCo2Exceeded(true);
             data.setBody("Co2 is too high");
-            data.setTitle("Threshold has been reached");
             data.setExceeded(true);
             mainActivity.sendNotification(to,data);
         }
