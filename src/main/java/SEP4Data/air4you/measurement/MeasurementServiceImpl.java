@@ -91,7 +91,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
             data.setExceeded(true);
 
-            String body = "Exceeded values are: ";
+            String body = "Exceeded values for: ";
 
             if(measurement.getTemperatureExceeded()){
                 body += "Temperature";
