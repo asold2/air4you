@@ -75,28 +75,41 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
         data.setTitle(measurementRepository.getRoom(measurement.getRoomId()).getName());
 
-
         if(tempThresh != null && measurementRepository.isInsideTemperatureThreshold(measurement.getTemperature(), measurement.getRoomId()) == 0){
-            data.setBody("Temperature is outside threshold");
-            data.setExceeded(true);
-
             measurement.setTemperatureExceeded(true);
-            mainActivity.sendNotification(to, data);
         }
 
         if(humThresh != null && measurementRepository.isInsideHumidityThreshold(measurement.getHumidity(), measurement.getRoomId()) == 0){
-            data.setBody("Humidity is outside threshold");
-            data.setExceeded(true);
-
             measurement.setHumidityExceeded(true);
-            mainActivity.sendNotification(to, data);
         }
 
         if(measurement.getCo2() > 600){
             measurement.setCo2Exceeded(true);
-            data.setBody("Co2 is too high");
-            data.setExceeded(true);
-            mainActivity.sendNotification(to,data);
+        }
+
+        if(measurement.getTemperatureExceeded() || measurement.getHumidityExceeded() || measurement.getCo2Exceeded()){
+
+            String body = "Exceeded values are: ";
+
+            if(measurement.getTemperatureExceeded()){
+                body += "Temperature";
+            }
+            if(measurement.getHumidityExceeded()) {
+                if(measurement.getTemperatureExceeded()){
+                    body += ",";
+                }
+                body += " Humidity";
+
+            }
+            if(measurement.getCo2Exceeded()){
+
+                if(measurement.getTemperatureExceeded() || measurement.getHumidityExceeded()){
+                    body += " and";
+                }
+
+                body += " CO2";
+            }
+            data.setBody(body);
         }
 
         mainActivity.sendNotification(to,data);
