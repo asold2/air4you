@@ -2,39 +2,85 @@ package stage;
 
 import org.springframework.dao.DuplicateKeyException;
 
+import java.sql.Date;
 public class Extract {
     private JDBCManager jdbcManager = null;
+    private Transform transform = null;
 
     public Extract(){
         jdbcManager = JDBCManager.getInstance();
+
         stageDimRoomCreation();
         stageDimUserCreation();
         stageDimMeasurementCreation();
-        stageDimHumidityThresholdCreation();
-        stageDimTemperatureThresholdCreation();
+//        stageDimHumidityThresholdCreation();
+//        stageDimTemperatureThresholdCreation();
         stageDimTokenCreation();
         stageDimDateCreation();
         satgeRegistrationFactCreation();
         stageFactMeasurementCreation();
 
 
-
-//        stageFactMeasurementCreation();
-
-        //
-//
         extractRoomToStage();
         extractDimMeasurementToStage();
-        extractTemperatureThresholdToStage();
-        extractDimHumidityThresholdToStage();
         extractTokenToStage();
         extractDimUserToStage();
 
         extractDimDateFromRoomToStage();
         extractDimDateFromMeasurementToStage();
-        extractFactRegistrationToStage();
+
+        extractToFactRegistrationStage();
+        extractfactMeasurementToStage();
+
+        transform = new Transform();
 
     }
+
+    private void extractfactMeasurementToStage() {
+        jdbcManager.execute(
+                "insert into stage_air4you.fact_measurement(\n" +
+                        "    measurement_id,\n" +
+                        "    user_id,\n" +
+                        "    room_id,\n" +
+                        "    date_id\n" +
+                        "\n" +
+                        ")select\n" +
+                        "    dim_measurement.measurement_id\n" +
+                        "    ,dim_user.u_id,\n" +
+                        "    dim_room.r_id,\n" +
+                        "    dim_date.date_id\n" +
+                        "\n" +
+                        "from\n" +
+                        "     stage_air4you.dim_date,\n" +
+                        "    stage_air4you.dim_room\n" +
+                        "inner join stage_air4you.dim_user on dim_room.user_id = dim_user.user_id\n" +
+                        "inner join stage_air4you.dim_measurement on dim_measurement.room_id = dim_room.room_id\n" +
+                        "where  fact_type = 'measurement' and (EXTRACT(YEAR FROM dim_measurement.date) = dim_date.year ) and (EXTRACT(MONTH FROM dim_measurement.date) = dim_date.month )\n" +
+                        "and (EXTRACT(DAY FROM dim_measurement.date) = dim_date.day ) and (EXTRACT(HOUR FROM dim_measurement.date) = dim_date.hour)\n" +
+                        "  and (EXTRACT(MINUTE FROM dim_measurement.date) = dim_date.minute )\n" +
+                        "-- and (dim_measurement.humidity_exceeded = true or dim_measurement.temperature_exceeded = true or dim_measurement.co2_exceeded = true)\n" +
+                        "on conflict do nothing\n" +
+                        ";");
+    }
+
+    private void extractToFactRegistrationStage() {
+        try{
+            jdbcManager.execute("\n" +
+                    "insert into stage_air4you.fact_registration(\n" +
+                    "    user_id, room_id, date_id\n" +
+                    ") SELECT dim_user.u_id, dim_room.r_id, dim_date.date_id\n" +
+                    "         from stage_air4you.dim_date, stage_air4you.dim_user inner join stage_air4you.dim_room\n" +
+                    "on dim_room.user_id = dim_user.user_id\n" +
+                    "where fact_type = 'room_registartion' and (EXTRACT(YEAR FROM dim_room.registration_date) = dim_date.year ) and (EXTRACT(MONTH FROM dim_room.registration_date) = dim_date.month )\n" +
+                    "and (EXTRACT(DAY FROM dim_room.registration_date) = dim_date.day ) and (EXTRACT(HOUR FROM dim_room.registration_date) = dim_date.hour)\n" +
+                    "  and (EXTRACT(MINUTE FROM dim_room.registration_date) = dim_date.minute )\n" +
+                    "on conflict do nothing\n" +
+                    ";\n");
+        }catch(DuplicateKeyException e){
+            throw e;
+        }
+    }
+
 
     public void stageDimRoomCreation(){
 //        jdbcManager.execute("drop table stage_air4you.Dim_Room cascade ");
@@ -99,15 +145,28 @@ public class Extract {
                 ")");
     }
 
+//    public void stageDimDateCreation(){
+//        jdbcManager.execute("create table if not exists stage_air4you.dim_date (\n" +
+//                "    date_id serial not null primary key,\n" +
+//                "    year varchar(10),\n" +
+//                "    month varchar (20),\n" +
+//                "    week varchar(20),\n" +
+//                "    day varchar (20),\n" +
+//                "    hour varchar(20),\n" +
+//                "    minute varchar(20),\n" +
+//                "    fact_type varchar(40)" +
+//                ")");
+//    }
+
     public void stageDimDateCreation(){
         jdbcManager.execute("create table if not exists stage_air4you.dim_date (\n" +
                 "    date_id serial not null primary key,\n" +
-                "    year varchar(10),\n" +
-                "    month varchar (20),\n" +
-                "    week varchar(20),\n" +
-                "    day varchar (20),\n" +
-                "    hour varchar(20),\n" +
-                "    minute varchar(20),\n" +
+                "    year int,\n" +
+                "    month int,\n" +
+                "    week int,\n" +
+                "    day int,\n" +
+                "    hour int,\n" +
+                "    minute int,\n" +
                 "    fact_type varchar(40)" +
                 ")");
     }
@@ -125,20 +184,16 @@ public class Extract {
     }
     public void stageFactMeasurementCreation(){
         jdbcManager.execute("create table if not exists stage_air4you.fact_measurement(\n" +
-                "                    measurement_id int not null,\n" +
-                "                    user_id int not null,\n" +
-                "                    room_id int not null,\n" +
-                "                    humidity_threshold_id int not null,\n" +
-                "                    temperature_threshold_id int not null,\n" +
-                "                    date_id  int not null,\n" +
-                "                    foreign key (user_id) references stage_air4you.dim_user (u_id),\n" +
-                "                    foreign key (room_id) references stage_air4you.dim_room (r_id),\n" +
-                "                    foreign key (date_id) references stage_air4you.dim_date (date_id),\n" +
-                "                    foreign key (measurement_id) references stage_air4you.dim_measurement (measurement_id),\n" +
-                "                    foreign key (temperature_threshold_id) references stage_air4you.dim_temperature_threshold (temperature_threshold_id),\n" +
-                "                    foreign key (humidity_threshold_id) references stage_air4you.dim_humiditythreshold (humidity_threshold_id),\n" +
-                "                    constraint fact_measurement_PK PRIMARY KEY(user_id, room_id, date_id, measurement_id, humidity_threshold_id, temperature_threshold_id )\n" +
-                "                    );");
+                "                                                   measurement_id int not null,\n" +
+                "                                                    user_id int not null,\n" +
+                "                                                    room_id int not null,\n" +
+                "                                                    date_id  int not null,\n" +
+                "                                                    foreign key (user_id) references stage_air4you.dim_user (u_id) on delete cascade,\n" +
+                "                                                    foreign key (room_id) references stage_air4you.dim_room (r_id) on delete cascade,\n" +
+                "                                                    foreign key (date_id) references stage_air4you.dim_date (date_id) on delete cascade,\n" +
+                "                                                    foreign key (measurement_id) references stage_air4you.dim_measurement (measurement_id) on delete cascade,\n" +
+                "                                                    constraint fact_measurement_PK PRIMARY KEY(user_id, room_id, date_id, measurement_id)\n" +
+                "                                                    )");
     }
 
     public void extractDimMeasurementToStage(){
@@ -249,21 +304,16 @@ public class Extract {
 
 
 
-    public void extractFactRegistrationToStage(){
-        try{
-            jdbcManager.execute("insert into stage_air4you.fact_registration(\n" +
-                    "    user_id, room_id, date_id\n" +
-                    ") SELECT dim_user.u_id, dim_room.r_id, dim_date.date_id\n" +
-                    "         from stage_air4you.dim_date, stage_air4you.dim_user inner join stage_air4you.dim_room\n" +
-                    "on dim_room.user_id = dim_user.user_id\n" +
-                    "where fact_type = 'room_registartion'\n" +
-                    "on conflict do nothing\n" +
-                    ";\n");
-        }catch(DuplicateKeyException e){
-            throw e;
-        }
 
-    }
+
+
+
+
+
+
+
+
+
 
 
 

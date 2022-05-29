@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import stage.Extract;
+import stage.Transform;
 
 @SpringBootApplication
 @ComponentScan
@@ -20,6 +21,7 @@ public class Air4youApplication {
 		SpringApplication.run(Air4youApplication.class, args);
 
 		Extract extract = new Extract();
+//		Transform transform = new Transform();
 //		extract.stageDimUserCreation();
 //
 //	extract.stageDimHumidityThresholdCreation();
