@@ -52,7 +52,7 @@ public class RoomController {
         return roomsToReturn;
     }
     //Returns array list of all possible rooms
-    @PostMapping("/all/rooms/")
+    @GetMapping("/all/rooms/")
     public List<Room> getAllRooms(){
 
         return roomService.getAllRooms();
