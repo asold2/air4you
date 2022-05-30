@@ -95,10 +95,10 @@ public class MeasurementServiceImpl implements IMeasurementService{
         Threshold thresholdToReturn = new Threshold(measurement.getRoomId(), (int)tempThresh.getMin(), (int)tempThresh.getMax(), (int)humThresh.getMin(), (int)humThresh.getMax());
 
 
-        if(thresholdToReturn.getMaxHumidity()==0 && thresholdToReturn.getMinHumidity()==0 && thresholdToReturn.getMaxTemp()==0 && thresholdToReturn.getMinHumidity()==0){
-            System.out.println("returning null instead of threshold");
-            return null;
-        }
+//        if(thresholdToReturn.getMaxHumidity()==0 && thresholdToReturn.getMinHumidity()==0 && thresholdToReturn.getMaxTemp()==0 && thresholdToReturn.getMinHumidity()==0){
+//            System.out.println("returning null instead of threshold");
+//            return null;
+//        }
 
         return thresholdToReturn;
     }
