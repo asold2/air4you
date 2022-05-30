@@ -1,6 +1,5 @@
 package stage;
 
-import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -10,11 +9,17 @@ public class ETL {
     public ETL(){
         jdbcManager = JDBCManager.getInstance();
 
+        createETLSchema();
+
         createAndInsertLogTable();
 
         updateEdwDimensionWithValidToAndValidFrom();
 
         logUpdate();
+    }
+
+    private void createETLSchema(){
+        jdbcManager.execute("CREATE SCHEMA IF NOT EXISTS etl_air4you");
     }
 
     private void updateEdwDimensionWithValidToAndValidFrom() {

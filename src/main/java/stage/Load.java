@@ -11,6 +11,7 @@ public class Load {
 
     public Load(){
         jdbcManager = JDBCManager.getInstance();
+        createEdwSchema();
         creatEdwDimRoom();
         creatEdwDimUser();
         creatEdwDimToken();
@@ -31,6 +32,10 @@ public class Load {
         initialLoad();
 
         etl= new ETL();
+    }
+
+    private void createEdwSchema(){
+        jdbcManager.execute("CREATE SCHEMA IF NOT EXISTS edw_air4you");
     }
 
     private void createEdwFactMeasurement() {
