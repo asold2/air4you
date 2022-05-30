@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class ThresholdController {
 
-    private final IThresholdService thresholdService;
+    private final ThresholdService thresholdService;
 
-    public ThresholdController(IThresholdService thresholdService){
+    public ThresholdController(ThresholdService thresholdService){
         this.thresholdService = thresholdService;
     }
 

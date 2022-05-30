@@ -4,7 +4,7 @@ import SEP4Data.air4you.tempThreshold.TemperatureThreshold;
 import org.springframework.stereotype.Service;
 
 @Service
-public class IThresholdService implements ISendThresholdToGateway {
+public class ThresholdService implements ISendThresholdToGateway {
 
 
 
