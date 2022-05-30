@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.persistence.Table;
 
 @Repository
-@Table()
 public interface RoomRepository extends JpaRepository<Room, String> {
     @Transactional
     @Modifying
