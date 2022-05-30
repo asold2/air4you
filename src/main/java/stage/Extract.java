@@ -7,6 +7,8 @@ public class Extract {
     private JDBCManager jdbcManager = null;
     private Transform transform = null;
 
+/*Within the constructor all the methods implemented in this class are called, to first
+* create the staging tables, then to populate it with data from the source system*/
     public Extract(){
         jdbcManager = JDBCManager.getInstance();
 
@@ -35,6 +37,8 @@ public class Extract {
         transform = new Transform();
 
     }
+
+
 
     private void extractfactMeasurementToStage() {
         jdbcManager.execute(
@@ -81,7 +85,7 @@ public class Extract {
         }
     }
 
-
+/*STAGING - Creating all staging tables for the dimension and fact tables*/
     public void stageDimRoomCreation(){
 //        jdbcManager.execute("drop table stage_air4you.Dim_Room cascade ");
         jdbcManager.execute("create table if not exists stage_air4you.Dim_Room ( " +
@@ -196,6 +200,8 @@ public class Extract {
                 "                                                    )");
     }
 
+
+    /*EXTRACTING - Extracting data from fact and dimensional data, and inserting it to the staging tables*/
     public void extractDimMeasurementToStage(){
         jdbcManager.execute("insert into stage_air4you.dim_measurement\n" +
                 "(measurement_id, room_id, date, temperature, humidity, co2, temperature_exceeded, humidity_exceeded, co2_exceeded) SELECT\n" +
