@@ -11,7 +11,6 @@ import SEP4Data.air4you.room.RoomService;
 import SEP4Data.air4you.tempThreshold.ITempThresholdService;
 import SEP4Data.air4you.tempThreshold.TemperatureThreshold;
 import SEP4Data.air4you.threshold.Threshold;
-import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +53,6 @@ public class MeasurementServiceImpl implements IMeasurementService{
         Data data = new Data();
         data.setExceeded(false);
         String to = measurementRepository.getTokenFromRoomId(measurement.getRoomId());
-        System.out.println("TOKEN = " + to);
 
         LocalDateTime ldt = LocalDateTime.ofInstant(measurement.getDate().toInstant(),ZoneId.systemDefault());
         LocalTime localTime = ldt.toLocalTime();
@@ -94,7 +92,13 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
         measurementRepository.save(measurement);
 
-        Threshold thresholdToReturn = new Threshold(measurement.getRoomId(), tempThresh.getMin(), tempThresh.getMax(), humThresh.getMin(), humThresh.getMax());
+        Threshold thresholdToReturn = new Threshold(measurement.getRoomId(), (int)tempThresh.getMin(), (int)tempThresh.getMax(), (int)humThresh.getMin(), (int)humThresh.getMax());
+
+
+        if(thresholdToReturn.getMaxHumidity()==0 && thresholdToReturn.getMinHumidity()==0 && thresholdToReturn.getMaxTemp()==0 && thresholdToReturn.getMinHumidity()==0){
+            System.out.println("returning null instead of threshold");
+            return null;
+        }
 
         return thresholdToReturn;
     }

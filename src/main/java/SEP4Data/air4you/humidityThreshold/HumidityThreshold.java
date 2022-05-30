@@ -1,5 +1,7 @@
 package SEP4Data.air4you.humidityThreshold;
 
+import SEP4Data.air4you.threshold.Threshold;
+
 import javax.persistence.*;
 import java.sql.Time;
 import java.time.LocalTime;
@@ -18,8 +20,8 @@ public class HumidityThreshold
   private double max;
 
   public HumidityThreshold(){
-    this.max = Double.MAX_VALUE;
-    this.min = Double.MIN_VALUE;
+    this.max = 0;
+    this.min = 0;
   }
   public HumidityThreshold(double max, double min){
     this.max = max;

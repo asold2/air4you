@@ -31,7 +31,6 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
   // Adding humidity threshold 
   @Override
   public boolean addHumidityThreshold(HumidityThreshold humidityThreshold) throws Exception {
-    System.out.println("das");
     if (roomRepository.findById(humidityThreshold.getRoomId()).isEmpty())
     {
       throw new Exception("noRoom");
@@ -112,7 +111,6 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
   // Updating humidity threshold by threshold Id
   @Override
   public void updateHumidityThreshold(HumidityThreshold humidityThreshold){
-    System.out.println(humidityThreshold.getId() + "!!!!!!!!!!!!!!!!!!!!!!!!");
     //Not working. add id in path
     humidityThresholdRepository.updateHumidityThreshold(humidityThreshold.getMax(), humidityThreshold.getMin(), humidityThreshold.getId());
   }
