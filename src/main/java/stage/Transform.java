@@ -9,14 +9,15 @@ public class Transform {
         jdbcManager = JDBCManager.getInstance();
 
         transformUserEmailandName();
-        transformDim_measurementWrongDate();
-        transformDim_DateWrongDate();
+        transformDimMeasurementWrongDate();
+        transformDimDateWrongDate();
 
         addValidToandValidFromToStageDimensions();
 
         load = new Load();
     }
 
+    /*Adding extra attribute to staging tables to reflect type two changes*/
     private void addValidToandValidFromToStageDimensions() {
         jdbcManager.execute("alter table stage_air4you.dim_measurement\n" +
                 "add if not exists ValidFrom int, add if not exists ValidTo int;\n" +
@@ -47,6 +48,7 @@ public class Transform {
                 "validto = 99990101;");
     }
 
+    /*Updating the values for email and name where they are null*/
     public void transformUserEmailandName(){
         jdbcManager.execute("update stage_air4you.dim_user\n" +
                 "set email = 'unknown'\n" +
@@ -55,11 +57,13 @@ public class Transform {
                 "set name = 'not specified'\n" +
                 "where name is null;");
     }
-    public void transformDim_measurementWrongDate(){
+
+    /*Updating the Measurement stage table, so it can contain the right dates*/
+    public void transformDimMeasurementWrongDate(){
         jdbcManager.execute("delete  from stage_air4you.dim_measurement\n" +
                 "    where extract(year from stage_air4you.dim_measurement.date) < 2022;");
     }
-    public void transformDim_DateWrongDate(){
+    public void transformDimDateWrongDate(){
         jdbcManager.execute("delete  from stage_air4you.dim_date\n" +
                 "    where year < 2022;");
     }

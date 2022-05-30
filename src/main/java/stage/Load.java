@@ -12,11 +12,11 @@ public class Load {
     public Load(){
         jdbcManager = JDBCManager.getInstance();
         createEdwSchema();
-        creatEdwDimRoom();
-        creatEdwDimUser();
-        creatEdwDimToken();
-        creatEdwDimDate();
-        creatEdwDimMeasurement();
+        createEdwDimRoom();
+        createEdwDimUser();
+        createEdwDimToken();
+        createEdwDimDate();
+        createEdwDimMeasurement();
 
         insertIntoEdwDimRoom();
         insertIntoEdwDimDate();
@@ -34,22 +34,23 @@ public class Load {
         etl= new ETL();
     }
 
+    /*Creating edw schema tables for all dimension and fact tables*/
     private void createEdwSchema(){
         jdbcManager.execute("CREATE SCHEMA IF NOT EXISTS edw_air4you");
     }
 
     private void createEdwFactMeasurement() {
         jdbcManager.execute("create table if not exists edw_air4you.fact_measurement(\n" +
-                "m_id int not null,\n" +
-                "u_id int not null,\n" +
-                "r_id int not null,\n" +
-                "d_id  int not null,\n" +
-                "foreign key (u_id) references edw_air4you.dim_user (u_id) on delete cascade,\n" +
-                "foreign key (r_id) references edw_air4you.dim_room (r_id) on delete cascade,\n" +
-                "foreign key (d_id) references edw_air4you.dim_date (d_id) on delete cascade,\n" +
-                "foreign key (m_id) references edw_air4you.dim_measurement (m_id) on delete cascade,\n" +
-                "constraint fact_measurement_PK PRIMARY KEY(u_id, r_id, d_id, m_id)\n" +
-                ");");
+                "                                                                   m_id int not null,\n" +
+                "                                                                    u_id int not null,\n" +
+                "                                                                    r_id int not null,\n" +
+                "                                                                    d_id  int not null,\n" +
+                "                                                                    foreign key (u_id) references edw_air4you.dim_user (u_id) on delete cascade,\n" +
+                "                                                                    foreign key (r_id) references edw_air4you.dim_room (r_id) on delete cascade,\n" +
+                "                                                                    foreign key (d_id) references edw_air4you.dim_date (d_id) on delete cascade,\n" +
+                "                                                                    foreign key (m_id) references edw_air4you.dim_measurement (m_id) on delete cascade,\n" +
+                "                                                                    constraint fact_measurement_PK PRIMARY KEY(u_id, r_id, d_id, m_id)\n" +
+                "                                                                    );");
     }
 
     private void createEdwFactRoomRegistartion() {
@@ -64,47 +65,8 @@ public class Load {
                 "                    );");
     }
 
-    private void insertIntoEdwDimDate() {
-        jdbcManager.execute(
-                "insert into edw_air4you.dim_date (date_id, year, month, week, day, hour, minute, fact_type)\n" +
-                "select date_id, year, month, week, day, hour, minute, fact_type from stage_air4you.dim_date\n" +
-                "except select date_id, year, month, week, day, hour, minute, fact_type from edw_air4you.dim_date;");
-    }
-
-    private void updateDimRoom(){
-
-    }
-
-    private void insertIntoEdwDimUser() {
-        jdbcManager.execute("\n" +
-                "insert into edw_air4you.Dim_User\n" +
-                "                (user_id, token, email, name  )\n" +
-                "                                select user_id, token, email, name\n" +
-                "                                from stage_air4you.dim_user\n" +
-                "                except select user_id, token, email, name from edw_air4you.Dim_User;");
-    }
-
-    private void insertIntoEdwDimToken() {
-        jdbcManager.execute("insert into edw_air4you.dim_token(token_id, u_id, token)\n" +
-                "                select  id, uid, token from stage_air4you.dim_token\n" +
-                "                except select token_id, u_id, token from edw_air4you.dim_token;");
-    }
-
-    private void insertIntoEdwDimMeasurement() {
-        jdbcManager.execute("insert into edw_air4you.dim_measurement\n" +
-                "                ( measurement_id, room_id, date, temperature, humidity, co2, temperature_exceeded, humidity_exceeded, co2_exceeded) SELECT\n" +
-                "                measurement_id, room_id,date,temperature,humidity, co2,temperature_exceeded, humidity_exceeded, co2_exceeded from stage_air4you.dim_measurement\n" +
-                "                except select measurement_id, room_id, date, temperature, humidity, co2, temperature_exceeded, humidity_exceeded, co2_exceeded from edw_air4you.dim_measurement;\n");
-    }
-
-    private void insertIntoEdwDimRoom() {
-        jdbcManager.execute("Insert into edw_air4you.dim_room(room_id, name, registration_date, user_id)\n" +
-                "                SELECT room_id, name, registration_date, user_id from stage_air4you.dim_room\n" +
-                "                               except select room_id, name, registration_date, user_id from edw_air4you.Dim_Room;\n");
-    }
-
-    private void creatEdwDimUser() {
-    jdbcManager.execute("create table if not exists edw_air4you.dim_user (\n" +
+    private void createEdwDimUser() {
+        jdbcManager.execute("create table if not exists edw_air4you.dim_user (\n" +
             "    u_id  serial  primary key ,\n" +
             "    user_id varchar(255),\n" +
             "    token varchar(255),\n" +
@@ -113,7 +75,7 @@ public class Load {
             ");");
     }
 
-    private void creatEdwDimToken() {
+    private void createEdwDimToken() {
         jdbcManager.execute("create table if not exists edw_air4you.dim_token (\n" +
                 "    t_id  serial  primary key ,\n" +
                 "    token_id int,\n" +
@@ -123,7 +85,7 @@ public class Load {
                 ");");
     }
 
-    private void creatEdwDimMeasurement() {
+    private void createEdwDimMeasurement() {
         jdbcManager.execute("create table if not exists edw_air4you.dim_measurement (\n" +
                 "    m_id  serial  primary key ,\n" +
                 "    measurement_id int,\n" +
@@ -138,70 +100,68 @@ public class Load {
                 ");");
     }
 
-    private void creatEdwDimDate() {
+    private void createEdwDimDate() {
         jdbcManager.execute("create table if not exists edw_air4you.dim_date (\n" +
-                "    d_id  serial  primary key ,\n" +
-                "    date_id int,\n" +
-                "    year int,\n" +
-                "    month int,\n" +
-                "    week int,\n" +
-                "    day int,\n" +
-                "    hour int,\n" +
-                "    minute int,\n" +
-                "    fact_type varchar(40)\n" +
-                ");");
+            "    d_id  serial  primary key ,\n" +
+            "    date_id int,\n" +
+            "    year int,\n" +
+            "    month int,\n" +
+            "    week int,\n" +
+            "    day int,\n" +
+            "    hour int,\n" +
+            "    minute int,\n" +
+            "    fact_type varchar(40)\n" +
+            ");");
     }
-
-    private void creatEdwDimRoom() {
+    private void createEdwDimRoom() {
         jdbcManager.execute("create table if not exists edw_air4you.dim_room (\n" +
-                "    r_id  serial  primary key ,\n" +
-                "    room_id varchar(255) not null,\n" +
-                "    name varchar(255) not null,\n" +
-                "    registration_date timestamp,\n" +
-                "    user_id varchar(255)\n" +
-                ");");
+            "    r_id  serial  primary key ,\n" +
+            "    room_id varchar(255) not null,\n" +
+            "    name varchar(255) not null,\n" +
+            "    registration_date timestamp,\n" +
+            "    user_id varchar(255)\n" +
+            ");");
 
     }
 
 
-    public void initialLoad(){
-
-        java.util.Date date = new java.util.Date();
-
-        long timeInMilliSeconds = date.getTime();
-
-        jdbcManager.execute(" create table if not exists edw_air4you.initial_load_Date(\n" +
-                "        id serial primary key ,\n" +
-                "        date timestamp,\n" +
-                "        load_type varchar(255)\n" +
-                "    );");
-
-        String sqlMeasurement = "select count (*) from edw_air4you.fact_measurement";
-        String sqlRegistartion = "    select count (*) from edw_air4you.fact_registration";
-        int fact_measurement_rows = jdbcManager.queryForObject(sqlMeasurement, Integer.class);
-        int fact_registartion_rows = jdbcManager.queryForObject(sqlRegistartion, Integer.class);
-
-        System.out.println(fact_registartion_rows);
-        System.out.println(fact_measurement_rows);
-
-
-        if(fact_registartion_rows == 0){
-            extractFactRegistrationToEdw();
-            jdbcManager.update("insert into edw_air4you.initial_load_date(\n" +
-                    "    date, load_type\n" +
-                    ") values (?, ?)", new Date(timeInMilliSeconds), "FactRegistartion");
-
-        }
-        if(fact_measurement_rows == 0){
-            extractFactMeasurementToEdw();
-            jdbcManager.update("insert into edw_air4you.initial_load_date(\n" +
-                    "    date, load_type\n" +
-                    ") values (?, ?)", new Date(timeInMilliSeconds), "FactMeasurement");
-        }
-
-
+    /*LOADING - Populating the edw schema dimension tables with transformed data */
+    private void insertIntoEdwDimDate() {
+        jdbcManager.execute("insert into edw_air4you.dim_date (date_id, year, month, week, day, hour, minute, fact_type)\n" +
+            "select date_id, year, month, week, day, hour, minute, fact_type from stage_air4you.dim_date\n" +
+            "except select date_id, year, month, week, day, hour, minute, fact_type from edw_air4you.dim_date;");
     }
 
+    private void insertIntoEdwDimUser() {
+        jdbcManager.execute("\n" +
+            "insert into edw_air4you.Dim_User\n" +
+            "                (user_id, token, email, name  )\n" +
+            "                                select user_id, token, email, name\n" +
+            "                                from stage_air4you.dim_user\n" +
+            "                except select user_id, token, email, name from edw_air4you.Dim_User;");
+    }
+
+    private void insertIntoEdwDimToken() {
+        jdbcManager.execute("insert into edw_air4you.dim_token(u_id, token)\n" +
+            "                select  uid, token from stage_air4you.dim_token\n" +
+            "                except select u_id, token from edw_air4you.dim_token;");
+    }
+
+    private void insertIntoEdwDimMeasurement() {
+        jdbcManager.execute("insert into edw_air4you.dim_measurement\n" +
+            "                ( measurement_id, room_id, date, temperature, humidity, co2, temperature_exceeded, humidity_exceeded, co2_exceeded) SELECT\n" +
+            "                measurement_id, room_id,date,temperature,humidity, co2,temperature_exceeded, humidity_exceeded, co2_exceeded from stage_air4you.dim_measurement\n" +
+            "                except select measurement_id, room_id, date, temperature, humidity, co2, temperature_exceeded, humidity_exceeded, co2_exceeded from edw_air4you.dim_measurement;\n");
+    }
+
+    private void insertIntoEdwDimRoom() {
+        jdbcManager.execute("Insert into edw_air4you.dim_room(room_id, name, registration_date, user_id)\n" +
+            "                SELECT room_id, name, registration_date, user_id from stage_air4you.dim_room\n" +
+            "                               except select room_id, name, registration_date, user_id from edw_air4you.Dim_Room;\n");
+    }
+
+
+    /*Populating the edw fact tables with data*/
     public void extractFactMeasurementToEdw(){
     jdbcManager.execute("insert into  edw_air4you.fact_measurement(\n" +
             "                    m_id,\n" +
@@ -240,6 +200,45 @@ public class Load {
         }catch(DuplicateKeyException e){
             throw e;
         }
+    }
+
+    /*Initial load of data*/
+    public void initialLoad(){
+
+        java.util.Date date = new java.util.Date();
+
+        long timeInMilliSeconds = date.getTime();
+
+        jdbcManager.execute(" create table if not exists edw_air4you.initial_load_Date(\n" +
+            "        id serial primary key ,\n" +
+            "        date timestamp,\n" +
+            "        load_type varchar(255)\n" +
+            "    );");
+
+        String sqlMeasurement = "select count (*) from edw_air4you.fact_measurement";
+        String sqlRegistartion = "    select count (*) from edw_air4you.fact_registration";
+        int fact_measurement_rows = jdbcManager.queryForObject(sqlMeasurement, Integer.class);
+        int fact_registartion_rows = jdbcManager.queryForObject(sqlRegistartion, Integer.class);
+
+        System.out.println(fact_registartion_rows);
+        System.out.println(fact_measurement_rows);
+
+
+        if(fact_registartion_rows == 0){
+            extractFactRegistrationToEdw();
+            jdbcManager.update("insert into edw_air4you.initial_load_date(\n" +
+                "    date, load_type\n" +
+                ") values (?, ?)", new Date(timeInMilliSeconds), "FactRegistartion");
+
+        }
+        if(fact_measurement_rows == 0){
+            extractFactMeasurementToEdw();
+            jdbcManager.update("insert into edw_air4you.initial_load_date(\n" +
+                "    date, load_type\n" +
+                ") values (?, ?)", new Date(timeInMilliSeconds), "FactMeasurement");
+        }
+
+
     }
 
 }

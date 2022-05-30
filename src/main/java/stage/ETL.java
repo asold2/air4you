@@ -22,6 +22,7 @@ public class ETL {
         jdbcManager.execute("CREATE SCHEMA IF NOT EXISTS etl_air4you");
     }
 
+/*Altering all tables within the edw schema with attributes to handle type 2 changes*/
     private void updateEdwDimensionWithValidToAndValidFrom() {
     jdbcManager.execute("alter table edw_air4you.dim_measurement\n" +
             "add if not exists ValidFrom int, add if not exists ValidTo int;\n" +
@@ -53,6 +54,7 @@ public class ETL {
 
     }
 
+    /*Creating the ETL log table*/
     private void createAndInsertLogTable() {
         jdbcManager.execute("create table if not exists etl_air4you.LogUpdate(\n" +
                 "    table_name varchar(50) null,\n" +
@@ -71,6 +73,7 @@ public class ETL {
 
 
 
+    /*Making sure new measurements are reflected within the data warehouse*/
     public void logUpdate(){
 
 
