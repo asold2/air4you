@@ -47,7 +47,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
     public Threshold addMeasurement(Measurement measurement) {
 
         //TODO check if beyond threshold
-        Date date = measurement.getDate();
+        Date date = new Date();
         measurement.setDate(date);
 
         Data data = new Data();
@@ -62,6 +62,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
         TemperatureThreshold tempThresh;
 
         humThresh = measurementRepository.getCurrentHumidityThreshold(localTime, measurement.getRoomId());
+
         tempThresh = measurementRepository.getCurrentTemperatureThreshold(localTime, measurement.getRoomId());
 
         if(humThresh == null){
@@ -70,6 +71,10 @@ public class MeasurementServiceImpl implements IMeasurementService{
         if(tempThresh == null){
             tempThresh = new TemperatureThreshold();
         }
+        System.out.println(humThresh.getMax() + "BBBBBBBBBBB");
+
+        System.out.println(humThresh.getMax() + "BBBBBBBBBBB");
+        System.out.println(humThresh.getMin() + "BBBBBBBBBBB");
 
         data.setTitle(measurementRepository.getRoomName(measurement.getRoomId()));
 
@@ -95,10 +100,10 @@ public class MeasurementServiceImpl implements IMeasurementService{
         Threshold thresholdToReturn = new Threshold(measurement.getRoomId(), (int)tempThresh.getMin(), (int)tempThresh.getMax(), (int)humThresh.getMin(), (int)humThresh.getMax());
 
 
-//        if(thresholdToReturn.getMaxHumidity()==0 && thresholdToReturn.getMinHumidity()==0 && thresholdToReturn.getMaxTemp()==0 && thresholdToReturn.getMinHumidity()==0){
-//            System.out.println("returning null instead of threshold");
-//            return null;
-//        }
+        System.out.println(thresholdToReturn.getMaxTemp() + "AAAAAAAAAAa");
+        System.out.println(thresholdToReturn.getMinTemp() + "AAAAAAAAAAa");
+        System.out.println(thresholdToReturn.getMaxHumidity() + "AAAAAAAAAAa");
+        System.out.println(thresholdToReturn.getMinHumidity() + "AAAAAAAAAAa");
 
         return thresholdToReturn;
     }

@@ -19,14 +19,16 @@ public class HumidityThreshold
   private double min;
   private double max;
 
-  public HumidityThreshold(){
-    this.max = 0;
-    this.min = 0;
-  }
+//  public HumidityThreshold(){
+//    this.max = 0;
+//    this.min = 0;
+//  }
   public HumidityThreshold(double max, double min){
     this.max = max;
     this.min = min;
   }
+  public HumidityThreshold(){
+}
 
   public HumidityThreshold(String roomId, LocalTime startTime, LocalTime endTime, double min, double max)
   {

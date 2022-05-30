@@ -33,6 +33,9 @@ public interface MeasurementRepository extends JpaRepository<Measurement, Intege
 
     @Query(value = "SELECT ht FROM HumidityThreshold ht WHERE :measurementTime BETWEEN ht.startTime AND ht.endTime AND ht.roomId = :roomId")
     HumidityThreshold getCurrentHumidityThreshold(@Param(value = "measurementTime") LocalTime measurementTime, @Param(value = "roomId") String roomId);
+
+
+
     @Query(value = "SELECT tt FROM TemperatureThreshold tt WHERE :measurementTime BETWEEN tt.startTime AND tt.endTime AND tt.roomId = :roomId")
     TemperatureThreshold getCurrentTemperatureThreshold(@Param(value = "measurementTime") LocalTime measurementTime, @Param(value = "roomId") String roomId);
     @Query(value = "SELECT token FROM room INNER JOIN tokens on user_id = uid WHERE room_id = :roomId", nativeQuery = true)
