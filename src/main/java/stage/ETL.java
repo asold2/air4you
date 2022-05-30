@@ -83,9 +83,10 @@ public class ETL {
 
 
             jdbcManager.execute( "insert into edw_air4you.dim_measurement\n" +
-                    "                                ( room_id, date, temperature, humidity, co2, temperature_exceeded, humidity_exceeded, co2_exceeded, validfrom, validto)\n" +
-                    "                                SELECT\n" +
-                    "                                room_id,date,temperature,humidity, co2,temperature_exceeded, humidity_exceeded, co2_exceeded, "+ NewDate + ", " + FutureDate +  "  from stage_air4you.dim_measurement where validto = 99990101\n" +
-                    "                                except select  room_id, date, temperature, humidity, co2, temperature_exceeded, humidity_exceeded, co2_exceeded, validfrom, validto from edw_air4you.dim_measurement ;\n" );
+                    "( room_id, date, temperature, humidity, co2, temperature_exceeded, humidity_exceeded, co2_exceeded, validfrom, validto)\n" +
+                    "SELECT\n" +
+                    "room_id,date,temperature,humidity, co2,temperature_exceeded, humidity_exceeded, co2_exceeded, "+ NewDate + ", " + FutureDate + "  from stage_air4you.dim_measurement where validto = 99990101\n" +
+                    "except select  room_id, date, temperature, humidity, co2, temperature_exceeded, humidity_exceeded, co2_exceeded, validfrom, validto from edw_air4you.dim_measurement \n");
+        jdbcManager.execute("insert into etl_air4you.LogUpdate(table_name, last_load_date) values ('dim_measurement', "+ NewDate + ");\n");
     }
 }
