@@ -7,9 +7,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import stage.Extract;
+import stage.Transform;
 
 @SpringBootApplication
-@ComponentScan({"config.StageJDBC"})
+@ComponentScan
+@ComponentScan({"SEP4Data.air4you.StageJDBC"})
 
 public class Air4youApplication {
 
@@ -17,9 +19,9 @@ public class Air4youApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Air4youApplication.class, args);
-		RoomService roomService = new RoomServiceImpl();
 
 		Extract extract = new Extract();
+//		Transform transform = new Transform();
 //		extract.stageDimUserCreation();
 //
 //	extract.stageDimHumidityThresholdCreation();

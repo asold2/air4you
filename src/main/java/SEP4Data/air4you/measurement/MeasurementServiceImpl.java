@@ -6,6 +6,7 @@ import SEP4Data.air4you.Notification.Token.TokenService;
 import SEP4Data.air4you.humidityThreshold.HumidityThreshold;
 import SEP4Data.air4you.humidityThreshold.IHumidityThresholdService;
 import SEP4Data.air4you.room.Room;
+import SEP4Data.air4you.room.RoomRepository;
 import SEP4Data.air4you.room.RoomService;
 import SEP4Data.air4you.tempThreshold.ITempThresholdService;
 import SEP4Data.air4you.tempThreshold.TemperatureThreshold;
@@ -28,6 +29,9 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
     @Autowired
     MeasurementRepository measurementRepository;
+
+    @Autowired
+    RoomRepository roomRepository;
     @Autowired
     MainActivity mainActivity;
     @Autowired
@@ -42,6 +46,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
     @Autowired
     RoomService roomService;
 
+    //Adding measurement
     @Override
     public Threshold addMeasurement(Measurement measurement) {
 
@@ -102,6 +107,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
         return thresholdToReturn;
     }
 
+    //Get measurements by room id
     @Override
     public List<Measurement> getMeasurements(String roomId) {
 
@@ -116,8 +122,13 @@ public class MeasurementServiceImpl implements IMeasurementService{
     }
 
     @Override
-    public void deleteAllFromRoom(String roomId) {
-
+    public boolean deleteAllFromRoom(String roomId) {
+        if(roomRepository.existsById(roomId)) {
+            measurementRepository.deleteMeasurementsByRoomId(roomId);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -125,10 +136,12 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
     }
 
+    //Delete all measurements
     @Override
     public void deleteAll() {
         measurementRepository.deleteAll();
     }
+
 
     @Override
     public  TemperatureThreshold returnCurrentTempThreshold(String roomId, Date measurementDate) {
@@ -156,7 +169,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
         return temperatureThreshold;
     }
 
-
+    // This method will return measurements by room id
     @Override
     public Measurement getLastMeasurementByRoomId(String roomId) {
         List<Measurement> roomsMeasuremnts = new ArrayList<>();
@@ -168,6 +181,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
         return roomsMeasuremnts.get(roomsMeasuremnts.size()-1);
     }
 
+    //This method will return measurements by date and room id
     @Override
     public List<Measurement> getMeasurementByDateAndRoomId(String dateInString, String roomId) {
         List<Measurement> measurementsInRoom = roomService.getRoomById(roomId).getMeasurements();
@@ -196,6 +210,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
         return newMeasurements;
     }
 
+    //This method will return measurements between two dates
     @Override
     public List<Measurement> getMeasurementsBetweenDates(String startDate, String endDate, String roomId)
     {
@@ -225,6 +240,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
         return measurementsToReturn;
     }
 
+    //This method will return measurements for week by user id
     @Override
     public List<Measurement> getMeasurementByUserAndRoomIdWeek(String userId)
     {

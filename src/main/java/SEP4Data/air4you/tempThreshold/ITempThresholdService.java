@@ -10,7 +10,7 @@ import java.util.List;
 public interface ITempThresholdService {
 
     List<TemperatureThreshold> getAllTempThresholds();
-    boolean addTempThreshold(TemperatureThreshold temperatureThreshold);
+    boolean addTempThreshold(TemperatureThreshold temperatureThreshold) throws Exception;
     void deleteTempThreshold(int Id);
     void updateTempThreshold(TemperatureThreshold temperatureThreshold);
     TemperatureThreshold returnCurrentTempThreshold(String roomId, Date measurementDate);

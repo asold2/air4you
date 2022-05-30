@@ -51,11 +51,11 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
 
 
     @Override
-    public boolean addTempThreshold(TemperatureThreshold temperatureThreshold) {
+    public boolean addTempThreshold(TemperatureThreshold temperatureThreshold) throws Exception {
 
         System.out.println();
         if (roomRepository.findById(temperatureThreshold.getRoomId()).isEmpty()){
-            return false;
+            throw new Exception("noRoom");
         }
 
         List<TemperatureThreshold> roomsThresholds = new ArrayList<>();
@@ -66,20 +66,20 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
         }
         for (TemperatureThreshold temp : roomsThresholds){
             if((temperatureThreshold.getStartTime().isAfter(temp.getStartTime()) || temperatureThreshold.getStartTime().equals(temp.getStartTime())) &&   ((temperatureThreshold.getStartTime().isBefore(temp.getEndTime()))) || temperatureThreshold.getStartTime().equals(temp.getEndTime())){
-                return false;
+                throw new Exception("insideTimeZone");
             }
             else if(temperatureThreshold.getEndTime().isAfter(temp.getStartTime()) && (temperatureThreshold.getEndTime().isBefore(temp.getEndTime())) || ((temperatureThreshold.getEndTime().equals(temp.getEndTime())) || temperatureThreshold.getEndTime().equals(temp.getStartTime()))){
-                return false;
+                throw new Exception("insideTimeZone");
             }
             else if(temperatureThreshold.contains(temp)){
-                return false;
+                throw new Exception("alreadyContains");
             }
         }
         if(temperatureThreshold.getStartTime()==null || temperatureThreshold.getEndTime()==null){
-            return false;
+            throw new Exception("noTime");
         }
         else if(temperatureThreshold.getMax()<= temperatureThreshold.getMin()){
-            return false;
+            throw new Exception("badMaxAndMin");
         }
 
 

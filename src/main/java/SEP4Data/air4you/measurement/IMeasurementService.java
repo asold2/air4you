@@ -12,7 +12,7 @@ import java.util.List;
 public interface IMeasurementService {
     Threshold addMeasurement(Measurement measurement);
     List<Measurement> getMeasurements(String roomId);
-    void deleteAllFromRoom(String roomId);
+    boolean deleteAllFromRoom(String roomId);
     void deleteAllFromUser(String userId);
     void deleteAll();
     TemperatureThreshold returnCurrentTempThreshold(String roomId, Date measurementDate);

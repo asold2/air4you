@@ -13,21 +13,20 @@ public class UserController {
         this.userService = userService;
     }
 
-@PostMapping("/user/registration/{username}/{password}/")
+    @PostMapping("/user/registration/{username}/{password}/")
 
-public int registerUser(@PathVariable String username, @PathVariable String password){
-    if(userService.register(username, password)){
-        return HttpServletResponse.SC_OK;
+    public int registerUser(@PathVariable String username, @PathVariable String password){
+        if(userService.register(username, password)){
+            return HttpServletResponse.SC_OK;
+        } else{
+            return HttpServletResponse.SC_FORBIDDEN;
+        }
     }
-    else{
-        return HttpServletResponse.SC_FORBIDDEN;
-    }
-}
 
-@GetMapping("/users/")
+    @GetMapping("/users/")
     public List<User> getUsers(){
         return userService.getAllUsers();
-}
+    }
 
     @DeleteMapping("/users/total_deletion")
     public int deleteUsers(){
@@ -36,6 +35,15 @@ public int registerUser(@PathVariable String username, @PathVariable String pass
         }
         else{
             return  HttpServletResponse.SC_BAD_REQUEST;
+        }
+    }
+
+    @DeleteMapping("/users/{userId}")
+    public int deleteUser(@PathVariable String userId){
+        if(userService.deleteUser(userId)){
+            return HttpServletResponse.SC_OK;
+        } else {
+            return HttpServletResponse.SC_NOT_FOUND;
         }
     }
 

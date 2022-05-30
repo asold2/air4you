@@ -14,20 +14,24 @@ public class RoomController {
 
     @Autowired
     private RoomService roomService;
-    @Autowired
-    private IMeasurementService measurementService;
-
-
 
     @PostMapping("/room/")
     public int registerRoom(@RequestBody Room room){
-        System.out.println(room.getUserId());
         if(roomService.registerRoom(room)){
             return HttpServletResponse.SC_OK;
         }
         else {
             // Changed from Forbidden (403) to Expectation_Failed (417)
             return HttpServletResponse.SC_EXPECTATION_FAILED;
+        }
+    }
+
+    @PutMapping("/room/")
+    public int changeRoom(@RequestBody Room room){
+        if(roomService.updateRoom(room)){
+            return HttpServletResponse.SC_OK;
+        } else {
+            return HttpServletResponse.SC_NOT_FOUND;
         }
     }
 
@@ -38,9 +42,8 @@ public class RoomController {
 
     //Gets rooms with last measurement. Body is userId as String
     //returns array list of rooms
-    @PostMapping("/room/last/{userId}")
+    @GetMapping("/room/last/{userId}")
     public List<Room> getRoomsLastMeasurment(@PathVariable String userId){
-        System.out.println(userId + "!!!!!!!!!!!!!!!");
         List<Room> roomsToReturn = new ArrayList<>();
         for (Room room: roomService.getRooms(userId)) {
             room.onlyLastMeasurement();
@@ -49,10 +52,21 @@ public class RoomController {
         return roomsToReturn;
     }
     //Returns array list of all possible rooms
-    @PostMapping("/all/rooms/")
+    @GetMapping("/all/rooms/")
     public List<Room> getAllRooms(){
 
         return roomService.getAllRooms();
+    }
+
+    @DeleteMapping("/user/{userId}")
+    public int deleteRoomsByUserId(@PathVariable String userId){
+
+        if(roomService.deleteRoomsByUserId(userId)){
+            return HttpServletResponse.SC_OK;
+        } else {
+            return HttpServletResponse.SC_NOT_FOUND;
+        }
+
     }
 
     @PutMapping("empty/room/of/user/")
@@ -64,6 +78,16 @@ public class RoomController {
     @DeleteMapping("/abortion/")
     public void deleteAllRoomsFromUser(@RequestBody String userId){
         roomService.deleteAllFromUser(userId);
+    }
+    //This
+    @DeleteMapping("/room/{roomId}/")
+    public int deleteRoom(@PathVariable String roomId){
+        System.out.println(roomId + "userId to delete user from db");
+        if (roomService.deleteRoom(roomId)){
+            return HttpServletResponse.SC_OK;
+        }else
+            return HttpServletResponse.SC_NOT_FOUND;
+
     }
 
     @DeleteMapping("/deletion/")

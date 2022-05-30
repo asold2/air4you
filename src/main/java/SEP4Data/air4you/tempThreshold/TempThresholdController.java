@@ -27,12 +27,33 @@ public class TempThresholdController {
 
     @PostMapping("/temperatureThresholds/")
     public int addTempThreshold(@RequestBody TemperatureThreshold temperatureThreshold){
-        if (tempThresholdService.addTempThreshold(temperatureThreshold)){
-            return HttpServletResponse.SC_OK;
+        try {
+            if (tempThresholdService.addTempThreshold(temperatureThreshold)) {
+                return HttpServletResponse.SC_OK;
+            }
+        }catch (Exception e) {
+            switch (e.getMessage()){
+                case "noRoom":
+                    // 409 // There is no room to have threshold inside.
+                    return HttpServletResponse.SC_CONFLICT;
+                case "insideTimeZone":
+                    // 400 // Creating threshold that is inside other threshold's startTime/endTime
+                    return HttpServletResponse.SC_BAD_REQUEST;
+                case "alreadyContains":
+                    // 406 // There is already a threshold like this inside the room.
+                    return HttpServletResponse.SC_NOT_ACCEPTABLE;
+                case "noTime":
+                    // 417 // startTime or/and endTime is not inside Request.
+                    return HttpServletResponse.SC_EXPECTATION_FAILED;
+                case "badMaxAndMin":
+                    // 403 // Maximum is less than minimum or minimum is greater than maximum.
+                    return HttpServletResponse.SC_FORBIDDEN;
+                default:
+                    // 500 // Something inside program is wrong.
+                    return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+            }
         }
-        else{
-            return  HttpServletResponse.SC_FORBIDDEN;
-        }
+        return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
     }
 
     @DeleteMapping("/temperatureThresholds/{id}")
