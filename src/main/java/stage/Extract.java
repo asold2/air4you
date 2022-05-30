@@ -12,6 +12,8 @@ public class Extract {
     public Extract(){
         jdbcManager = JDBCManager.getInstance();
 
+        createStageSchema();
+
         stageDimRoomCreation();
         stageDimUserCreation();
         stageDimMeasurementCreation();
@@ -32,15 +34,17 @@ public class Extract {
         extractDimDateFromMeasurementToStage();
 
         extractToFactRegistrationStage();
-        extractfactMeasurementToStage();
+        extractFactMeasurementToStage();
 
         transform = new Transform();
 
     }
 
+    private void createStageSchema(){
+        jdbcManager.execute("CREATE SCHEMA IF NOT EXISTS stage_air4you");
+    }
 
-
-    private void extractfactMeasurementToStage() {
+    private void extractFactMeasurementToStage() {
         jdbcManager.execute(
                 "insert into stage_air4you.fact_measurement(\n" +
                         "    measurement_id,\n" +

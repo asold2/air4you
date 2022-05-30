@@ -11,6 +11,7 @@ public class Load {
 
     public Load(){
         jdbcManager = JDBCManager.getInstance();
+        createEdwSchema();
         createEdwDimRoom();
         createEdwDimUser();
         createEdwDimToken();
@@ -34,6 +35,10 @@ public class Load {
     }
 
     /*Creating edw schema tables for all dimension and fact tables*/
+    private void createEdwSchema(){
+        jdbcManager.execute("CREATE SCHEMA IF NOT EXISTS edw_air4you");
+    }
+
     private void createEdwFactMeasurement() {
         jdbcManager.execute("create table if not exists edw_air4you.fact_measurement(\n" +
                 "                                                                   m_id int not null,\n" +
@@ -72,26 +77,27 @@ public class Load {
 
     private void createEdwDimToken() {
         jdbcManager.execute("create table if not exists edw_air4you.dim_token (\n" +
-            "    t_id  serial  primary key ,\n" +
-            "    u_id varchar(255),\n" +
-            "    token varchar(255)\n" +
-            "\n" +
-            ");");
+                "    t_id  serial  primary key ,\n" +
+                "    token_id int,\n" +
+                "    u_id varchar(255),\n" +
+                "    token varchar(255)\n" +
+                "\n" +
+                ");");
     }
 
     private void createEdwDimMeasurement() {
         jdbcManager.execute("create table if not exists edw_air4you.dim_measurement (\n" +
-            "    m_id  serial  primary key ,\n" +
-            "    measurement_id varchar(255),\n" +
-            "    room_id varchar(255),\n" +
-            "    date timestamp,\n" +
-            "    temperature numeric(6,2),\n" +
-            "    humidity numeric(6,2),\n" +
-            "    co2 numeric(6,2),\n" +
-            "    temperature_exceeded boolean,\n" +
-            "    humidity_exceeded boolean,\n" +
-            "    co2_exceeded boolean\n" +
-            ");");
+                "    m_id  serial  primary key ,\n" +
+                "    measurement_id int,\n" +
+                "    room_id varchar(255),\n" +
+                "    date timestamp,\n" +
+                "    temperature numeric(6,2),\n" +
+                "    humidity numeric(6,2),\n" +
+                "    co2 numeric(6,2),\n" +
+                "    temperature_exceeded boolean,\n" +
+                "    humidity_exceeded boolean,\n" +
+                "    co2_exceeded boolean\n" +
+                ");");
     }
 
     private void createEdwDimDate() {
@@ -107,7 +113,6 @@ public class Load {
             "    fact_type varchar(40)\n" +
             ");");
     }
-
     private void createEdwDimRoom() {
         jdbcManager.execute("create table if not exists edw_air4you.dim_room (\n" +
             "    r_id  serial  primary key ,\n" +
@@ -119,41 +124,41 @@ public class Load {
 
     }
 
+
     /*LOADING - Populating the edw schema dimension tables with transformed data */
     private void insertIntoEdwDimDate() {
         jdbcManager.execute("insert into edw_air4you.dim_date (date_id, year, month, week, day, hour, minute, fact_type)\n" +
-                "select date_id, year, month, week, day, hour, minute, fact_type from stage_air4you.dim_date\n" +
-                "except select date_id, year, month, week, day, hour, minute, fact_type from edw_air4you.dim_date;");
+            "select date_id, year, month, week, day, hour, minute, fact_type from stage_air4you.dim_date\n" +
+            "except select date_id, year, month, week, day, hour, minute, fact_type from edw_air4you.dim_date;");
     }
 
     private void insertIntoEdwDimUser() {
         jdbcManager.execute("\n" +
-                "insert into edw_air4you.Dim_User\n" +
-                "                (user_id, token, email, name  )\n" +
-                "                                select user_id, token, email, name\n" +
-                "                                from stage_air4you.dim_user\n" +
-                "                except select user_id, token, email, name from edw_air4you.Dim_User;");
+            "insert into edw_air4you.Dim_User\n" +
+            "                (user_id, token, email, name  )\n" +
+            "                                select user_id, token, email, name\n" +
+            "                                from stage_air4you.dim_user\n" +
+            "                except select user_id, token, email, name from edw_air4you.Dim_User;");
     }
 
     private void insertIntoEdwDimToken() {
         jdbcManager.execute("insert into edw_air4you.dim_token(u_id, token)\n" +
-                "                select  uid, token from stage_air4you.dim_token\n" +
-                "                except select u_id, token from edw_air4you.dim_token;");
+            "                select  uid, token from stage_air4you.dim_token\n" +
+            "                except select u_id, token from edw_air4you.dim_token;");
     }
 
     private void insertIntoEdwDimMeasurement() {
         jdbcManager.execute("insert into edw_air4you.dim_measurement\n" +
-                "                ( measurement_id, room_id, date, temperature, humidity, co2, temperature_exceeded, humidity_exceeded, co2_exceeded) SELECT\n" +
-                "                measurement_id, room_id,date,temperature,humidity, co2,temperature_exceeded, humidity_exceeded, co2_exceeded from stage_air4you.dim_measurement\n" +
-                "                except select measurement_id, room_id, date, temperature, humidity, co2, temperature_exceeded, humidity_exceeded, co2_exceeded from edw_air4you.dim_measurement;\n");
+            "                ( measurement_id, room_id, date, temperature, humidity, co2, temperature_exceeded, humidity_exceeded, co2_exceeded) SELECT\n" +
+            "                measurement_id, room_id,date,temperature,humidity, co2,temperature_exceeded, humidity_exceeded, co2_exceeded from stage_air4you.dim_measurement\n" +
+            "                except select measurement_id, room_id, date, temperature, humidity, co2, temperature_exceeded, humidity_exceeded, co2_exceeded from edw_air4you.dim_measurement;\n");
     }
 
     private void insertIntoEdwDimRoom() {
         jdbcManager.execute("Insert into edw_air4you.dim_room(room_id, name, registration_date, user_id)\n" +
-                "                SELECT room_id, name, registration_date, user_id from stage_air4you.dim_room\n" +
-                "                               except select room_id, name, registration_date, user_id from edw_air4you.Dim_Room;\n");
+            "                SELECT room_id, name, registration_date, user_id from stage_air4you.dim_room\n" +
+            "                               except select room_id, name, registration_date, user_id from edw_air4you.Dim_Room;\n");
     }
-
 
 
     /*Populating the edw fact tables with data*/
