@@ -2,7 +2,6 @@ package stage;
 
 import org.springframework.dao.DuplicateKeyException;
 
-import java.sql.Date;
 public class Extract {
     private JDBCManager jdbcManager = null;
     private Transform transform = null;
@@ -19,7 +18,7 @@ public class Extract {
 //        stageDimTemperatureThresholdCreation();
         stageDimTokenCreation();
         stageDimDateCreation();
-        satgeRegistrationFactCreation();
+        stageRegistrationFactCreation();
         stageFactMeasurementCreation();
 
 
@@ -44,28 +43,26 @@ public class Extract {
 
     private void extractFactMeasurementToStage() {
         jdbcManager.execute(
-                "insert into stage_air4you.fact_measurement(\n" +
-                        "    measurement_id,\n" +
-                        "    user_id,\n" +
-                        "    room_id,\n" +
-                        "    date_id\n" +
-                        "\n" +
-                        ")select\n" +
-                        "    dim_measurement.measurement_id\n" +
-                        "    ,dim_user.u_id,\n" +
-                        "    dim_room.r_id,\n" +
-                        "    dim_date.date_id\n" +
-                        "\n" +
-                        "from\n" +
-                        "     stage_air4you.dim_date,\n" +
-                        "    stage_air4you.dim_room\n" +
-                        "inner join stage_air4you.dim_user on dim_room.user_id = dim_user.user_id\n" +
-                        "inner join stage_air4you.dim_measurement on dim_measurement.room_id = dim_room.room_id\n" +
-                        "where  fact_type = 'measurement' and (EXTRACT(YEAR FROM dim_measurement.date) = dim_date.year ) and (EXTRACT(MONTH FROM dim_measurement.date) = dim_date.month )\n" +
-                        "and (EXTRACT(DAY FROM dim_measurement.date) = dim_date.day ) and (EXTRACT(HOUR FROM dim_measurement.date) = dim_date.hour)\n" +
-                        "  and (EXTRACT(MINUTE FROM dim_measurement.date) = dim_date.minute )\n" +
+                "insert into stage_air4you.fact_measurement(" +
+                        " measurement_id," +
+                        " user_id," +
+                        " room_id," +
+                        " date_id" +
+                        ")select" +
+                        " dim_measurement.measurement_id," +
+                        " dim_user.u_id," +
+                        " dim_room.r_id," +
+                        " dim_date.date_id" +
+                        " from " +
+                        " stage_air4you.dim_date, " +
+                        " stage_air4you.dim_room" +
+                        " inner join stage_air4you.dim_user on dim_room.user_id = dim_user.user_id" +
+                        " inner join stage_air4you.dim_measurement on dim_measurement.room_id = dim_room.room_id" +
+                        " where  fact_type = 'measurement' and (EXTRACT(YEAR FROM dim_measurement.date) = dim_date.year ) and (EXTRACT(MONTH FROM dim_measurement.date) = dim_date.month )" +
+                        " and (EXTRACT(DAY FROM dim_measurement.date) = dim_date.day ) and (EXTRACT(HOUR FROM dim_measurement.date) = dim_date.hour)" +
+                        " and (EXTRACT(MINUTE FROM dim_measurement.date) = dim_date.minute )" +
                         "-- and (dim_measurement.humidity_exceeded = true or dim_measurement.temperature_exceeded = true or dim_measurement.co2_exceeded = true)\n" +
-                        "on conflict do nothing\n" +
+                        " on conflict do nothing" +
                         ";");
     }
 
@@ -177,7 +174,7 @@ public class Extract {
                 ")");
     }
 
-    public void satgeRegistrationFactCreation(){
+    public void stageRegistrationFactCreation(){
         jdbcManager.execute("create table if not exists stage_air4you.fact_registration(\n" +
                 "    user_id int not null,\n" +
                 "    room_id int not null,\n" +
