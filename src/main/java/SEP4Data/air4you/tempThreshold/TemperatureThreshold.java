@@ -26,8 +26,8 @@ public class TemperatureThreshold {
 //    }
 
         public TemperatureThreshold(){
-        this.min = 1;
-        this.max = 1;
+        this.min = 0;
+        this.max = 0;
     }
     public TemperatureThreshold(double max, double min){
         this.max = max;
