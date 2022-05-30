@@ -13,13 +13,13 @@ public class Threshold implements Serializable {
     @Id
     private int thresholdId;
     private String roomId = "none";
-    private int minTemp ;
+    private int minTemp =0 ;
 
-    private int maxTemp ;
+    private int maxTemp =0;
 
-    private int minHumidity ;
+    private int minHumidity =0 ;
 
-    private int maxHumidity ;
+    private int maxHumidity  = 0;
 
     public Threshold( String roomId, int minTemp, int maxTemp, int minHumidity, int maxHumidity) {
         this.roomId = roomId;
