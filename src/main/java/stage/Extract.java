@@ -4,26 +4,19 @@ import org.springframework.dao.DuplicateKeyException;
 
 public class Extract {
     private JDBCManager jdbcManager = null;
-    private Transform transform = null;
 
 /*Within the constructor all the methods implemented in this class are called, to first
 * create the staging tables, then to populate it with data from the source system*/
     public Extract(){
         jdbcManager = JDBCManager.getInstance();
 
-        createStageSchema();
+        extract();
 
-        stageDimRoomCreation();
-        stageDimUserCreation();
-        stageDimMeasurementCreation();
-//        stageDimHumidityThresholdCreation();
-//        stageDimTemperatureThresholdCreation();
-        stageDimTokenCreation();
-        stageDimDateCreation();
-        stageRegistrationFactCreation();
-        stageFactMeasurementCreation();
+        Transform transform = new Transform();
 
+    }
 
+    private void extract(){
         extractRoomToStage();
         extractDimMeasurementToStage();
         extractTokenToStage();
@@ -34,13 +27,6 @@ public class Extract {
 
         extractToFactRegistrationStage();
         extractFactMeasurementToStage();
-
-        transform = new Transform();
-
-    }
-
-    private void createStageSchema(){
-        jdbcManager.execute("CREATE SCHEMA IF NOT EXISTS stage_air4you");
     }
 
     private void extractFactMeasurementToStage() {
@@ -87,119 +73,6 @@ public class Extract {
     }
 
 /*STAGING - Creating all staging tables for the dimension and fact tables*/
-    public void stageDimRoomCreation(){
-//        jdbcManager.execute("drop table stage_air4you.Dim_Room cascade ");
-        jdbcManager.execute("create table if not exists stage_air4you.Dim_Room ( " +
-                "R_Id serial  primary key, " +
-                "room_id VARCHAR(255) not null," +
-                "name VARCHAR(255)," +
-                "registration_date timestamp," +
-                "user_id varchar(255) " +
-                 ")");
-
-    }
-    public void stageDimTokenCreation(){
-        jdbcManager.execute("create table if not exists stage_air4you.Dim_Token( "+
-                "id integer not null primary key," +
-                "uid varchar(255)," +
-                "token varchar(255)" +
-                ")");
-    }
-    public void stageDimUserCreation(){
-        jdbcManager.execute("create table if not exists stage_air4you.Dim_User( " +
-                "U_Id serial not null primary key, " +
-                "user_Id varchar(255) not null ," +
-                "token varchar(255)," +
-                "email varchar(255)," +
-                "name varchar(255)" +
-                ")");
-    }
-    public void stageDimTemperatureThresholdCreation(){
-        jdbcManager.execute("create table if not exists stage_air4you.dim_temperature_threshold(" +
-                "temperature_threshold_id INT not null primary key," +
-                "room_id VARCHAR(255)," +
-                "minimum_value DECIMAL(5,2)," +
-                "maximum_value DECIMAL(5,2)," +
-                "start_time TIME(10)," +
-                "end_time TIME(10)" +
-                ")");
-    }
-
-    public void stageDimHumidityThresholdCreation(){
-        jdbcManager.execute("CREATE TABLE IF NOT EXISTS stage_air4you.Dim_HumidityThreshold ("+
-                "humidity_threshold_id int not null primary key,"+
-                "room_id VARCHAR(255),"+
-                "start_time TIME(10),"+
-                "end_time TIME(10),"+
-                "minimum_value DECIMAL (5,2),"+
-                "maximum_value DECIMAL (5,2)" +
-                ")");
-    }
-
-    public void stageDimMeasurementCreation(){
-        jdbcManager.execute("create table if not exists stage_air4you.Dim_Measurement ( " +
-                "measurement_Id INT not null primary key," +
-                "room_Id VARCHAR(255)," +
-                "date timestamp," +
-                "temperature DECIMAL (6,2)," +
-                "humidity DECIMAL (6,2)," +
-                "co2 DECIMAL (6,2) ," +
-                "temperature_Exceeded BOOLEAN," +
-                "humidity_Exceeded BOOLEAN," +
-                "co2_Exceeded BOOLEAN" +
-                ")");
-    }
-
-//    public void stageDimDateCreation(){
-//        jdbcManager.execute("create table if not exists stage_air4you.dim_date (\n" +
-//                "    date_id serial not null primary key,\n" +
-//                "    year varchar(10),\n" +
-//                "    month varchar (20),\n" +
-//                "    week varchar(20),\n" +
-//                "    day varchar (20),\n" +
-//                "    hour varchar(20),\n" +
-//                "    minute varchar(20),\n" +
-//                "    fact_type varchar(40)" +
-//                ")");
-//    }
-
-    public void stageDimDateCreation(){
-        jdbcManager.execute("create table if not exists stage_air4you.dim_date (\n" +
-                "    date_id serial not null primary key,\n" +
-                "    year int,\n" +
-                "    month int,\n" +
-                "    week int,\n" +
-                "    day int,\n" +
-                "    hour int,\n" +
-                "    minute int,\n" +
-                "    fact_type varchar(40)" +
-                ")");
-    }
-
-    public void stageRegistrationFactCreation(){
-        jdbcManager.execute("create table if not exists stage_air4you.fact_registration(\n" +
-                "    user_id int not null,\n" +
-                "    room_id int not null,\n" +
-                "    date_id  int not null,\n" +
-                "    foreign key (user_id) references stage_air4you.dim_user (u_id),\n" +
-                "    foreign key (room_id) references stage_air4you.dim_room (r_id),\n" +
-                "    foreign key (date_id) references stage_air4you.dim_date (date_id),\n" +
-                "    constraint Registration_PK PRIMARY KEY(user_id, room_id, date_id)\n" +
-                "    );");
-    }
-    public void stageFactMeasurementCreation(){
-        jdbcManager.execute("create table if not exists stage_air4you.fact_measurement(\n" +
-                "                                                   measurement_id int not null,\n" +
-                "                                                    user_id int not null,\n" +
-                "                                                    room_id int not null,\n" +
-                "                                                    date_id  int not null,\n" +
-                "                                                    foreign key (user_id) references stage_air4you.dim_user (u_id) on delete cascade,\n" +
-                "                                                    foreign key (room_id) references stage_air4you.dim_room (r_id) on delete cascade,\n" +
-                "                                                    foreign key (date_id) references stage_air4you.dim_date (date_id) on delete cascade,\n" +
-                "                                                    foreign key (measurement_id) references stage_air4you.dim_measurement (measurement_id) on delete cascade,\n" +
-                "                                                    constraint fact_measurement_PK PRIMARY KEY(user_id, room_id, date_id, measurement_id)\n" +
-                "                                                    )");
-    }
 
 
     /*EXTRACTING - Extracting data from fact and dimensional data, and inserting it to the staging tables*/
