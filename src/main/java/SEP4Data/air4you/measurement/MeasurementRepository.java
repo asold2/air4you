@@ -35,18 +35,13 @@ public interface MeasurementRepository extends JpaRepository<Measurement, Intege
     HumidityThreshold getCurrentHumidityThreshold(@Param(value = "measurementTime") LocalTime measurementTime, @Param(value = "roomId") String roomId);
     @Query(value = "SELECT tt FROM TemperatureThreshold tt WHERE :measurementTime BETWEEN tt.startTime AND tt.endTime AND tt.roomId = :roomId")
     TemperatureThreshold getCurrentTemperatureThreshold(@Param(value = "measurementTime") LocalTime measurementTime, @Param(value = "roomId") String roomId);
-
-    @Query(value = "SELECT CASE WHEN EXISTS (SELECT measurement FROM measurement, temperature_thresholds WHERE :measurementTemperature BETWEEN temperature_thresholds.min AND temperature_thresholds.max AND temperature_thresholds.room_id = :roomId) THEN 1 ELSE 0 END",
-    nativeQuery = true)
-    int isInsideTemperatureThreshold(@Param(value = "measurementTemperature") double measurementTemperature, @Param(value = "roomId") String roomId);
-
-    @Query(value = "SELECT CASE WHEN EXISTS (SELECT measurement FROM measurement, humidity_thresholds WHERE :measurementHumidity BETWEEN humidity_thresholds.min AND humidity_thresholds.max AND humidity_thresholds.room_id = :roomId) THEN 1 ELSE 0 END",
-            nativeQuery = true)
-    int isInsideHumidityThreshold(@Param(value = "measurementHumidity") double measurementHumidity, @Param(value = "roomId") String roomId);
-
     @Query(value = "SELECT token FROM room INNER JOIN tokens on user_id = uid WHERE room_id = :roomId", nativeQuery = true)
     String getTokenFromRoomId(@Param(value = "roomId") String roomId);
 
     @Query(value = "SELECT r FROM Room r WHERE r.roomId = :roomId")
     Room getRoom(@Param(value = "roomId") String roomId);
+
+    @Query(value = "SELECT name FROM room WHERE room_id = :roomId",
+    nativeQuery = true)
+    String getRoomName(@Param(value = "roomId") String roomId);
 }

@@ -29,8 +29,8 @@ public class MeasurementServiceImpl implements IMeasurementService{
     MeasurementRepository measurementRepository;
     @Autowired
     RoomRepository roomRepository;
-    @Autowired
-    MainActivity mainActivity;
+
+    MainActivity mainActivity = new MainActivity();
     @Autowired
     IHumidityThresholdService humidityThresholdService;
 
@@ -73,20 +73,35 @@ public class MeasurementServiceImpl implements IMeasurementService{
             tempThresh = new TemperatureThreshold();
         }
 
-        data.setTitle(measurementRepository.getRoom(measurement.getRoomId()).getName());
+        data.setTitle(measurementRepository.getRoomName(measurement.getRoomId()));
 
-        if(tempThresh != null && measurementRepository.isInsideTemperatureThreshold(measurement.getTemperature(), measurement.getRoomId()) == 0){
+        if(tempThresh != null && (measurement.getTemperature() < tempThresh.getMin() || measurement.getTemperature() > tempThresh.getMax())){
             measurement.setTemperatureExceeded(true);
         }
 
-        if(humThresh != null && measurementRepository.isInsideHumidityThreshold(measurement.getHumidity(), measurement.getRoomId()) == 0){
-            measurement.setHumidityExceeded(true);
+        if(tempThresh != null && (measurement.getHumidity() < humThresh.getMin() || measurement.getHumidity() > humThresh.getMax())){
+            measurement.setTemperatureExceeded(true);
         }
 
         if(measurement.getCo2() > 600){
             measurement.setCo2Exceeded(true);
         }
 
+        data.setBody(createNotification(measurement).getBody());
+        data.setExceeded(createNotification(measurement).isExceeded());
+
+        mainActivity.sendNotification(to,data);
+
+        measurementRepository.save(measurement);
+
+        Threshold thresholdToReturn = new Threshold(measurement.getRoomId(), tempThresh.getMin(), tempThresh.getMax(), humThresh.getMin(), humThresh.getMax());
+
+        return thresholdToReturn;
+    }
+
+    @Override
+    public Data createNotification(Measurement measurement){
+        Data data = new Data();
         if(measurement.getTemperatureExceeded() || measurement.getHumidityExceeded() || measurement.getCo2Exceeded()){
 
             data.setExceeded(true);
@@ -98,7 +113,11 @@ public class MeasurementServiceImpl implements IMeasurementService{
             }
             if(measurement.getHumidityExceeded()) {
                 if(measurement.getTemperatureExceeded()){
-                    body += ",";
+                    if(measurement.getCo2Exceeded()) {
+                        body += ",";
+                    } else {
+                        body += " and";
+                    }
                 }
                 body += " Humidity";
 
@@ -113,14 +132,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
             }
             data.setBody(body);
         }
-
-        mainActivity.sendNotification(to,data);
-
-        measurementRepository.save(measurement);
-
-        Threshold thresholdToReturn = new Threshold(measurement.getRoomId(), tempThresh.getMin(), tempThresh.getMax(), humThresh.getMin(), humThresh.getMax());
-
-        return thresholdToReturn;
+        return data;
     }
 
     //Get measurements by room id
@@ -159,42 +171,16 @@ public class MeasurementServiceImpl implements IMeasurementService{
     }
 
 
-    @Override
-    public  TemperatureThreshold returnCurrentTempThreshold(String roomId, Date measurementDate) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(measurementDate);
-
-        // Change Measurement Date type into LocalTime dataType.
-        LocalTime measurementTime = LocalTime.of(
-                calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE),
-                calendar.get(Calendar.SECOND));
-
-        // Check with measurement LocalTime which threshold is valid
-        TemperatureThreshold temperatureThreshold = null;
-        for (TemperatureThreshold temp: tempThresholdService.getAllTempThresholdsByRoomId(roomId)) {
-            if (temp.getStartTime().isBefore(measurementTime) && temp.getEndTime().isAfter(measurementTime)){
-                temperatureThreshold = temp;
-            }
-        }
-
-        // If no thresholds are valid
-        if(temperatureThreshold == null){
-            temperatureThreshold = new TemperatureThreshold(0,0);
-        }
-        return temperatureThreshold;
-    }
-
     // This method will return measurements by room id
     @Override
     public Measurement getLastMeasurementByRoomId(String roomId) {
-        List<Measurement> roomsMeasuremnts = new ArrayList<>();
+        List<Measurement> roomsMeasurements = new ArrayList<>();
         for (Measurement measurement: measurementRepository.findAll()) {
             if(measurement.getRoomId().equals(roomId)){
-                roomsMeasuremnts.add(measurement);
+                roomsMeasurements.add(measurement);
             }
         }
-        return roomsMeasuremnts.get(roomsMeasuremnts.size()-1);
+        return roomsMeasurements.get(roomsMeasurements.size()-1);
     }
 
     @Override

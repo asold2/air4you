@@ -9,12 +9,9 @@ import org.springframework.context.annotation.ComponentScan;
 //import stage.Extract;
 
 @SpringBootApplication
-@ComponentScan
 //@ComponentScan({"SEP4Data.air4you.StageJDBC"})
 
 public class Air4youApplication {
-
-	static MainActivity mainActivity;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Air4youApplication.class, args);
@@ -24,7 +21,6 @@ public class Air4youApplication {
 //
 //		kj
 //	extract.stageDimHumidityThresholdCreation();
-		//mainActivity.sendNotification("Test title", "Test content");
 
 	}
 
