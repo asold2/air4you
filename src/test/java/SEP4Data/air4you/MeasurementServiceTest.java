@@ -56,7 +56,7 @@ public class MeasurementServiceTest {
 
         Measurement measurement = new Measurement(new Date(),"newRoomId",25,50,400);
 
-        System.out.println(measurementService.addMeasurement(measurement).getMaxTemp());
+        measurementService.addMeasurement(measurement);
 
         verify(dao, times(1)).save(measurement);
 
