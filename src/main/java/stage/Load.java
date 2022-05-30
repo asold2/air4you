@@ -75,9 +75,9 @@ public class Load {
     }
 
     private void insertIntoEdwDimToken() {
-        jdbcManager.execute("insert into edw_air4you.dim_token(u_id, token)\n" +
-                "                select  uid, token from stage_air4you.dim_token\n" +
-                "                except select u_id, token from edw_air4you.dim_token;");
+        jdbcManager.execute("insert into edw_air4you.dim_token(token_id, u_id, token)\n" +
+                "                select  id, uid, token from stage_air4you.dim_token\n" +
+                "                except select token_id, u_id, token from edw_air4you.dim_token;");
     }
 
     private void insertIntoEdwDimMeasurement() {
@@ -106,6 +106,7 @@ public class Load {
     private void creatEdwDimToken() {
         jdbcManager.execute("create table if not exists edw_air4you.dim_token (\n" +
                 "    t_id  serial  primary key ,\n" +
+                "    token_id int,\n" +
                 "    u_id varchar(255),\n" +
                 "    token varchar(255)\n" +
                 "\n" +
@@ -115,7 +116,7 @@ public class Load {
     private void creatEdwDimMeasurement() {
         jdbcManager.execute("create table if not exists edw_air4you.dim_measurement (\n" +
                 "    m_id  serial  primary key ,\n" +
-                "    measurement_id varchar(255),\n" +
+                "    measurement_id int,\n" +
                 "    room_id varchar(255),\n" +
                 "    date timestamp,\n" +
                 "    temperature numeric(6,2),\n" +
