@@ -13,7 +13,7 @@ public interface HumidityThresholdRepository extends JpaRepository<HumidityThres
   @Modifying
   @Transactional
   @Query(value = "update HumidityThreshold t set t.max = :max, t.min = :min where t.Id = :Id")
-  void updateHumidityThreshold(@Param(value = "max") double max, @Param(value = "min") double min, @Param(value = "Id") int id);
+  void updateHumidityThreshold(@Param(value = "max") double max, @Param(value = "min") double min, @Param(value = "Id") int Id);
 
 
 }

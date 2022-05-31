@@ -110,9 +110,16 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
 
   // Updating humidity threshold by threshold Id
   @Override
-  public void updateHumidityThreshold(HumidityThreshold humidityThreshold){
+  public boolean updateHumidityThreshold(HumidityThreshold humidityThreshold){
     //Not working. add id in path
-    humidityThresholdRepository.updateHumidityThreshold(humidityThreshold.getMax(), humidityThreshold.getMin(), humidityThreshold.getId());
+    if(humidityThresholdRepository.existsById(humidityThreshold.getId())){
+      humidityThresholdRepository.updateHumidityThreshold(humidityThreshold.getMax(), humidityThreshold.getMin(), humidityThreshold.getId());
+      return true;
+    } else {
+      return false;
+    }
+
+
   }
 
   // This method runs through all humidity thresholds in a specific room and find one threshold by the time

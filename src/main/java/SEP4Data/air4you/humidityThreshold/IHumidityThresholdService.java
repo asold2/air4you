@@ -13,7 +13,7 @@ public interface IHumidityThresholdService
   void deleteHumidityThreshold(int id);
   HumidityThreshold returnCurrentHumidityThreshold(String roomId, Date measurementDate);
   Measurement isInsideThreshold(Measurement measurement, HumidityThreshold humidityThreshold);
-  void updateHumidityThreshold(HumidityThreshold humidityThreshold);
+  boolean updateHumidityThreshold(HumidityThreshold humidityThreshold);
   List<HumidityThreshold> getAllHumidityThresholdsByRoomId(String roomId);
   void deleteAll();
 }
