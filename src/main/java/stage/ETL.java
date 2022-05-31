@@ -14,8 +14,13 @@ public class ETL {
         createAndInsertLogTable();
 
         updateEdwDimensionWithValidToAndValidFrom();
+        type2ChangesForRoom();
+//        type2ChangesForDate();
+//        type2ChangesForMeasurement();
+//        type2ChangesForToken();
+//        type2ChangesForUser();
 
-        logUpdate();
+
     }
 
     private void createETLSchema(){
@@ -26,13 +31,13 @@ public class ETL {
         jdbcManager.execute("with u as (\n" +
                 "      update edw_air4you.dim_room r\n" +
                 "          set validto = sr.validfrom\n" +
-                "          from stage_air4you.dim_room sr\n" +
+                "          from stage_air4you.dim_room  sr\n" +
                 "          where sr.room_id = r.room_id and\n" +
                 "            r.validto = 99990101\n" +
                 "             )\n" +
                 "insert into edw_air4you.dim_room (room_id, name, registration_date, user_id, validfrom, validto)\n" +
                 "     select room_id, name, registration_date, user_id, to_char(CURRENT_DATE, 'YYYYMMDD')::integer, 99990101\n" +
-                "     from stage_air4you.dim_room sc;");
+                "     from stage_air4you.dim_room sr;");
     }
 
     private void type2ChangesForMeasurement(){
@@ -138,27 +143,27 @@ public class ETL {
 
 
     /*Making sure new measurements are reflected within the data warehouse*/
-    public void logUpdate(){
-
-
-        Date date = new Date();
-        SimpleDateFormat formator = new SimpleDateFormat("yyyyddMM");
-
-        String query = "select max(last_load_date) from etl_air4you.LogUpdate where table_name='dim_measurement'";
-        int LastLoad = jdbcManager.queryForObject(query, Integer.class);
-        int NewDate = Integer.parseInt(formator.format(date));
-        int FutureDate = 99990101;
-
-
-        String countMeasurements = "select count(*) from edw_air4you.dim_measurement";
-        int measurementsInEdw = jdbcManager.queryForObject(countMeasurements, Integer.class);
-
-
-            jdbcManager.execute( "insert into edw_air4you.dim_measurement\n" +
-                    "( room_id, date, temperature, humidity, co2, temperature_exceeded, humidity_exceeded, co2_exceeded, validfrom, validto)\n" +
-                    "SELECT\n" +
-                    "room_id,date,temperature,humidity, co2,temperature_exceeded, humidity_exceeded, co2_exceeded, "+ NewDate + ", " + FutureDate + "  from stage_air4you.dim_measurement where validto = 99990101\n" +
-                    "except select  room_id, date, temperature, humidity, co2, temperature_exceeded, humidity_exceeded, co2_exceeded, validfrom, validto from edw_air4you.dim_measurement \n");
-        jdbcManager.execute("insert into etl_air4you.LogUpdate(table_name, last_load_date) values ('dim_measurement', "+ NewDate + ");\n");
-    }
+//    public void logUpdate(){
+//
+//
+//        Date date = new Date();
+//        SimpleDateFormat formator = new SimpleDateFormat("yyyyddMM");
+//
+//        String query = "select max(last_load_date) from etl_air4you.LogUpdate where table_name='dim_measurement'";
+//        int LastLoad = jdbcManager.queryForObject(query, Integer.class);
+//        int NewDate = Integer.parseInt(formator.format(date));
+//        int FutureDate = 99990101;
+//
+//
+//        String countMeasurements = "select count(*) from edw_air4you.dim_measurement";
+//        int measurementsInEdw = jdbcManager.queryForObject(countMeasurements, Integer.class);
+//
+//
+//            jdbcManager.execute( "insert into edw_air4you.dim_measurement\n" +
+//                    "( room_id, date, temperature, humidity, co2, temperature_exceeded, humidity_exceeded, co2_exceeded, validfrom, validto)\n" +
+//                    "SELECT\n" +
+//                    "room_id,date,temperature,humidity, co2,temperature_exceeded, humidity_exceeded, co2_exceeded, "+ NewDate + ", " + FutureDate + "  from stage_air4you.dim_measurement where validto = 99990101\n" +
+//                    "except select  room_id, date, temperature, humidity, co2, temperature_exceeded, humidity_exceeded, co2_exceeded, validfrom, validto from edw_air4you.dim_measurement \n");
+//        jdbcManager.execute("insert into etl_air4you.LogUpdate(table_name, last_load_date) values ('dim_measurement', "+ NewDate + ");\n");
+//    }
 }
