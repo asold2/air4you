@@ -77,7 +77,11 @@ public class HumidityThresholdController
 
   // This method will update humidity threshold if the link is called
   @PutMapping("/humidityThresholds/")
-  public void updateHumidityThreshold(@RequestBody HumidityThreshold humidityThreshold){
-    humidityThresholdService.updateHumidityThreshold((humidityThreshold));
+  public int updateHumidityThreshold(@RequestBody HumidityThreshold humidityThreshold){
+    if(humidityThresholdService.updateHumidityThreshold((humidityThreshold))){
+      return HttpServletResponse.SC_OK;
+    } else {
+      return HttpServletResponse.SC_BAD_REQUEST;
+    }
   }
 }
