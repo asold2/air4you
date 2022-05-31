@@ -33,6 +33,7 @@ public class RoomController {
         }
     }
 
+  //Todo delete
     //Get room by userId
     @GetMapping("/rooms/{userId}")
     public List<Room> getRooms(@PathVariable String userId){
@@ -42,7 +43,7 @@ public class RoomController {
     //Gets rooms with last measurement. Body is userId as String
     //returns array list of rooms
     @GetMapping("/room/last/{userId}")
-    public List<Room> getRoomsLastMeasurement(@PathVariable String userId){
+    public List<Room> getRoomsAndLastMeasurement(@PathVariable String userId){
         List<Room> roomsToReturn = new ArrayList<>();
         for (Room room: roomService.getRooms(userId)) {
             room.onlyLastMeasurement();
@@ -50,6 +51,8 @@ public class RoomController {
         }
         return roomsToReturn;
     }
+
+  //Todo delete
     //Returns array list of all possible rooms
     @GetMapping("/all/rooms/")
     public List<Room> getAllRooms(){
@@ -68,12 +71,14 @@ public class RoomController {
 
     }
 
+  //Todo delete
     //Delete user from room
     @PutMapping("empty/room/of/user/")
     public void deleteUserFromRoom(@RequestBody Room room){
         roomService.deleteUserFromRoom(room);
     }
 
+  //Todo delete
     //For this method send a simple integer as user's Id in the body of http request
     @DeleteMapping("/abortion/")
     public void deleteAllRoomsFromUser(@RequestBody String userId){
@@ -90,12 +95,15 @@ public class RoomController {
             return HttpServletResponse.SC_NOT_FOUND;
 
     }
+
+  //Todo delete
     // This method will delete all rom if the link is called
     @DeleteMapping("/deletion/")
     public void deleteAllRooms(){
 
         roomService.deleteAll();
     }
+
 
     // This method will change user id for a room if the link is called it take room id and new user id
     @PostMapping("/change/user/{roomId}/{userId}")

@@ -16,6 +16,7 @@ public class TokenController{
         this.tokenService = tokenService;
     }
 
+    //Todo delete
     @GetMapping("/all/tokens/")
     public List<UserToken> getAllTokens(){
         for (UserToken userToken:
@@ -27,7 +28,7 @@ public class TokenController{
 
 
     @PostMapping("/token/")
-    public int CreateToken(@RequestBody UserToken userToken){
+    public int createToken(@RequestBody UserToken userToken){
 
         if( tokenService.createToken(userToken)){
             tokenService.notifyUser(userToken.getToken());
@@ -40,10 +41,11 @@ public class TokenController{
     }
 
     @PutMapping("/token/")
-    public int DeleteToken(@RequestBody UserToken userToken){
+    public int deleteToken(@RequestBody UserToken userToken){
        return tokenService.deleteToken(userToken);
     }
 
+    //Todo delete
     @DeleteMapping("delete/tokens/")
     public void deleteAllTokens(){
         tokenService.deleteAll();

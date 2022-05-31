@@ -21,6 +21,7 @@ public class HumidityThresholdController
     return humidityThresholdService.getAllHumidityThresholdsByRoomId(roomId);
   }
 
+  //TODO delete this method
   // This method will return List of all humidity thresholds if the link is called
   @GetMapping("/humidityThresholds/")
   public List<HumidityThreshold> getAllThrehsoldsHumidity()
@@ -69,6 +70,7 @@ public class HumidityThresholdController
     }
   }
 
+  //TODO delete
   // This method will delete all humidity thresholds if the link is called
   @DeleteMapping("/humidityThresholds/all/")
   public void deleteAllHumidityThresholds(){

@@ -19,6 +19,8 @@ public class TempThresholdController {
     public List<TemperatureThreshold> getAllTempThresholdsByRoomId(@PathVariable String roomId){
         return tempThresholdService.getAllTempThresholdsByRoomId(roomId);
     }
+
+    //Todo delete
     @GetMapping("/temperatureThresholds/")
     public List<TemperatureThreshold> getAllTempThresholds(){
         return tempThresholdService.getAllTempThresholds();
@@ -69,12 +71,13 @@ public class TempThresholdController {
         }
     }
 
-
+    //Todo delete
     @DeleteMapping("/temperatureThresholds/all/")
     public void deleteAllTempThresholds(){
         tempThresholdService.deleteAll();
     }
 
+    //Todo delete
     @PutMapping("/temperatureThresholds/")
     public void updateTempThreshold(@RequestBody TemperatureThreshold temperatureThreshold){
         tempThresholdService.updateTempThreshold(temperatureThreshold);
