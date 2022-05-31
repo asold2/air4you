@@ -17,9 +17,6 @@ import java.util.Map;
 public class RoomServiceImpl implements RoomService{
 
     @Autowired
-    JdbcTemplate jdbcTemplate = new JdbcTemplate();
-
-    @Autowired
     private RoomRepository roomRepository;
 
 

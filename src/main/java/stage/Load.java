@@ -25,7 +25,7 @@ public class Load {
         insertIntoEdwDimMeasurement();
 
 
-        createEdwFactRoomRegistartion();
+        createEdwFactRoomRegistration();
         createEdwFactMeasurement();
 
 
@@ -40,20 +40,19 @@ public class Load {
     }
 
     private void createEdwFactMeasurement() {
-        jdbcManager.execute("create table if not exists edw_air4you.fact_measurement(\n" +
-                "                                                                   m_id int not null,\n" +
-                "                                                                    u_id int not null,\n" +
-                "                                                                    r_id int not null,\n" +
-                "                                                                    d_id  int not null,\n" +
-                "                                                                    foreign key (u_id) references edw_air4you.dim_user (u_id) on delete cascade,\n" +
-                "                                                                    foreign key (r_id) references edw_air4you.dim_room (r_id) on delete cascade,\n" +
-                "                                                                    foreign key (d_id) references edw_air4you.dim_date (d_id) on delete cascade,\n" +
-                "                                                                    foreign key (m_id) references edw_air4you.dim_measurement (m_id) on delete cascade,\n" +
-                "                                                                    constraint fact_measurement_PK PRIMARY KEY(u_id, r_id, d_id, m_id)\n" +
-                "                                                                    );");
+        jdbcManager.execute("create table if not exists edw_air4you.fact_measurement( " +
+                "m_id int not null, " +
+                "u_id int not null, " +
+                "r_id int not null, " +
+                "d_id  int not null, " +
+                "foreign key (u_id) references edw_air4you.dim_user (u_id) on delete cascade, " +
+                "foreign key (r_id) references edw_air4you.dim_room (r_id) on delete cascade, " +
+                "foreign key (d_id) references edw_air4you.dim_date (d_id) on delete cascade, " +
+                "foreign key (m_id) references edw_air4you.dim_measurement (m_id) on delete cascade, " +
+                "constraint fact_measurement_PK PRIMARY KEY(u_id, r_id, d_id, m_id));");
     }
 
-    private void createEdwFactRoomRegistartion() {
+    private void createEdwFactRoomRegistration() {
         jdbcManager.execute("create table if not exists edw_air4you.fact_registration(\n" +
                 "                    u_id int not null,\n" +
                 "                    r_id int not null,\n" +
