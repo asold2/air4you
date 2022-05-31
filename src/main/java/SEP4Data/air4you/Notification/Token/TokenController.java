@@ -16,7 +16,6 @@ public class TokenController{
         this.ITokenService = ITokenService;
     }
 
-    //Todo delete
     @GetMapping("/all/tokens/")
     public List<UserToken> getAllTokens(){
         for (UserToken userToken:

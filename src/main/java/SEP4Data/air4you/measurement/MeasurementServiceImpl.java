@@ -24,16 +24,8 @@ public class MeasurementServiceImpl implements IMeasurementService{
     @Autowired
     RoomRepository roomRepository;
 
+    //This is initiated like this because of testing
     MainActivity mainActivity = new MainActivity();
-    @Autowired
-    IHumidityThresholdService humidityThresholdService;
-
-    @Autowired
-    ITempThresholdService tempThresholdService;
-
-    @Autowired ITokenService ITokenService;
-
-    @Autowired IRoomService IRoomService;
 
     //Adding measurement
     @Override
