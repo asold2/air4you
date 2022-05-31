@@ -71,13 +71,8 @@ public class TempThresholdController {
         }
     }
 
-    //Todo delete
-    @DeleteMapping("/temperatureThresholds/all/")
-    public void deleteAllTempThresholds(){
-        tempThresholdService.deleteAll();
-    }
 
-    //Todo delete
+
     @PutMapping("/temperatureThresholds/")
     public void updateTempThreshold(@RequestBody TemperatureThreshold temperatureThreshold){
         tempThresholdService.updateTempThreshold(temperatureThreshold);

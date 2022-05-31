@@ -43,11 +43,7 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
         System.out.println(tempList);
         return tempList;
     }
-    //Deleting all threshold
-    @Override
-    public void deleteAll() {
-        tempThresholdRepository.deleteAll();
-    }
+
 
 
     @Override
@@ -99,29 +95,7 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
         //Not working. add id in path
         tempThresholdRepository.updateTempThreshold(temperatureThreshold.getMax(), temperatureThreshold.getMin(), temperatureThreshold.getId());
     }
-    // This method runs through all temperature thresholds in a specific room and find one threshold by the time
-    @Override
-    public TemperatureThreshold returnCurrentTempThreshold(String roomId, Date measurementDate) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(measurementDate);
 
-        // Change Measurement Date type into LocalTime dataType.
-        LocalTime measurementTime = LocalTime.of(
-                calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE),
-                calendar.get(Calendar.SECOND));
-
-        TemperatureThreshold temperatureThreshold = null;
-        for (TemperatureThreshold temp: getAllTempThresholdsByRoomId(roomId)) {
-            if (temp.getStartTime().isBefore(measurementTime) && temp.getEndTime().isAfter(measurementTime)){
-                temperatureThreshold = temp;
-            }
-        }
-        if(temperatureThreshold == null){
-            temperatureThreshold = new TemperatureThreshold(0,0);
-        }
-        return temperatureThreshold;
-    }
     // This method will if the temperature data from measurements is inside Min and Max threshold
     public boolean isInsideMaxAndMin(Measurement measurement, TemperatureThreshold temperatureThreshold){
         if (measurement.getTemperature() > temperatureThreshold.getMax()) {
@@ -155,17 +129,5 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
         }
         return true;
     }
-
-    // This method will check "isInsideMaxAndMin" and "isInsideStartTimeEndTime" methods
-    @Override
-    public Measurement isInsideThreshold(Measurement measurement, TemperatureThreshold temperatureThreshold) {
-        if (isInsideStartTimeEndTime(measurement,temperatureThreshold)){
-            if (isInsideMaxAndMin(measurement, temperatureThreshold)){
-                measurement.setTemperatureExceeded(false);
-            }
-        }
-        return measurement;
-    }
-
 
 }

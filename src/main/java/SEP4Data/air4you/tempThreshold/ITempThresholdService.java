@@ -13,10 +13,6 @@ public interface ITempThresholdService {
     boolean addTempThreshold(TemperatureThreshold temperatureThreshold) throws Exception;
     void deleteTempThreshold(int Id);
     void updateTempThreshold(TemperatureThreshold temperatureThreshold);
-    TemperatureThreshold returnCurrentTempThreshold(String roomId, Date measurementDate);
-    Measurement isInsideThreshold(Measurement measurement, TemperatureThreshold temperatureThreshold);
-
     List<TemperatureThreshold> getAllTempThresholdsByRoomId(String roomId);
 
-    void deleteAll();
 }

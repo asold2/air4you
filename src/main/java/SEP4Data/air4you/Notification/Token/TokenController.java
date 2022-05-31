@@ -10,28 +10,28 @@ import javax.servlet.http.HttpServletResponse;
 public class TokenController{
 
     @Autowired
-    private TokenService tokenService;
+    private ITokenService ITokenService;
 
-    public TokenController(TokenService tokenService){
-        this.tokenService = tokenService;
+    public TokenController(ITokenService ITokenService){
+        this.ITokenService = ITokenService;
     }
 
     //Todo delete
     @GetMapping("/all/tokens/")
     public List<UserToken> getAllTokens(){
         for (UserToken userToken:
-             tokenService.getAllTokens()) {
+             ITokenService.getAllTokens()) {
             System.out.println(userToken.getUid());
         }
-        return tokenService.getAllTokens();
+        return ITokenService.getAllTokens();
     }
 
 
     @PostMapping("/token/")
     public int createToken(@RequestBody UserToken userToken){
 
-        if( tokenService.createToken(userToken)){
-            tokenService.notifyUser(userToken.getToken());
+        if( ITokenService.createToken(userToken)){
+            ITokenService.notifyUser(userToken.getToken());
             return HttpServletResponse.SC_OK;
         }
         else {
@@ -42,14 +42,9 @@ public class TokenController{
 
     @PutMapping("/token/")
     public int deleteToken(@RequestBody UserToken userToken){
-       return tokenService.deleteToken(userToken);
+       return ITokenService.deleteToken(userToken);
     }
 
-    //Todo delete
-    @DeleteMapping("delete/tokens/")
-    public void deleteAllTokens(){
-        tokenService.deleteAll();
-    }
 
 
 }

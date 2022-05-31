@@ -9,7 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Service
-public class TokenServiceImpl implements TokenService{
+public class ITokenServiceImpl implements ITokenService
+{
 
     @Autowired
     private TokenRepository tokenRepository;
@@ -18,7 +19,7 @@ public class TokenServiceImpl implements TokenService{
     private MainActivity mainActivity;
 
     @Autowired
-    public TokenServiceImpl() {
+    public ITokenServiceImpl() {
     }
 
     @Override
@@ -38,33 +39,12 @@ public class TokenServiceImpl implements TokenService{
         return HttpServletResponse.SC_OK;
     }
 
-    @Override
-    public boolean updateToken(UserToken updatedUserToken) {
-       tokenRepository.updateUserToken(updatedUserToken.getToken(), updatedUserToken.getUid());
-       return true;
-    }
 
     @Override
     public void notifyUser(String token) {
         mainActivity.sendNotification(token,new Data("You have been given a new token","New Token!",true));
     }
 
-    @Override
-    public String getToken(String uId) {
-        for (UserToken temp : tokenRepository.findAll())
-        {
-            if (temp.getUid().equals(uId))
-            {
-               return temp.getToken();
-            }
-        }
-        return "";
-    }
-
-    @Override
-    public void deleteAll() {
-        tokenRepository.deleteAll();
-    }
 
     @Override
     public List<UserToken> getAllTokens() {

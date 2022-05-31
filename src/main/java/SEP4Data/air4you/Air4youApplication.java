@@ -1,11 +1,7 @@
 package SEP4Data.air4you;
 
-import SEP4Data.air4you.Notification.MainActivity;
-import SEP4Data.air4you.room.RoomService;
-import SEP4Data.air4you.room.RoomServiceImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 //import stage.Extract;
 
 @SpringBootApplication

@@ -2,19 +2,15 @@ package SEP4Data.air4you.room;
 
 //import SEP4Data.air4you.StageJDBC;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
-public class RoomServiceImpl implements RoomService{
+public class RoomServiceImpl implements IRoomService
+{
 
     @Autowired
     private RoomRepository roomRepository;
@@ -48,23 +44,7 @@ public class RoomServiceImpl implements RoomService{
         return temp;
     }
 
-    @Override
-    public List<Room> getAllRooms() {
 
-        return roomRepository.findAll();
-    }
-
-    @Override
-    public void deleteAll() {
-        roomRepository.deleteAll();
-    }
-
-    @Override
-    public void deleteUserFromRoom(Room room) {
-        roomRepository.deleteById(String.valueOf(room.getRoomId()));
-        room.setUserId("none");
-        roomRepository.save(room);
-    }
 
     @Override
     public boolean deleteRoom(String roomId) {
@@ -78,21 +58,6 @@ public class RoomServiceImpl implements RoomService{
         }
     }
 
-
-
-    @Override
-    public void deleteAllFromUser(String userId) {
-        for (Room room : roomRepository.findAll()){
-            if (room.getUserId().equals(userId)){
-                roomRepository.deleteById(String.valueOf(room.getRoomId()));
-            }
-        }
-    }
-
-    @Override
-    public Room getRoomById(String roomId) {
-        return roomRepository.getById(roomId);
-    }
 
     @Override
     public boolean updateRoom(Room room) {
@@ -119,19 +84,6 @@ public class RoomServiceImpl implements RoomService{
 
         return false;
     }
-
-//    @Override
-//    public void setLatestMeasurementForRoom(Measurement measurement) {
-//////        Room room = roomRepository.getById(measurement.getRoomId());
-//////        room.setLastMeasurement(measurement);
-//////        roomRepository.save(room);
-////        roomRepository.updateRoomMeasurement(measurement, measurement.getRoomId());
-//
-//        //        room.setLastMeasuremnt(measurement);
-////        roomRepository.deleteById(measurement.getRoomId());
-////        roomRepository.save(room);
-////        System.out.println(room.toString());
-//    }
 
 
 
