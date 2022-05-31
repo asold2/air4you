@@ -24,10 +24,8 @@ public class Load {
         insertIntoEdwDimToken();
         insertIntoEdwDimMeasurement();
 
-
         createEdwFactRoomRegistration();
         createEdwFactMeasurement();
-
 
         initialLoad();
 
@@ -120,7 +118,6 @@ public class Load {
             "    registration_date timestamp,\n" +
             "    user_id varchar(255)\n" +
             ");");
-
     }
 
 
@@ -154,9 +151,10 @@ public class Load {
     }
 
     private void insertIntoEdwDimRoom() {
+//        jdbcManager.execute("truncate table ");
         jdbcManager.execute("Insert into edw_air4you.dim_room(room_id, name, registration_date, user_id)\n" +
-            "                SELECT room_id, name, registration_date, user_id from stage_air4you.dim_room\n" +
-            "                               except select room_id, name, registration_date, user_id from edw_air4you.Dim_Room;\n");
+            "SELECT room_id, name, registration_date, user_id from stage_air4you.dim_room\n" +
+            "except select room_id, name, registration_date, user_id from edw_air4you.Dim_Room;\n");
     }
 
 
@@ -203,32 +201,25 @@ public class Load {
 
     /*Initial load of data*/
     public void initialLoad(){
-
         java.util.Date date = new java.util.Date();
-
         long timeInMilliSeconds = date.getTime();
-
         jdbcManager.execute(" create table if not exists edw_air4you.initial_load_Date(\n" +
             "        id serial primary key ,\n" +
             "        date timestamp,\n" +
             "        load_type varchar(255)\n" +
             "    );");
-
         String sqlMeasurement = "select count (*) from edw_air4you.fact_measurement";
         String sqlRegistartion = "    select count (*) from edw_air4you.fact_registration";
         int fact_measurement_rows = jdbcManager.queryForObject(sqlMeasurement, Integer.class);
         int fact_registartion_rows = jdbcManager.queryForObject(sqlRegistartion, Integer.class);
-
-        System.out.println(fact_registartion_rows);
-        System.out.println(fact_measurement_rows);
-
-
         if(fact_registartion_rows == 0){
             extractFactRegistrationToEdw();
             jdbcManager.update("insert into edw_air4you.initial_load_date(\n" +
                 "    date, load_type\n" +
                 ") values (?, ?)", new Date(timeInMilliSeconds), "FactRegistartion");
-
+        }
+        else if(fact_registartion_rows > 0){
+            extractFactRegistrationToEdw();
         }
         if(fact_measurement_rows == 0){
             extractFactMeasurementToEdw();
@@ -236,8 +227,9 @@ public class Load {
                 "    date, load_type\n" +
                 ") values (?, ?)", new Date(timeInMilliSeconds), "FactMeasurement");
         }
-
-
+        else if(fact_measurement_rows > 0){
+            extractFactMeasurementToEdw();
+        }
     }
 
 }

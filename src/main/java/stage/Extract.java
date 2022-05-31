@@ -89,10 +89,11 @@ public class Extract {
     }
 
     public void extractRoomToStage(){
+//        jdbcManager.execute("truncate table stage_air4you.Dim_Room;");
         jdbcManager.execute("Insert into stage_air4you.Dim_Room(\n" +
-                "                                   room_id, name, registration_date, user_id\n" +
-                ") SELECT room.room_id, room.name, room.registration_date, room.user_id from room\n" +
-                "                except select room_id, name, registration_date, user_id from stage_air4you.Dim_Room"
+                "room_id, name, registration_date, user_id\n" +
+                ")SELECT room.room_id, room.name, room.registration_date, room.user_id from room\n" +
+                "except select room_id, name, registration_date, user_id from stage_air4you.Dim_Room"
 
         );
     }

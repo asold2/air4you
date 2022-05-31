@@ -3,26 +3,19 @@ package stage;
 public class ETLProcess {
 
     JDBCManager jdbcManager;
-
     public ETLProcess(){
-
         jdbcManager = JDBCManager.getInstance();
-
         // Create Stage schema
         createStageSchema();
-        
         // STAGING - Creating all staging tables for the dimension and fact tables
         setupDimensionsAndFacts();
-
         // Continue to extraction
         Extract extract = new Extract();
-
     }
 
     private void createStageSchema(){
         jdbcManager.execute("CREATE SCHEMA IF NOT EXISTS stage_air4you");
     }
-
     private void setupDimensionsAndFacts(){
         stageDimRoomCreation();
         stageDimUserCreation();
@@ -36,7 +29,6 @@ public class ETLProcess {
     }
 
     private void stageDimRoomCreation(){
-//        jdbcManager.execute("drop table stage_air4you.Dim_Room cascade ");
         jdbcManager.execute("create table if not exists stage_air4you.Dim_Room ( " +
                 "R_Id serial  primary key, " +
                 "room_id VARCHAR(255) not null," +
@@ -44,7 +36,6 @@ public class ETLProcess {
                 "registration_date timestamp," +
                 "user_id varchar(255) " +
                 ")");
-
     }
     private void stageDimTokenCreation(){
         jdbcManager.execute("create table if not exists stage_air4you.Dim_Token( "+
