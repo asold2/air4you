@@ -15,5 +15,4 @@ public interface ITempThresholdService {
     boolean updateTempThreshold(TemperatureThreshold temperatureThreshold);
     List<TemperatureThreshold> getAllTempThresholdsByRoomId(String roomId);
 
-    void deleteAll();
 }

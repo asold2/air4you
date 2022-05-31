@@ -101,38 +101,5 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
         }
     }
 
-    // This method will if the temperature data from measurements is inside Min and Max threshold
-    public boolean isInsideMaxAndMin(Measurement measurement, TemperatureThreshold temperatureThreshold){
-        if (measurement.getTemperature() > temperatureThreshold.getMax()) {
-            return false;
-
-        } else if (measurement.getTemperature() < temperatureThreshold.getMin()) {
-            return false;
-        }
-        return true;
-    }
-    // This method will if the measurement timestamp is inside Start time and End time threshold
-    public boolean isInsideStartTimeEndTime(Measurement measurement,TemperatureThreshold temperatureThreshold){
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(measurement.getDate());
-
-        int measurementHour = calendar.get(Calendar.HOUR_OF_DAY);
-        int measurementMinute = calendar.get(Calendar.MINUTE);
-
-        if(temperatureThreshold.getStartTime() != null && temperatureThreshold.getEndTime() != null) {
-
-
-            if (measurementHour >= temperatureThreshold.getStartTime().getHour() && measurementHour <= temperatureThreshold.getEndTime().getHour()) {
-                return true;
-            } else if (measurementHour == temperatureThreshold.getStartTime().getHour() || measurementHour == temperatureThreshold.getEndTime().getHour()) {
-                if (measurementMinute > temperatureThreshold.getStartTime().getMinute() && measurementMinute < temperatureThreshold.getEndTime().getMinute()) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        return true;
-    }
 
 }
