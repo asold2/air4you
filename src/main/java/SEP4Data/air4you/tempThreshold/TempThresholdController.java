@@ -20,11 +20,6 @@ public class TempThresholdController {
         return tempThresholdService.getAllTempThresholdsByRoomId(roomId);
     }
 
-    //Todo delete
-    @GetMapping("/temperatureThresholds/")
-    public List<TemperatureThreshold> getAllTempThresholds(){
-        return tempThresholdService.getAllTempThresholds();
-    }
 
 
     @PostMapping("/temperatureThresholds/")
