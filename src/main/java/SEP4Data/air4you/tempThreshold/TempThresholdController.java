@@ -76,8 +76,12 @@ public class TempThresholdController {
     }
 
     @PutMapping("/temperatureThresholds/")
-    public void updateTempThreshold(@RequestBody TemperatureThreshold temperatureThreshold){
-        tempThresholdService.updateTempThreshold(temperatureThreshold);
+    public int updateTempThreshold(@RequestBody TemperatureThreshold temperatureThreshold){
+        if(tempThresholdService.updateTempThreshold(temperatureThreshold)){
+            return HttpServletResponse.SC_OK;
+        } else {
+            return HttpServletResponse.SC_BAD_REQUEST;
+        }
 
     }
 
