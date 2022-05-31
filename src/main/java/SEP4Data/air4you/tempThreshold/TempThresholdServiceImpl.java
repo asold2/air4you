@@ -91,9 +91,14 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
 
     //Updating threshold by threshold Id
     @Override
-    public void updateTempThreshold(TemperatureThreshold temperatureThreshold) {
+    public boolean updateTempThreshold(TemperatureThreshold temperatureThreshold) {
         //Not working. add id in path
-        tempThresholdRepository.updateTempThreshold(temperatureThreshold.getMax(), temperatureThreshold.getMin(), temperatureThreshold.getId());
+        if (tempThresholdRepository.existsById(temperatureThreshold.getId())) {
+            tempThresholdRepository.updateTempThreshold(temperatureThreshold.getMax(), temperatureThreshold.getMin(), temperatureThreshold.getStartTime(), temperatureThreshold.getEndTime(), temperatureThreshold.getId());
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // This method will if the temperature data from measurements is inside Min and Max threshold
