@@ -41,8 +41,6 @@ public interface MeasurementRepository extends JpaRepository<Measurement, Intege
     @Query(value = "SELECT token FROM room INNER JOIN tokens on user_id = uid WHERE room_id = :roomId", nativeQuery = true)
     String getTokenFromRoomId(@Param(value = "roomId") String roomId);
 
-    @Query(value = "SELECT r FROM Room r WHERE r.roomId = :roomId")
-    Room getRoom(@Param(value = "roomId") String roomId);
 
     @Query(value = "SELECT name FROM room WHERE room_id = :roomId",
     nativeQuery = true)

@@ -21,7 +21,7 @@ public class ITokenServiceImpl implements ITokenService
     @Autowired
     public ITokenServiceImpl() {
     }
-
+    // Method for create token
     @Override
     public boolean createToken(UserToken newUserToken) {
         if(tokenRepository.findUserTokenByUid(newUserToken.getUid()).isEmpty()){
@@ -32,20 +32,20 @@ public class ITokenServiceImpl implements ITokenService
         return true;
     }
 
-
+    //Method to delete token
     @Override
     public int deleteToken(UserToken oldUserToken) {
         tokenRepository.delete(oldUserToken);
         return HttpServletResponse.SC_OK;
     }
 
-
+    // Notifying user when he gets a new token
     @Override
     public void notifyUser(String token) {
         mainActivity.sendNotification(token,new Data("You have been given a new token","New Token!",true));
     }
 
-
+    //Getting all tokens
     @Override
     public List<UserToken> getAllTokens() {
         return tokenRepository.findAll();

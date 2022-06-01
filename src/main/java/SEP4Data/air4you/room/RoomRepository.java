@@ -14,10 +14,6 @@ import javax.persistence.Table;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, String> {
-    @Transactional
-    @Modifying
-    @Query(value="update Room room set last_Measurement = :measurement where room.room_id = :roomId", nativeQuery = true)
-    void updateRoomMeasurement(@Param("measurement")Measurement measurement, @Param("roomId")String roomId);
 
     @Modifying
     @Transactional

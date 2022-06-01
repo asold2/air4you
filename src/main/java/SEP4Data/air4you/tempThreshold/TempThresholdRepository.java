@@ -14,6 +14,7 @@ public interface TempThresholdRepository extends JpaRepository<TemperatureThresh
     @Modifying
     @Transactional
     @Query(value = "update TemperatureThreshold t set t.max = :max, t.min = :min, t.startTime =:startTime, t.endTime = :endTime where t.Id = :Id ")
-    int updateTempThreshold(@Param(value = "max") double max, @Param(value = "min") double min, @Param(value = "startTime") LocalTime startTime,@Param(value = "endTime") LocalTime endTime, @Param(value = "Id") int Id);
+    int updateTempThreshold(@Param(value = "max") double max, @Param(value = "min") double min,
+        @Param(value = "startTime") LocalTime startTime,@Param(value = "endTime") LocalTime endTime, @Param(value = "Id") int Id);
 
 }

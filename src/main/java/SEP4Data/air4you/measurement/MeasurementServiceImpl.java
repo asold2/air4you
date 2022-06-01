@@ -26,6 +26,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
     @Autowired
     RoomRepository roomRepository;
 
+    //This is initiated like this because of testing
     MainActivity mainActivity = new MainActivity();
     @Autowired
     IHumidityThresholdService humidityThresholdService;
@@ -37,6 +38,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
     @Autowired IRoomService IRoomService;
 //
+
     //Adding measurement
     @Override
     public Threshold addMeasurement(Measurement measurement) {
@@ -189,38 +191,6 @@ public class MeasurementServiceImpl implements IMeasurementService{
             temperatures.add(measurementRepository.countAverageCo2(roomId, i));
         }
         return temperatures;
-    }
-
-    @Override
-    public List<Measurement> getMeasurementByUserAndRoomIdWeek(String userId)
-    {
-        List<Room> listOfRooms = IRoomService.getRooms(userId);
-        List<Measurement> listOfMeasurements = new ArrayList<>();
-        LocalDate today = LocalDate.now();
-        LocalDate oneWeekAgo = today.minus(1, ChronoUnit.WEEKS);
-        List<Measurement> measurementsToReturn = new ArrayList<>();
-
-
-        for(int i=0;i<listOfRooms.size();i++)
-        {
-            listOfMeasurements.addAll(listOfRooms.get(i).getMeasurements());
-        }
-
-        for (Measurement measurement:
-                listOfMeasurements)
-        {
-
-            LocalDate measurementLocalDate = measurement.getDate().toInstant().atZone(
-                    ZoneId.systemDefault()).toLocalDate();
-
-            if(measurementLocalDate.isBefore(today) && measurementLocalDate.isAfter(oneWeekAgo))
-            {
-                measurementsToReturn.add(measurement);
-            }
-        }
-
-
-        return measurementsToReturn;
     }
 
 
