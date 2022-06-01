@@ -42,7 +42,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        cal.add(Calendar.HOUR, -2);
+        cal.add(Calendar.HOUR, +2);
         Date twoHoursback = cal.getTime();
 
 
