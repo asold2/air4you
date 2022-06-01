@@ -25,6 +25,9 @@ public class Extract {
         extractDimDateFromRoomToStage();
         extractDimDateFromMeasurementToStage();
 
+        insertValidToAndValidFromToDimensionsStage();
+
+
         extractToFactRegistrationStage();
         extractFactMeasurementToStage();
     }
@@ -89,7 +92,7 @@ public class Extract {
     }
 
     public void extractRoomToStage(){
-//        jdbcManager.execute("truncate table stage_air4you.Dim_Room;");
+        jdbcManager.execute("truncate table stage_air4you.dim_room  cascade");
         jdbcManager.execute("Insert into stage_air4you.Dim_Room(\n" +
                 "room_id, name, registration_date, user_id\n" +
                 ")SELECT room.room_id, room.name, room.registration_date, room.user_id from room\n" +
@@ -183,6 +186,24 @@ public class Extract {
                 "              from stage_air4you.dim_date");
     }
 
+    private void insertValidToAndValidFromToDimensionsStage() {
+        jdbcManager.update("update  stage_air4you.dim_room\n" +
+                "                set ValidFrom = to_char(CURRENT_DATE, 'YYYYMMDD')::integer,\n" +
+                "                ValidTo = 99990101;\n" +
+                "                update stage_air4you.dim_date\n" +
+                "                set ValidFrom = to_char(CURRENT_DATE, 'YYYYMMDD')::integer,\n" +
+                "                ValidTo = 99990101;\n" +
+                "                update stage_air4you.dim_token\n" +
+                "                set ValidFrom = to_char(CURRENT_DATE, 'YYYYMMDD')::integer,\n" +
+                "                validto = 99990101;\n" +
+                "                update stage_air4you.dim_measurement\n" +
+                "                set ValidFrom = to_char(CURRENT_DATE, 'YYYYMMDD')::integer,\n" +
+                "                validto = 99990101;\n" +
+                "                update stage_air4you.dim_user\n" +
+                "                set ValidFrom = to_char(CURRENT_DATE, 'YYYYMMDD')::integer,\n" +
+                "                validto = 99990101;");
+
+    }
 
 
 

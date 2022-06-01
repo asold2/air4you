@@ -20,13 +20,17 @@ public class ETLProcess {
         stageDimRoomCreation();
         stageDimUserCreation();
         stageDimMeasurementCreation();
-        stageDimHumidityThresholdCreation();
-        stageDimTemperatureThresholdCreation();
         stageDimTokenCreation();
         stageDimDateCreation();
         stageRegistrationFactCreation();
         stageFactMeasurementCreation();
+        addValidToandValidFromToStageDimensions();
+
+
     }
+
+
+
 
     private void stageDimRoomCreation(){
         jdbcManager.execute("create table if not exists stage_air4you.Dim_Room ( " +
@@ -140,4 +144,18 @@ public class ETLProcess {
                 "                                                    )");
     }
 
+    private void addValidToandValidFromToStageDimensions() {
+        jdbcManager.execute("alter table stage_air4you.dim_measurement\n" +
+                "add if not exists ValidFrom int, add if not exists ValidTo int;\n" +
+                "alter table stage_air4you.dim_room\n" +
+                "add if not exists ValidFrom int, add if not exists ValidTo int;\n" +
+                "alter table stage_air4you.dim_date\n" +
+                "add  if not exists ValidFrom int,  add if not exists ValidTo int;\n" +
+                "alter table stage_air4you.dim_token\n" +
+                "add if not exists ValidFrom int,  add if not exists ValidTo int;\n" +
+                "alter table stage_air4you.dim_user\n" +
+                "add if not exists ValidFrom int, add if not exists ValidTo int\n" +
+                ";\n");
+
+    }
 }

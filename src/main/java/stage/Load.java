@@ -17,6 +17,8 @@ public class Load {
         createEdwDimToken();
         createEdwDimDate();
         createEdwDimMeasurement();
+        addValidToandValidFromToEDWDimensions();
+
 
         insertIntoEdwDimRoom();
         insertIntoEdwDimDate();
@@ -152,9 +154,28 @@ public class Load {
 
     private void insertIntoEdwDimRoom() {
 //        jdbcManager.execute("truncate table ");
-        jdbcManager.execute("Insert into edw_air4you.dim_room(room_id, name, registration_date, user_id)\n" +
-            "SELECT room_id, name, registration_date, user_id from stage_air4you.dim_room\n" +
-            "except select room_id, name, registration_date, user_id from edw_air4you.Dim_Room;\n");
+        jdbcManager.execute("Insert into edw_air4you.dim_room(room_id, name, registration_date, user_id, validfrom, validto)\n" +
+                "            SELECT room_id, name, registration_date, user_id, to_char(CURRENT_DATE, 'YYYYMMDD')::integer, 99990101 from stage_air4you.dim_room\n" +
+                "            where room_id in (select room_id from stage_air4you.dim_room except select room_id from edw_air4you.dim_room where edw_air4you.dim_room.validto = 99990101)\n");
+//    jdbcManager.execute("create table temp1 (\n" +
+//            "                room_id VARCHAR(255) not null,\n" +
+//            "                name VARCHAR(255),\n" +
+//            "                registration_date timestamp,\n" +
+//            "                user_id varchar(255)\n" +
+//            "\n" +
+//            ") \n" +
+//            "insert into temp1(room_id, name, registration_date, user_id) SELECT room_id, name, registration_date, user_id\n" +
+//            "from stage_air4you.dim_room except select room_id, name, registration_date, user_id from edw_air4you.dim_room\n" +
+//            "where validto = 99990101\n" +
+//            "except select room_id, name, registration_date, user_id from stage_air4you.dim_room\n" +
+//            "where room_id in (select room_id from stage_air4you.dim_room except select room_id from edw_air4you.dim_room where edw_air4you.dim_room.validto = 99990101)\n" +
+//            "insert into edw_air4you.dim_room (room_id, name, registration_date, user_id, validfrom, validto)\n" +
+//            "select room_id, name, registration_date, user_id, to_char(CURRENT_DATE, 'YYYYMMDD')::integer, 99990101\n" +
+//            "from temp1;\n" +
+//            "update edw_air4you.dim_room\n" +
+//            "set validto = to_char(CURRENT_DATE, 'YYYYMMDD')::integer -1\n" +
+//            "where room_id in (select room_id from temp1) and dim_room.validfrom < to_char(CURRENT_DATE, 'YYYYMMDD')::integer\n" +
+//            "drop table if exists temp1");
     }
 
 
@@ -231,5 +252,22 @@ public class Load {
             extractFactMeasurementToEdw();
         }
     }
+
+    private void addValidToandValidFromToEDWDimensions() {
+        jdbcManager.execute("alter table edw_air4you.dim_measurement\n" +
+                "add if not exists ValidFrom int, add if not exists ValidTo int;\n" +
+                "alter table edw_air4you.dim_room\n" +
+                "add if not exists ValidFrom int, add if not exists ValidTo int;\n" +
+                "alter table edw_air4you.dim_date\n" +
+                "add  if not exists ValidFrom int,  add if not exists ValidTo int;\n" +
+                "alter table edw_air4you.dim_token\n" +
+                "add if not exists ValidFrom int,  add if not exists ValidTo int;\n" +
+                "alter table edw_air4you.dim_user\n" +
+                "add if not exists ValidFrom int, add if not exists ValidTo int\n" +
+                ";\n");
+
+    }
+
+
 
 }

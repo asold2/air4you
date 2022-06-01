@@ -12,41 +12,12 @@ public class Transform {
         transformDimMeasurementWrongDate();
         transformDimDateWrongDate();
 
-        addValidToandValidFromToStageDimensions();
 
         load = new Load();
     }
 
     /*Adding extra attribute to staging tables to reflect type two changes*/
-    private void addValidToandValidFromToStageDimensions() {
-        jdbcManager.execute("alter table stage_air4you.dim_measurement\n" +
-                "add if not exists ValidFrom int, add if not exists ValidTo int;\n" +
-                "alter table stage_air4you.dim_room\n" +
-                "add if not exists ValidFrom int,  add if not exists ValidTo int;\n" +
-                "alter table stage_air4you.dim_date\n" +
-                "add  if not exists ValidFrom int,  add if not exists ValidTo int;\n" +
-                "alter table stage_air4you.dim_token\n" +
-                "add if not exists ValidFrom int,  add if not exists ValidTo int;\n" +
-                "alter table stage_air4you.dim_user\n" +
-                "add if not exists ValidFrom int, add if not exists ValidTo int\n" +
-                ";\n" +
-                "\n" +
-                "update stage_air4you.dim_room\n" +
-                "set ValidFrom = 20220101,\n" +
-                "ValidTo = 99990101;\n" +
-                "update stage_air4you.dim_date\n" +
-                "set ValidFrom = 20220101,\n" +
-                "validto = 99990101;\n" +
-                "update stage_air4you.dim_token\n" +
-                "set ValidFrom = 20220101,\n" +
-                "validto = 99990101;\n" +
-                "update stage_air4you.dim_measurement\n" +
-                "set ValidFrom = 20220101,\n" +
-                "validto = 99990101;\n" +
-                "update stage_air4you.dim_user\n" +
-                "set ValidFrom = 20220101,\n" +
-                "validto = 99990101;");
-    }
+
 
     /*Updating the values for email and name where they are null*/
     public void transformUserEmailandName(){

@@ -12,9 +12,6 @@ public class TokenController{
     @Autowired
     private TokenService tokenService;
 
-    public TokenController(TokenService tokenService){
-        this.tokenService = tokenService;
-    }
 
     @GetMapping("/all/tokens/")
     public List<UserToken> getAllTokens(){
