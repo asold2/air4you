@@ -27,7 +27,8 @@ public class MeasurementServiceImpl implements IMeasurementService{
     RoomRepository roomRepository;
 
     //This is initiated like this because of testing
-    MainActivity mainActivity = new MainActivity();
+    @Autowired
+    MainActivity mainActivity;
 
     @Autowired IRoomService IRoomService;
 //
@@ -61,10 +62,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
         if(tempThresh == null){
             tempThresh = new TemperatureThreshold();
         }
-        System.out.println(humThresh.getMax() + "BBBBBBBBBBB");
 
-        System.out.println(humThresh.getMax() + "BBBBBBBBBBB");
-        System.out.println(humThresh.getMin() + "BBBBBBBBBBB");
 
         data.setTitle(measurementRepository.getRoomName(measurement.getRoomId()));
 
@@ -90,10 +88,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
         Threshold thresholdToReturn = new Threshold(measurement.getRoomId(), (int)tempThresh.getMin(), (int)tempThresh.getMax(), (int)humThresh.getMin(), (int)humThresh.getMax());
 
 
-        System.out.println(thresholdToReturn.getMaxTemp() + "AAAAAAAAAAa");
-        System.out.println(thresholdToReturn.getMinTemp() + "AAAAAAAAAAa");
-        System.out.println(thresholdToReturn.getMaxHumidity() + "AAAAAAAAAAa");
-        System.out.println(thresholdToReturn.getMinHumidity() + "AAAAAAAAAAa");
+
 
         return thresholdToReturn;
     }

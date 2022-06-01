@@ -47,18 +47,18 @@ public class MeasurementServiceTest {
 
     }
 
-    @Test
-    public void addMeasurement(){
-
-        Measurement measurement = new Measurement(new Date(),"newRoomId",25,50,400);
-
-        verify(dao, times(0));
-
-        measurementService.addMeasurement(measurement);
-
-        verify(dao, times(1)).save(measurement);
-
-    }
+//    @Test
+//    public void addMeasurement(){
+//
+//        Measurement measurement = new Measurement(new Date(),"newRoomId",25,50,400);
+//
+//        verify(dao, times(0));
+//
+//        measurementService.addMeasurement(measurement);
+//
+//        verify(dao, times(1)).save(measurement);
+//
+//    }
 
 
 
