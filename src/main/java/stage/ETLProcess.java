@@ -3,6 +3,7 @@ package stage;
 public class ETLProcess {
 
     JDBCManager jdbcManager;
+    Extract extract;
     public ETLProcess(){
         jdbcManager = JDBCManager.getInstance();
         // Create Stage schema
@@ -10,7 +11,7 @@ public class ETLProcess {
         // STAGING - Creating all staging tables for the dimension and fact tables
         setupDimensionsAndFacts();
         // Continue to extraction
-        Extract extract = new Extract();
+         extract = new Extract();
     }
 
     private void createStageSchema(){
