@@ -39,7 +39,14 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
         //TODO check if beyond threshold
         Date date = new Date();
-        measurement.setDate(date);
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.HOUR, -2);
+        Date twoHoursback = cal.getTime();
+
+
+        measurement.setDate(twoHoursback);
 
         Data data = new Data();
         data.setExceeded(false);
