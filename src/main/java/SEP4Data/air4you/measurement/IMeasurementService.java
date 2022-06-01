@@ -17,4 +17,6 @@ public interface IMeasurementService {
     List<Double> getAverageHumidity(String roomId);
     List<Double> getAverageCo2(String roomId);
 
+    List<Measurement> getMeasurementByUserAndRoomIdWeek(String userId);
+
 }

@@ -53,6 +53,11 @@ public class MeasurementController {
         return measurementService.getAverageCo2(roomId);
 
     }
+    @GetMapping("/measurement/week/{userId}")
+    public List<Measurement> getMeasurementByUserAndRoomIdWeek(@PathVariable String userId)
+    {
+        return measurementService.getMeasurementByUserAndRoomIdWeek(userId);
+    }
 
 
 }

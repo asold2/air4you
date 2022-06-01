@@ -5,6 +5,7 @@ import SEP4Data.air4you.Notification.MainActivity;
 import SEP4Data.air4you.Notification.Token.ITokenService;
 import SEP4Data.air4you.humidityThreshold.HumidityThreshold;
 import SEP4Data.air4you.humidityThreshold.IHumidityThresholdService;
+import SEP4Data.air4you.room.Room;
 import SEP4Data.air4you.room.RoomRepository;
 import SEP4Data.air4you.room.IRoomService;
 import SEP4Data.air4you.tempThreshold.ITempThresholdService;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.*;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Service
@@ -34,7 +36,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
     @Autowired ITokenService ITokenService;
 
     @Autowired IRoomService IRoomService;
-
+//
     //Adding measurement
     @Override
     public Threshold addMeasurement(Measurement measurement) {
@@ -187,6 +189,38 @@ public class MeasurementServiceImpl implements IMeasurementService{
             temperatures.add(measurementRepository.countAverageCo2(roomId, i));
         }
         return temperatures;
+    }
+
+    @Override
+    public List<Measurement> getMeasurementByUserAndRoomIdWeek(String userId)
+    {
+        List<Room> listOfRooms = IRoomService.getRooms(userId);
+        List<Measurement> listOfMeasurements = new ArrayList<>();
+        LocalDate today = LocalDate.now();
+        LocalDate oneWeekAgo = today.minus(1, ChronoUnit.WEEKS);
+        List<Measurement> measurementsToReturn = new ArrayList<>();
+
+
+        for(int i=0;i<listOfRooms.size();i++)
+        {
+            listOfMeasurements.addAll(listOfRooms.get(i).getMeasurements());
+        }
+
+        for (Measurement measurement:
+                listOfMeasurements)
+        {
+
+            LocalDate measurementLocalDate = measurement.getDate().toInstant().atZone(
+                    ZoneId.systemDefault()).toLocalDate();
+
+            if(measurementLocalDate.isBefore(today) && measurementLocalDate.isAfter(oneWeekAgo))
+            {
+                measurementsToReturn.add(measurement);
+            }
+        }
+
+
+        return measurementsToReturn;
     }
 
 
