@@ -77,8 +77,8 @@ public class MeasurementServiceImpl implements IMeasurementService{
             measurement.setTemperatureExceeded(true);
         }
 
-        if(tempThresh != null && (measurement.getHumidity() < humThresh.getMin() || measurement.getHumidity() > humThresh.getMax())){
-            measurement.setTemperatureExceeded(true);
+        if(humThresh != null && (measurement.getHumidity() < humThresh.getMin() || measurement.getHumidity() > humThresh.getMax())){
+            measurement.setHumidityExceeded(true);
         }
 
         if(measurement.getCo2() > 600){
