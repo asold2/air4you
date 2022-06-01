@@ -6,8 +6,8 @@ import java.sql.Date;
 
 public class Load {
 
-    private JDBCManager jdbcManager = null;
-    private ETL etl = null;
+    private JDBCManager jdbcManager;
+    private ETL etl;
 
     public Load(){
         jdbcManager = JDBCManager.getInstance();

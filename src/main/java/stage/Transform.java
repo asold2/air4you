@@ -2,8 +2,8 @@ package stage;
 
 public class Transform {
 
-    private JDBCManager jdbcManager = null;
-    private Load load = null;
+    private JDBCManager jdbcManager;
+    private Load load;
 
     public Transform() {
         jdbcManager = JDBCManager.getInstance();
@@ -15,8 +15,6 @@ public class Transform {
 
         load = new Load();
     }
-
-    /*Adding extra attribute to staging tables to reflect type two changes*/
 
 
     /*Updating the values for email and name where they are null*/

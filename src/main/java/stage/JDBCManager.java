@@ -9,7 +9,7 @@ import javax.persistence.EntityManager;
 /*This class implements a Singleton, to make sure it is instantiated only once*/
 public class JDBCManager extends JdbcTemplate {
     private static JDBCManager instance;
-    private StageJDBC stageJDBC = null;
+    private StageJDBC stageJDBC;
 
     private JDBCManager(){
         stageJDBC = new StageJDBC();

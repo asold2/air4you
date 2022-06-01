@@ -3,7 +3,8 @@ package stage;
 import org.springframework.dao.DuplicateKeyException;
 
 public class Extract {
-    private JDBCManager jdbcManager = null;
+    private JDBCManager jdbcManager;
+    private Transform transform;
 
 /*Within the constructor all the methods implemented in this class are called, to first
 * create the staging tables, then to populate it with data from the source system*/
@@ -12,7 +13,7 @@ public class Extract {
 
         extract();
 
-        Transform transform = new Transform();
+         transform = new Transform();
 
     }
 

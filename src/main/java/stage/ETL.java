@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ETL {
-    private JDBCManager jdbcManager = null;
+    private JDBCManager jdbcManager;
 
     public ETL(){
         jdbcManager = JDBCManager.getInstance();
