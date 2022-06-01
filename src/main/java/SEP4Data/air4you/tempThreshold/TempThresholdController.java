@@ -69,7 +69,7 @@ public class TempThresholdController {
     }
 
 
-
+    // You can Update temperature threshold if link is called
     @PutMapping("/temperatureThresholds/")
     public int updateTempThreshold(@RequestBody TemperatureThreshold temperatureThreshold){
         if(tempThresholdService.updateTempThreshold(temperatureThreshold)){

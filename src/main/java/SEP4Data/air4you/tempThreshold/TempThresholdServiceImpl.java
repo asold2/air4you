@@ -45,7 +45,7 @@ public class TempThresholdServiceImpl implements ITempThresholdService{
     }
 
 
-
+    //Adding temperature threshold
     @Override
     public boolean addTempThreshold(TemperatureThreshold temperatureThreshold) throws Exception {
 
