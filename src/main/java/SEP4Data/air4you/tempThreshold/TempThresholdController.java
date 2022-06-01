@@ -15,13 +15,14 @@ public class TempThresholdController {
     @Autowired
     private ITempThresholdService tempThresholdService;
 
+    // All temperature thresholds for specific room are returned if this link is called
     @GetMapping("/temperatureThresholds/{roomId}")
     public List<TemperatureThreshold> getAllTempThresholdsByRoomId(@PathVariable String roomId){
         return tempThresholdService.getAllTempThresholdsByRoomId(roomId);
     }
 
 
-
+    // Temperature threshold is added if this link is called
     @PostMapping("/temperatureThresholds/")
     public int addTempThreshold(@RequestBody TemperatureThreshold temperatureThreshold){
         System.out.println("");
@@ -54,6 +55,7 @@ public class TempThresholdController {
         return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
     }
 
+    // Deleting temperature threshold by id
     @DeleteMapping("/temperatureThresholds/{id}")
     public int deleteTempThreshold(@PathVariable int thresholdId){
         try {

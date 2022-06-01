@@ -16,7 +16,7 @@ public class RoomServiceImpl implements IRoomService
     private RoomRepository roomRepository;
 
 
-
+    //method to create new room
     @Override
     public boolean registerRoom(Room room) {
         room.setRegistrationDate(LocalDateTime.now());
@@ -32,7 +32,7 @@ public class RoomServiceImpl implements IRoomService
         return false;
 
     }
-
+    //Method to get all rooms by user id
     @Override
     public List<Room> getRooms(String userId) {
         ArrayList<Room> temp = new ArrayList<>();
@@ -45,7 +45,7 @@ public class RoomServiceImpl implements IRoomService
     }
 
 
-
+    //Method to delete room by user id
     @Override
     public boolean deleteRoom(String roomId) {
 
@@ -58,7 +58,7 @@ public class RoomServiceImpl implements IRoomService
         }
     }
 
-
+    // Method for updating the room
     @Override
     public boolean updateRoom(Room room) {
         if(roomRepository.existsById(room.getRoomId())){
@@ -68,6 +68,7 @@ public class RoomServiceImpl implements IRoomService
         return false;
     }
 
+    // Method for updating userId for specific room
     @Override
     public void updateUserIdForRoom(String roomId, String userid) {
         Room room = roomRepository.getById(roomId);
@@ -75,6 +76,7 @@ public class RoomServiceImpl implements IRoomService
         roomRepository.save(room);
     }
 
+    //Method for deleting room by userId
     @Override
     public boolean deleteRoomsByUserId(String userId) {
         if(roomRepository.existsByUserId(userId)){

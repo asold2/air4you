@@ -15,7 +15,7 @@ public class TokenController{
     public TokenController(ITokenService ITokenService){
         this.ITokenService = ITokenService;
     }
-
+    // This method will return all tokens if this link is called
     @GetMapping("/all/tokens/")
     public List<UserToken> getAllTokens(){
         for (UserToken userToken:
@@ -25,7 +25,7 @@ public class TokenController{
         return ITokenService.getAllTokens();
     }
 
-
+     // You can create new token by calling this link
     @PostMapping("/token/")
     public int createToken(@RequestBody UserToken userToken){
 
@@ -38,7 +38,7 @@ public class TokenController{
             return HttpServletResponse.SC_EXPECTATION_FAILED;
         }
     }
-
+    // You can delete token by calling this link
     @PutMapping("/token/")
     public int deleteToken(@RequestBody UserToken userToken){
        return ITokenService.deleteToken(userToken);
