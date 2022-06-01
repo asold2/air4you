@@ -202,7 +202,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
             LocalDate measurementLocalDate = measurement.getDate().toInstant().atZone(
                     ZoneId.systemDefault()).toLocalDate();
 
-            if(measurementLocalDate.isBefore(today) && measurementLocalDate.isAfter(oneWeekAgo))
+            if(measurementLocalDate.isBefore(today.plusDays(1)) && measurementLocalDate.isAfter(oneWeekAgo))
             {
                 measurementsToReturn.add(measurement);
             }
