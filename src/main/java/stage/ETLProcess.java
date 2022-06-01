@@ -57,27 +57,7 @@ public class ETLProcess {
                 "name varchar(255)" +
                 ")");
     }
-    private void stageDimTemperatureThresholdCreation(){
-        jdbcManager.execute("create table if not exists stage_air4you.dim_temperature_threshold(" +
-                "temperature_threshold_id INT not null primary key," +
-                "room_id VARCHAR(255)," +
-                "minimum_value DECIMAL(5,2)," +
-                "maximum_value DECIMAL(5,2)," +
-                "start_time TIME(10)," +
-                "end_time TIME(10)" +
-                ")");
-    }
 
-    private void stageDimHumidityThresholdCreation(){
-        jdbcManager.execute("CREATE TABLE IF NOT EXISTS stage_air4you.Dim_HumidityThreshold ("+
-                "humidity_threshold_id int not null primary key,"+
-                "room_id VARCHAR(255),"+
-                "start_time TIME(10),"+
-                "end_time TIME(10),"+
-                "minimum_value DECIMAL (5,2),"+
-                "maximum_value DECIMAL (5,2)" +
-                ")");
-    }
 
     private void stageDimMeasurementCreation(){
         jdbcManager.execute("create table if not exists stage_air4you.Dim_Measurement ( " +
@@ -93,18 +73,6 @@ public class ETLProcess {
                 ")");
     }
 
-//    private void stageDimDateCreation(){
-//        jdbcManager.execute("create table if not exists stage_air4you.dim_date (\n" +
-//                "    date_id serial not null primary key,\n" +
-//                "    year varchar(10),\n" +
-//                "    month varchar (20),\n" +
-//                "    week varchar(20),\n" +
-//                "    day varchar (20),\n" +
-//                "    hour varchar(20),\n" +
-//                "    minute varchar(20),\n" +
-//                "    fact_type varchar(40)" +
-//                ")");
-//    }
 
     private void stageDimDateCreation(){
         jdbcManager.execute("create table if not exists stage_air4you.dim_date (\n" +

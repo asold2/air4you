@@ -109,27 +109,6 @@ public class Extract {
 
 
 
-    public void extractTemperatureThresholdToStage(){
-        jdbcManager.execute("Insert into stage_air4you.dim_temperature_threshold (\n" +
-                "                select id,room_id, min,max,start_time,end_time\n" +
-                "                from temperature_thresholds\n" +
-                "                except select temperature_threshold_id,room_id, minimum_value,maximum_value,start_time,end_time\n" +
-                "                from stage_air4you.dim_temperature_threshold)");
-    }
-
-
-
-    public void extractDimHumidityThresholdToStage()
-    {
-        jdbcManager.execute("Insert into stage_air4you.Dim_HumidityThreshold(\n" +
-                "                                                humidity_threshold_id, room_id, start_time, end_time, minimum_value, maximum_value\n" +
-                ") SELECT\n" +
-                "            id, room_id, end_time, start_time, max, min\n" +
-                "            from humidity_thresholds\n" +
-                "            except select humidity_threshold_id, room_id, start_time, end_time, minimum_value, maximum_value\n" +
-                "            from stage_air4you.Dim_HumidityThreshold"
-            );
-    }
 
     //Need to take data from Dim_Room and Dim_Token from stage.
     public void extractDimUserToStage(){
