@@ -10,6 +10,7 @@ import SEP4Data.air4you.room.RoomRepository;
 import SEP4Data.air4you.room.RoomService;
 import SEP4Data.air4you.tempThreshold.ITempThresholdService;
 import SEP4Data.air4you.tempThreshold.TemperatureThreshold;
+import SEP4Data.air4you.threshold.ISendThresholdToGateway;
 import SEP4Data.air4you.threshold.Threshold;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,16 +20,15 @@ import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
-@Service
 public class MeasurementServiceImpl implements IMeasurementService{
 
     @Autowired
     MeasurementRepository measurementRepository;
+
+    @Autowired
+    ISendThresholdToGateway sendThresholdToGateway;
 
     @Autowired
     RoomRepository roomRepository;
@@ -48,7 +48,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
     //Adding measurement
     @Override
-    public Threshold addMeasurement(Measurement measurement) {
+    public void addMeasurement(Measurement measurement) {
 
         //TODO check if beyond threshold
         Date date = measurement.getDate();
@@ -100,11 +100,15 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
         mainActivity.sendNotification(to,data);
 
+
+
         measurementRepository.save(measurement);
 
         Threshold thresholdToReturn = new Threshold(measurement.getRoomId(), tempThresh.getMin(), tempThresh.getMax(), humThresh.getMin(), humThresh.getMax());
 
-        return thresholdToReturn;
+        //return thresholdToReturn;
+
+        sendThresholdToGateway.sendThresholdToGateway(thresholdToReturn);
     }
 
     //Get measurements by room id
@@ -153,6 +157,9 @@ public class MeasurementServiceImpl implements IMeasurementService{
                 calendar.get(Calendar.HOUR_OF_DAY),
                 calendar.get(Calendar.MINUTE),
                 calendar.get(Calendar.SECOND));
+
+        ZoneId asiaSingapore = ZoneId.of("Asia/Singapore");
+        calendar.setTimeZone(TimeZone.getTimeZone("UTC+2"));
 
         // Check with measurement LocalTime which threshold is valid
         TemperatureThreshold temperatureThreshold = null;
