@@ -142,7 +142,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
         }
         return toReturn;
     }
-
+    // This method will delete all measurements in room
     @Override
     public boolean deleteAllFromRoom(String roomId) {
         if(roomRepository.existsById(roomId)) {
@@ -152,7 +152,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
             return false;
         }
     }
-
+    // This method will run 7 times to get list of average temperature for last 7 days it's called in sql statement
     @Override
     public List<Double> getAverageTemp(String roomId) {
         ArrayList<Double> temperatures = new ArrayList<Double>();
@@ -162,7 +162,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
         return temperatures;
     }
 
-
+    // This method will run 7 times to get list of average humidity for last 7 days it's called in sql statement
     @Override
     public List<Double> getAverageHumidity(String roomId) {
         ArrayList<Double> humidities = new ArrayList<Double>();
@@ -171,7 +171,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
         }
         return humidities;
     }
-
+    // This method will run 7 times to get list of average co2 for last 7 days it's called in sql statement
     @Override
     public List<Double> getAverageCo2(String roomId) {
         ArrayList<Double> temperatures = new ArrayList<Double>();
