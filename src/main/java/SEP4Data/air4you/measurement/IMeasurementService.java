@@ -11,11 +11,7 @@ public interface IMeasurementService {
     void addMeasurement(Measurement measurement);
     List<Measurement> getMeasurements(String roomId);
     boolean deleteAllFromRoom(String roomId);
-    void deleteAllFromUser(String userId);
-    void deleteAll();
-    TemperatureThreshold returnCurrentTempThreshold(String roomId, Date measurementDate);
 
-    Measurement getLastMeasurementByRoomId(String roomId);
 
     List<Measurement> getMeasurementByDateAndRoomId(String date, String roomId);
     List<Measurement> getMeasurementsBetweenDates(String startDate, String endDate, String roomId);

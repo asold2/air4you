@@ -15,34 +15,42 @@ public class SendThresholdToGateway implements ISendThresholdToGateway
 {
 
     private final RestTemplate restTemplate;
+    ThresholdHolder thresholdHolder;
 
     public SendThresholdToGateway(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
+        thresholdHolder = ThresholdHolder.getInstance();
     }
 
 
+
     @Override
-    public void sendThresholdToGateway(Threshold threshold) {
-        String url = "http://localhost:8080/send/tempThreshold/";
+    public void sendThresholdToGateway() {
 
-        HttpHeaders headers = new HttpHeaders();
 
-        headers.setContentType(MediaType.APPLICATION_JSON);
+            Threshold threshold = thresholdHolder.getThreshold();
+            if(threshold!=null){
+                String url = "http://localhost:8080/send/tempThreshold/";
 
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+                HttpHeaders headers = new HttpHeaders();
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("roomId", threshold.getRoomId());
-        map.put("minTemp", threshold.getMaxTemp());
-        map.put("maxTemp", threshold.getMinTemp());
-        map.put("minHumidity", threshold.getMaxHumidity());
-        map.put("maxHumidity", threshold.getMinHumidity());
+                headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<Map<String, Object>> tempThreshold = new HttpEntity<>(map, headers);
+                headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
-        ResponseEntity<Threshold> response = this.restTemplate.postForEntity(url, tempThreshold, Threshold.class);
+                Map<String, Object> map = new HashMap<>();
+                map.put("roomId", threshold.getRoomId());
+                map.put("minTemp", threshold.getMaxTemp());
+                map.put("maxTemp", threshold.getMinTemp());
+                map.put("minHumidity", threshold.getMaxHumidity());
+                map.put("maxHumidity", threshold.getMinHumidity());
 
-        System.out.println("Sent temperature threshold to Gateway");
+                HttpEntity<Map<String, Object>> tempThreshold = new HttpEntity<>(map, headers);
+
+                this.restTemplate.postForLocation(url, tempThreshold);
+
+                System.out.println("Sent temperature threshold to Gateway");
+        }
 
 //        if (response.getStatusCode() == HttpStatus.CREATED) {
 //            return response.getBody();

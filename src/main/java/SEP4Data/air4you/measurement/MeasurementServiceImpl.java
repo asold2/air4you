@@ -12,6 +12,9 @@ import SEP4Data.air4you.tempThreshold.ITempThresholdService;
 import SEP4Data.air4you.tempThreshold.TemperatureThreshold;
 import SEP4Data.air4you.threshold.ISendThresholdToGateway;
 import SEP4Data.air4you.threshold.Threshold;
+import SEP4Data.air4you.threshold.ThresholdHolder;
+import jdk.swing.interop.SwingInterOpUtils;
+import net.bytebuddy.pool.TypePool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +24,11 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-
+@Service
 public class MeasurementServiceImpl implements IMeasurementService{
 
+
+    ThresholdHolder thresholdHolder = ThresholdHolder.getInstance();
     @Autowired
     MeasurementRepository measurementRepository;
 
@@ -50,6 +55,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
     @Override
     public void addMeasurement(Measurement measurement) {
 
+
         //TODO check if beyond threshold
         Date date = measurement.getDate();
         measurement.setDate(date);
@@ -69,6 +75,8 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
         TemperatureThreshold tempThresh = tempThresholdService.returnCurrentTempThreshold(measurement.getRoomId(), measurement.getDate());
         HumidityThreshold humThresh = humidityThresholdService.returnCurrentHumidityThreshold(measurement.getRoomId(), measurement.getDate());
+
+
 
         if (tempThresholdService.isInsideThreshold(measurement, tempThresh).getTemperatureExceeded())
         {
@@ -104,11 +112,14 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
         measurementRepository.save(measurement);
 
-        Threshold thresholdToReturn = new Threshold(measurement.getRoomId(), tempThresh.getMin(), tempThresh.getMax(), humThresh.getMin(), humThresh.getMax());
+        Threshold thresholdToReturn = new Threshold(measurement.getRoomId(), tempThresh.getMax(), tempThresh.getMin(), humThresh.getMax(), humThresh.getMin());
 
+        thresholdHolder.setThreshold(thresholdToReturn);
+        System.out.println(thresholdToReturn.getMaxTemp() + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11"+ new Date());
+        System.out.println("                    SET THRESHOLD IN MEASUREMENT                     ");
         //return thresholdToReturn;
 
-        sendThresholdToGateway.sendThresholdToGateway(thresholdToReturn);
+//        sendThresholdToGateway.sendThresholdToGateway(thresholdToReturn);
     }
 
     //Get measurements by room id

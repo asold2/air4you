@@ -6,6 +6,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ISendThresholdToGateway
 {
-    void sendThresholdToGateway(Threshold threshold);
+    void sendThresholdToGateway();
 
 }

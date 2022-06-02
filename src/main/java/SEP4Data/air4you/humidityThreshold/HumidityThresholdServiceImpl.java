@@ -22,11 +22,6 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
   @Autowired
   private RoomRepository roomRepository;
 
-  @Override
-  public List<HumidityThreshold> getAllHumidityThresholds()
-  {
-    return humidityThresholdRepository.findAll();
-  }
 
   // Adding humidity threshold 
   @Override
@@ -102,90 +97,16 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
     return tempList;
   }
 
-  // Method for deleting all humidity thresholds
-  @Override
-  public void deleteAll()
-  {
-    humidityThresholdRepository.deleteAll();
-  }
 
   // Updating humidity threshold by threshold Id
   @Override
   public void updateHumidityThreshold(HumidityThreshold humidityThreshold){
-    System.out.println(humidityThreshold.getId() + "!!!!!!!!!!!!!!!!!!!!!!!!");
     //Not working. add id in path
     humidityThresholdRepository.updateHumidityThreshold(humidityThreshold.getMax(), humidityThreshold.getMin(), humidityThreshold.getId());
   }
 
-  // This method runs through all humidity thresholds in a specific room and find one threshold by the time
-  @Override
-  public HumidityThreshold returnCurrentHumidityThreshold(String roomId, Date measurementDate) {
-    Calendar calendar = Calendar.getInstance();
-    calendar.setTime(measurementDate);
-
-    // Change Measurement Date type into LocalTime dataType.
-    LocalTime measurementTime = LocalTime.of(
-            calendar.get(Calendar.HOUR_OF_DAY),
-            calendar.get(Calendar.MINUTE),
-            calendar.get(Calendar.SECOND));
-
-    HumidityThreshold humidityThreshold = null;
-    for (HumidityThreshold temp: getAllHumidityThresholdsByRoomId(roomId)) {
-      if (temp.getStartTime().isBefore(measurementTime) && temp.getEndTime().isAfter(measurementTime)){
-        humidityThreshold = temp;
-      }
-    }
-    if(humidityThreshold == null){
-      humidityThreshold = new HumidityThreshold(0,0);
-    }
-    return humidityThreshold;
-  }
-
-// This method will if the humidity data from measurements is inside Min and Max threshold
-  public boolean isInsideMaxAndMin(Measurement measurement, HumidityThreshold humidityThreshold){
-    if (measurement.getHumidity() > humidityThreshold.getMax()) {
-      return false;
-
-    } else if (measurement.getHumidity() < humidityThreshold.getMin()) {
-      return false;
-    }
-    return true;
-  }
-
-  // This method will if the measurement timestamp is inside Start time and End time threshold
-  public boolean isInsideStartTimeEndTime(Measurement measurement,HumidityThreshold humidityThreshold){
-
-    Calendar calendar = Calendar.getInstance();
-    calendar.setTime(measurement.getDate());
-
-    int measurementHour = calendar.get(Calendar.HOUR_OF_DAY);
-    int measurementMinute = calendar.get(Calendar.MINUTE);
-
-    if(humidityThreshold.getStartTime() != null && humidityThreshold.getEndTime() != null) {
 
 
-      if (measurementHour >= humidityThreshold.getStartTime().getHour() && measurementHour <= humidityThreshold.getEndTime().getHour()) {
-        return true;
-      } else if (measurementHour == humidityThreshold.getStartTime().getHour() || measurementHour == humidityThreshold.getEndTime().getHour()) {
-        if (measurementMinute > humidityThreshold.getStartTime().getMinute() && measurementMinute < humidityThreshold.getEndTime().getMinute()) {
-          return true;
-        }
-      }
-      return false;
-    }
-    return true;
-  }
-
-  // This method will check "isInsideMaxAndMin" and "isInsideStartTimeEndTime" methods
-  @Override
-  public Measurement isInsideThreshold(Measurement measurement, HumidityThreshold humidityThreshold){
-    if (isInsideStartTimeEndTime(measurement,humidityThreshold)){
-      if (isInsideMaxAndMin(measurement, humidityThreshold)){
-        measurement.setHumidityExceeded(false);
-      }
-    }
-    return measurement;
-  }
 
 
 
