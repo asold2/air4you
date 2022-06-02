@@ -39,7 +39,7 @@ public class Air4youApplication {
 		sender();
 
 	}
-	@Scheduled(fixedRate = 240000)
+	@Scheduled(fixedRate = 120000)
 //	@Scheduled(fixedRate = 1000)
 	public static void sender(){
 		System.out.println("SENT TO THE FUCKER 1");
