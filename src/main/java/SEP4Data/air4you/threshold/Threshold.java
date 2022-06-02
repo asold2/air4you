@@ -21,7 +21,7 @@ public class Threshold implements Serializable {
 
     private int maxHumidity  = 0;
 
-    public Threshold( String roomId, int minTemp, int maxTemp, int minHumidity, int maxHumidity) {
+    public Threshold( String roomId, int maxTemp, int minTemp, int maxHumidity, int minHumidity) {
         this.roomId = roomId;
         this.minTemp = minTemp;
         this.maxTemp = maxTemp;

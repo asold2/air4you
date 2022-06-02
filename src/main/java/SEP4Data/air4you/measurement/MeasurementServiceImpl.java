@@ -107,13 +107,13 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
         measurementRepository.save(measurement);
 
-        Threshold thresholdToReturn = new Threshold(measurement.getRoomId(), (int)tempThresh.getMin(), (int)tempThresh.getMax(), (int)humThresh.getMin(), (int)humThresh.getMax());
+        Threshold thresholdToReturn = new Threshold(measurement.getRoomId(), (int)tempThresh.getMax(), (int)tempThresh.getMin(), (int)humThresh.getMax(), (int)humThresh.getMin());
 
 
 
 
         thresholdHolder.setThreshold(thresholdToReturn);
-        System.out.println(thresholdToReturn.getMaxTemp() + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11"+ new Date());
+        System.out.println(thresholdToReturn.getMaxTemp() + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11"+ new Date() + thresholdToReturn.getMinTemp());
         System.out.println("                    SET THRESHOLD IN MEASUREMENT                     ");
         //return thresholdToReturn;
 
