@@ -25,13 +25,14 @@ public class MainActivity {
 
         NotificationAPI apiService = retrofit.create(NotificationAPI.class);
         Call<String> call = apiService.postNotification(pushNotification);
-        call.enqueue(new Callback<String>() {
+        call.enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                if(!response.isSuccessful()){
+                if (!response.isSuccessful()) {
                     return;
                 }
             }
+
             @Override
             public void onFailure(Call<String> call, Throwable throwable) {
                 System.out.println(throwable.getMessage());

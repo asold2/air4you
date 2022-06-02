@@ -10,24 +10,28 @@ import javax.servlet.http.HttpServletResponse;
 public class TokenController{
 
     @Autowired
-    private TokenService tokenService;
+    private ITokenService ITokenService;
 
+    public TokenController(ITokenService ITokenService){
+        this.ITokenService = ITokenService;
+    }
+    // This method will return all tokens if this link is called
 
     @GetMapping("/all/tokens/")
     public List<UserToken> getAllTokens(){
         for (UserToken userToken:
-             tokenService.getAllTokens()) {
+             ITokenService.getAllTokens()) {
             System.out.println(userToken.getUid());
         }
-        return tokenService.getAllTokens();
+        return ITokenService.getAllTokens();
     }
 
-
+     // You can create new token by calling this link
     @PostMapping("/token/")
-    public int CreateToken(@RequestBody UserToken userToken){
+    public int createToken(@RequestBody UserToken userToken){
 
-        if( tokenService.createToken(userToken)){
-            tokenService.notifyUser(userToken.getToken());
+        if( ITokenService.createToken(userToken)){
+            ITokenService.notifyUser(userToken.getToken());
             return HttpServletResponse.SC_OK;
         }
         else {
@@ -35,16 +39,12 @@ public class TokenController{
             return HttpServletResponse.SC_EXPECTATION_FAILED;
         }
     }
-
+    // You can delete token by calling this link
     @PutMapping("/token/")
-    public int DeleteToken(@RequestBody UserToken userToken){
-       return tokenService.deleteToken(userToken);
+    public int deleteToken(@RequestBody UserToken userToken){
+       return ITokenService.deleteToken(userToken);
     }
 
-    @DeleteMapping("delete/tokens/")
-    public void deleteAllTokens(){
-        tokenService.deleteAll();
-    }
 
 
 }

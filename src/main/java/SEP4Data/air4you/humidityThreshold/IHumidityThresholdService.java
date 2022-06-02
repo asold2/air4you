@@ -10,6 +10,6 @@ public interface IHumidityThresholdService
 {
   boolean addHumidityThreshold(HumidityThreshold humidityThreshold) throws Exception;
   void deleteHumidityThreshold(int id);
-  void updateHumidityThreshold(HumidityThreshold humidityThreshold);
+  boolean updateHumidityThreshold(HumidityThreshold humidityThreshold);
   List<HumidityThreshold> getAllHumidityThresholdsByRoomId(String roomId);
 }

@@ -31,7 +31,6 @@ public class Room implements Serializable {
 
     @OneToMany(mappedBy="roomId", cascade = {CascadeType.REMOVE})
     private List<Measurement> measurements;
-//    private String notoficationToken;
 
 
     public Room() {

@@ -9,7 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Service
-public class TokenServiceImpl implements TokenService{
+public class ITokenServiceImpl implements ITokenService
+{
 
     @Autowired
     private TokenRepository tokenRepository;
@@ -18,9 +19,9 @@ public class TokenServiceImpl implements TokenService{
     private MainActivity mainActivity;
 
     @Autowired
-    public TokenServiceImpl() {
+    public ITokenServiceImpl() {
     }
-
+    // Method for create token
     @Override
     public boolean createToken(UserToken newUserToken) {
         if(tokenRepository.findUserTokenByUid(newUserToken.getUid()).isEmpty()){
@@ -31,41 +32,20 @@ public class TokenServiceImpl implements TokenService{
         return true;
     }
 
-
+    //Method to delete token
     @Override
     public int deleteToken(UserToken oldUserToken) {
         tokenRepository.delete(oldUserToken);
         return HttpServletResponse.SC_OK;
     }
 
-    @Override
-    public boolean updateToken(UserToken updatedUserToken) {
-       tokenRepository.updateUserToken(updatedUserToken.getToken(), updatedUserToken.getUid());
-       return true;
-    }
-
+    // Notifying user when he gets a new token
     @Override
     public void notifyUser(String token) {
         mainActivity.sendNotification(token,new Data("You have been given a new token","New Token!",true));
     }
 
-    @Override
-    public String getToken(String uId) {
-        for (UserToken temp : tokenRepository.findAll())
-        {
-            if (temp.getUid().equals(uId))
-            {
-               return temp.getToken();
-            }
-        }
-        return "";
-    }
-
-    @Override
-    public void deleteAll() {
-        tokenRepository.deleteAll();
-    }
-
+    //Getting all tokens
     @Override
     public List<UserToken> getAllTokens() {
         return tokenRepository.findAll();

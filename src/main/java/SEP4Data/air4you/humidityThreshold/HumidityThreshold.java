@@ -1,6 +1,9 @@
 package SEP4Data.air4you.humidityThreshold;
 
+import SEP4Data.air4you.threshold.Threshold;
+
 import javax.persistence.*;
+import java.sql.Time;
 import java.time.LocalTime;
 
 @Entity
@@ -16,11 +19,16 @@ public class HumidityThreshold
   private double min;
   private double max;
 
-  public HumidityThreshold(){}
+//  public HumidityThreshold(){
+//    this.max = 0;
+//    this.min = 0;
+//  }
   public HumidityThreshold(double max, double min){
     this.max = max;
     this.min = min;
   }
+  public HumidityThreshold(){
+}
 
   public HumidityThreshold(String roomId, LocalTime startTime, LocalTime endTime, double min, double max)
   {
@@ -29,6 +37,15 @@ public class HumidityThreshold
     this.endTime = endTime;
     this.min = min;
     this.max = max;
+  }
+
+  public HumidityThreshold(int id, Time startTime, double max, double min, String roomId, Time endTime){
+    this.Id = id;
+    this.endTime = endTime.toLocalTime();
+    this.max = max;
+    this.min = min;
+    this.startTime = startTime.toLocalTime();
+    this.roomId = roomId;
   }
 
   public void setId(int id) {

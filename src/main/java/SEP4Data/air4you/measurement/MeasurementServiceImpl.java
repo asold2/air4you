@@ -2,12 +2,12 @@ package SEP4Data.air4you.measurement;
 
 import SEP4Data.air4you.Notification.Data;
 import SEP4Data.air4you.Notification.MainActivity;
-import SEP4Data.air4you.Notification.Token.TokenService;
+import SEP4Data.air4you.Notification.Token.ITokenService;
 import SEP4Data.air4you.humidityThreshold.HumidityThreshold;
 import SEP4Data.air4you.humidityThreshold.IHumidityThresholdService;
 import SEP4Data.air4you.room.Room;
 import SEP4Data.air4you.room.RoomRepository;
-import SEP4Data.air4you.room.RoomService;
+import SEP4Data.air4you.room.IRoomService;
 import SEP4Data.air4you.tempThreshold.ITempThresholdService;
 import SEP4Data.air4you.tempThreshold.TemperatureThreshold;
 import SEP4Data.air4you.threshold.ISendThresholdToGateway;
@@ -18,12 +18,10 @@ import net.bytebuddy.pool.TypePool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+
 @Service
 public class MeasurementServiceImpl implements IMeasurementService{
 
@@ -37,19 +35,13 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
     @Autowired
     RoomRepository roomRepository;
+
+    //This is initiated like this because of testing
     @Autowired
     MainActivity mainActivity;
-    @Autowired
-    IHumidityThresholdService humidityThresholdService;
 
-    @Autowired
-    ITempThresholdService tempThresholdService;
-
-    @Autowired
-    TokenService tokenService;
-
-    @Autowired
-    RoomService roomService;
+    @Autowired IRoomService IRoomService;
+//
 
     //Adding measurement
     @Override
@@ -57,24 +49,40 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
 
         //TODO check if beyond threshold
-        Date date = measurement.getDate();
-        measurement.setDate(date);
+        Date date = new Date();
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.HOUR, +2);
+        Date twoHoursback = cal.getTime();
+
+
+        measurement.setDate(twoHoursback);
 
         Data data = new Data();
         data.setExceeded(false);
-        String to = null;
+        String to = measurementRepository.getTokenFromRoomId(measurement.getRoomId());
 
-        for (Room room:
-             roomService.getAllRooms()) {
-            if (room.getRoomId().equals(measurement.getRoomId())){
-                to = tokenService.getToken(room.getUserId());
-                break;
-            }
+        LocalDateTime ldt = LocalDateTime.ofInstant(measurement.getDate().toInstant(),ZoneId.systemDefault());
+        LocalTime localTime = ldt.toLocalTime();
+        System.out.println(localTime);
+
+        HumidityThreshold humThresh;
+        TemperatureThreshold tempThresh;
+
+        humThresh = measurementRepository.getCurrentHumidityThreshold(localTime, measurement.getRoomId());
+
+        tempThresh = measurementRepository.getCurrentTemperatureThreshold(localTime, measurement.getRoomId());
+
+        if(humThresh == null){
+            humThresh = new HumidityThreshold();
+        }
+        if(tempThresh == null){
+            tempThresh = new TemperatureThreshold();
         }
 
 
-        TemperatureThreshold tempThresh = tempThresholdService.returnCurrentTempThreshold(measurement.getRoomId(), measurement.getDate());
-        HumidityThreshold humThresh = humidityThresholdService.returnCurrentHumidityThreshold(measurement.getRoomId(), measurement.getDate());
+        data.setTitle(measurementRepository.getRoomName(measurement.getRoomId()));
 
 
 
@@ -84,33 +92,31 @@ public class MeasurementServiceImpl implements IMeasurementService{
             data.setTitle("Threshold has been reached");
             data.setExceeded(true);
 
+        if(tempThresh != null && (measurement.getTemperature() < tempThresh.getMin() || measurement.getTemperature() > tempThresh.getMax())){
             measurement.setTemperatureExceeded(true);
             mainActivity.sendNotification(to,data);
         }
 
-        if (humidityThresholdService.isInsideThreshold(measurement,humThresh).getHumidityExceeded())
-        {
-            data.setBody("Humidity is outside threshold");
-            data.setTitle("Threshold has been reached");
-            data.setExceeded(true);
-
+        if(humThresh != null && (measurement.getHumidity() < humThresh.getMin() || measurement.getHumidity() > humThresh.getMax())){
             measurement.setHumidityExceeded(true);
-            mainActivity.sendNotification(to,data);
         }
 
         if(measurement.getCo2() > 600){
             measurement.setCo2Exceeded(true);
-            data.setBody("Co2 is too high");
-            data.setTitle("Threshold has been reached");
-            data.setExceeded(true);
-            mainActivity.sendNotification(to,data);
         }
+
+        data.setBody(createNotification(measurement).getBody());
+        data.setExceeded(createNotification(measurement).isExceeded());
 
         mainActivity.sendNotification(to,data);
 
 
 
         measurementRepository.save(measurement);
+
+        Threshold thresholdToReturn = new Threshold(measurement.getRoomId(), (int)tempThresh.getMin(), (int)tempThresh.getMax(), (int)humThresh.getMin(), (int)humThresh.getMax());
+
+
 
         Threshold thresholdToReturn = new Threshold(measurement.getRoomId(), tempThresh.getMax(), tempThresh.getMin(), humThresh.getMax(), humThresh.getMin());
 
@@ -120,6 +126,42 @@ public class MeasurementServiceImpl implements IMeasurementService{
         //return thresholdToReturn;
 
 //        sendThresholdToGateway.sendThresholdToGateway(thresholdToReturn);
+    }
+
+    @Override
+    public Data createNotification(Measurement measurement){
+        Data data = new Data();
+        if(measurement.getTemperatureExceeded() || measurement.getHumidityExceeded() || measurement.getCo2Exceeded()){
+
+            data.setExceeded(true);
+
+            String body = "Exceeded values for: ";
+
+            if(measurement.getTemperatureExceeded()){
+                body += "Temperature";
+            }
+            if(measurement.getHumidityExceeded()) {
+                if(measurement.getTemperatureExceeded()){
+                    if(measurement.getCo2Exceeded()) {
+                        body += ",";
+                    } else {
+                        body += " and";
+                    }
+                }
+                body += " Humidity";
+
+            }
+            if(measurement.getCo2Exceeded()){
+
+                if(measurement.getTemperatureExceeded() || measurement.getHumidityExceeded()){
+                    body += " and";
+                }
+
+                body += " CO2";
+            }
+            data.setBody(body);
+        }
+        return data;
     }
 
     //Get measurements by room id
@@ -147,44 +189,12 @@ public class MeasurementServiceImpl implements IMeasurementService{
     }
 
     @Override
-    public void deleteAllFromUser(String userId) {
-
-    }
-
-    //Delete all measurements
-    @Override
-    public void deleteAll() {
-        measurementRepository.deleteAll();
-    }
-
-
-    @Override
-    public  TemperatureThreshold returnCurrentTempThreshold(String roomId, Date measurementDate) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(measurementDate);
-
-        // Change Measurement Date type into LocalTime dataType.
-        LocalTime measurementTime = LocalTime.of(
-                calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE),
-                calendar.get(Calendar.SECOND));
-
-        ZoneId asiaSingapore = ZoneId.of("Asia/Singapore");
-        calendar.setTimeZone(TimeZone.getTimeZone("UTC+2"));
-
-        // Check with measurement LocalTime which threshold is valid
-        TemperatureThreshold temperatureThreshold = null;
-        for (TemperatureThreshold temp: tempThresholdService.getAllTempThresholdsByRoomId(roomId)) {
-            if (temp.getStartTime().isBefore(measurementTime) && temp.getEndTime().isAfter(measurementTime)){
-                temperatureThreshold = temp;
-            }
+    public List<Double> getAverageTemp(String roomId) {
+        ArrayList<Double> temperatures = new ArrayList<Double>();
+        for (int i = 0; i < 7; i++) {
+            temperatures.add(measurementRepository.countAverageTemperature(roomId, i));
         }
-
-        // If no thresholds are valid
-        if(temperatureThreshold == null){
-            temperatureThreshold = new TemperatureThreshold(0,0);
-        }
-        return temperatureThreshold;
+        return temperatures;
     }
 
     // This method will return measurements by room id
@@ -201,68 +211,28 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
     //This method will return measurements by date and room id
     @Override
-    public List<Measurement> getMeasurementByDateAndRoomId(String dateInString, String roomId) {
-        List<Measurement> measurementsInRoom = roomService.getRoomById(roomId).getMeasurements();
-        List<Measurement> newMeasurements = new ArrayList<>();
-
-        try {
-            Date date = new SimpleDateFormat("dd-MM-yyyy").parse(dateInString);
-
-            Calendar inputCalendar = Calendar.getInstance();
-            inputCalendar.setTime(date);
-
-            for (Measurement measurement:
-                    measurementsInRoom) {
-                Calendar measurementCalendar = Calendar.getInstance();
-                measurementCalendar.setTime(measurement.getDate());
-
-                if(inputCalendar.get(Calendar.YEAR) == measurementCalendar.get(Calendar.YEAR) &&
-                        inputCalendar.get(Calendar.MONTH) == measurementCalendar.get(Calendar.MONTH) &&
-                        inputCalendar.get(Calendar.DAY_OF_MONTH) == measurementCalendar.get(Calendar.DAY_OF_MONTH)){
-                    newMeasurements.add(measurement);
-                }
-            }
-        } catch (ParseException e) {
-            return null;
+    public List<Double> getAverageHumidity(String roomId) {
+        ArrayList<Double> humidities = new ArrayList<Double>();
+        for (int i = 0; i < 7; i++) {
+            humidities.add(measurementRepository.countAverageHumidity(roomId, i));
         }
-        return newMeasurements;
+        return humidities;
     }
 
     //This method will return measurements between two dates
     @Override
-    public List<Measurement> getMeasurementsBetweenDates(String startDate, String endDate, String roomId)
-    {
-        List<Measurement> measurementsInRoom = roomService.getRoomById(roomId).getMeasurements();
-        List<Measurement> measurementsToReturn = new ArrayList<>();
-
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
-            LocalDate dateStart = LocalDate.parse(startDate, formatter);
-            LocalDate dateEnd = LocalDate.parse(endDate, formatter);
-
-
-            for (Measurement measurement:
-                measurementsInRoom) {
-
-                LocalDate measurementLocalDate = measurement.getDate().toInstant().atZone(
-                    ZoneId.systemDefault()).toLocalDate();
-
-                if(measurementLocalDate.isBefore(dateEnd) && measurementLocalDate.isAfter(dateStart))
-                {
-                    measurementsToReturn.add(measurement);
-                }
-
-
-            }
-        return measurementsToReturn;
+    public List<Double> getAverageCo2(String roomId) {
+        ArrayList<Double> temperatures = new ArrayList<Double>();
+        for (int i = 0; i < 7; i++) {
+            temperatures.add(measurementRepository.countAverageCo2(roomId, i));
+        }
+        return temperatures;
     }
 
     //This method will return measurements for week by user id
     @Override
-    public List<Measurement> getMeasurementByUserAndRoomIdWeek(String userId)
-    {
-        List<Room> listOfRooms = roomService.getRooms(userId);
+    public List<Measurement> getMeasurementByUserAndRoomIdWeek(String userId) {
+        List<Room> listOfRooms = IRoomService.getRooms(userId);
         List<Measurement> listOfMeasurements = new ArrayList<>();
         LocalDate today = LocalDate.now();
         LocalDate oneWeekAgo = today.minus(1, ChronoUnit.WEEKS);
@@ -275,13 +245,13 @@ public class MeasurementServiceImpl implements IMeasurementService{
         }
 
         for (Measurement measurement:
-            listOfMeasurements)
+                listOfMeasurements)
         {
 
             LocalDate measurementLocalDate = measurement.getDate().toInstant().atZone(
-                ZoneId.systemDefault()).toLocalDate();
+                    ZoneId.systemDefault()).toLocalDate();
 
-            if(measurementLocalDate.isBefore(today) && measurementLocalDate.isAfter(oneWeekAgo))
+            if(measurementLocalDate.isBefore(today.plusDays(2)) && measurementLocalDate.isAfter(oneWeekAgo))
             {
                 measurementsToReturn.add(measurement);
             }
@@ -290,4 +260,6 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
         return measurementsToReturn;
     }
+
+
 }

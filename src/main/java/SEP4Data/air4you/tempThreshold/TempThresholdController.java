@@ -15,18 +15,17 @@ public class TempThresholdController {
     @Autowired
     private ITempThresholdService tempThresholdService;
 
+    // All temperature thresholds for specific room are returned if this link is called
     @GetMapping("/temperatureThresholds/{roomId}")
     public List<TemperatureThreshold> getAllTempThresholdsByRoomId(@PathVariable String roomId){
         return tempThresholdService.getAllTempThresholdsByRoomId(roomId);
     }
-    @GetMapping("/temperatureThresholds/")
-    public List<TemperatureThreshold> getAllTempThresholds(){
-        return tempThresholdService.getAllTempThresholds();
-    }
 
 
+    // Temperature threshold is added if this link is called
     @PostMapping("/temperatureThresholds/")
     public int addTempThreshold(@RequestBody TemperatureThreshold temperatureThreshold){
+        System.out.println("");
         try {
             if (tempThresholdService.addTempThreshold(temperatureThreshold)) {
                 return HttpServletResponse.SC_OK;
@@ -56,6 +55,7 @@ public class TempThresholdController {
         return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
     }
 
+    // Deleting temperature threshold by id
     @DeleteMapping("/temperatureThresholds/{id}")
     public int deleteTempThreshold(@PathVariable int thresholdId){
         try {
@@ -69,14 +69,14 @@ public class TempThresholdController {
     }
 
 
-    @DeleteMapping("/temperatureThresholds/all/")
-    public void deleteAllTempThresholds(){
-        tempThresholdService.deleteAll();
-    }
-
+    // You can Update temperature threshold if link is called
     @PutMapping("/temperatureThresholds/")
-    public void updateTempThreshold(@RequestBody TemperatureThreshold temperatureThreshold){
-        tempThresholdService.updateTempThreshold(temperatureThreshold);
+    public int updateTempThreshold(@RequestBody TemperatureThreshold temperatureThreshold){
+        if(tempThresholdService.updateTempThreshold(temperatureThreshold)){
+            return HttpServletResponse.SC_OK;
+        } else {
+            return HttpServletResponse.SC_BAD_REQUEST;
+        }
 
     }
 
