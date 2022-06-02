@@ -16,9 +16,8 @@ public class MeasurementController {
 
     // This method will add measurement if the link is called
     @PostMapping("/measurement/")
-    public @ResponseBody
-    Threshold addMeasurement(@RequestBody Measurement measurement){
-        return measurementService.addMeasurement(measurement);
+    public void addMeasurement(@RequestBody Measurement measurement){
+        measurementService.addMeasurement(measurement);
     }
 
     // This method will delete measurement by roomId if the link is called

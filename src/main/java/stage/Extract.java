@@ -3,157 +3,83 @@
 //import org.springframework.dao.DuplicateKeyException;
 //
 //public class Extract {
-////    private JDBCManager jdbcManager = null;
+//    private JDBCManager jdbcManager;
+//    private Transform transform;
 //
+///*Within the constructor all the methods implemented in this class are called, to first
+//* create the staging tables, then to populate it with data from the source system*/
 //    public Extract(){
-////        jdbcManager = JDBCManager.getInstance();
-////        stageDimRoomCreation();
-////        stageDimUserCreation();
-////        stageDimMeasurementCreation();
-////        stageDimHumidityThresholdCreation();
-////        stageDimTemperatureThresholdCreation();
-////        stageDimTokenCreation();
-////        stageDimDateCreation();
-////        satgeRegistrationFactCreation();
-////        stageFactMeasurementCreation();
-////
-////
-////
-//////        stageFactMeasurementCreation();
-////
-////        //
-//////
-////        extractRoomToStage();
-////        extractDimMeasurementToStage();
-////        extractTemperatureThresholdToStage();
-////        extractDimHumidityThresholdToStage();
-////        extractTokenToStage();
-////        extractDimUserToStage();
-////
-////        extractDimDateFromRoomToStage();
-////        extractDimDateFromMeasurementToStage();
-////        extractFactRegistrationToStage();
+//        jdbcManager = JDBCManager.getInstance();
+//
+//        extract();
+//
+//         transform = new Transform();
 //
 //    }
 //
-//    public void stageDimRoomCreation(){
-////        jdbcManager.execute("drop table stage_air4you.Dim_Room cascade ");
-//        jdbcManager.execute("create table if not exists stage_air4you.Dim_Room ( " +
-//                "R_Id serial  primary key, " +
-//                "room_id VARCHAR(255) not null," +
-//                "name VARCHAR(255)," +
-//                "registration_date timestamp," +
-//                "user_id varchar(255) " +
-//                 ")");
+//    private void extract(){
+//        extractRoomToStage();
+//        extractDimMeasurementToStage();
+//        extractTokenToStage();
+//        extractDimUserToStage();
 //
-//    }
-//    public void stageDimTokenCreation(){
-//        jdbcManager.execute("create table if not exists stage_air4you.Dim_Token( "+
-//                "id integer not null primary key," +
-//                "uid varchar(255)," +
-//                "token varchar(255)" +
-//                ")");
-//    }
-//    public void stageDimUserCreation(){
-//        jdbcManager.execute("create table if not exists stage_air4you.Dim_User( " +
-//                "U_Id serial not null primary key, " +
-//                "user_Id varchar(255) not null ," +
-//                "token varchar(255)," +
-//                "email varchar(255)," +
-//                "name varchar(255)" +
-//                ")");
-//    }
-//    public void stageDimTemperatureThresholdCreation(){
-//        jdbcManager.execute("create table if not exists stage_air4you.dim_temperature_threshold(" +
-//                "temperature_threshold_id INT not null primary key," +
-//                "room_id VARCHAR(255)," +
-//                "minimum_value DECIMAL(5,2)," +
-//                "maximum_value DECIMAL(5,2)," +
-//                "start_time TIME(10)," +
-//                "end_time TIME(10)" +
-//                ")");
+//        extractDimDateFromRoomToStage();
+//        extractDimDateFromMeasurementToStage();
+//
+//        insertValidToAndValidFromToDimensionsStage();
+//
+//
+//        extractToFactRegistrationStage();
+//        extractFactMeasurementToStage();
 //    }
 //
-//    public void stageDimHumidityThresholdCreation(){
-//        jdbcManager.execute("CREATE TABLE IF NOT EXISTS stage_air4you.Dim_HumidityThreshold ("+
-//                "humidity_threshold_id int not null primary key,"+
-//                "room_id VARCHAR(255),"+
-//                "start_time TIME(10),"+
-//                "end_time TIME(10),"+
-//                "minimum_value DECIMAL (5,2),"+
-//                "maximum_value DECIMAL (5,2)" +
-//                ")");
+//    private void extractFactMeasurementToStage() {
+//        jdbcManager.execute(
+//                "insert into stage_air4you.fact_measurement(" +
+//                        " measurement_id," +
+//                        " user_id," +
+//                        " room_id," +
+//                        " date_id" +
+//                        ")select" +
+//                        " dim_measurement.measurement_id," +
+//                        " dim_user.u_id," +
+//                        " dim_room.r_id," +
+//                        " dim_date.date_id" +
+//                        " from " +
+//                        " stage_air4you.dim_date, " +
+//                        " stage_air4you.dim_room" +
+//                        " inner join stage_air4you.dim_user on dim_room.user_id = dim_user.user_id" +
+//                        " inner join stage_air4you.dim_measurement on dim_measurement.room_id = dim_room.room_id" +
+//                        " where  fact_type = 'measurement' and (EXTRACT(YEAR FROM dim_measurement.date) = dim_date.year ) and (EXTRACT(MONTH FROM dim_measurement.date) = dim_date.month )" +
+//                        " and (EXTRACT(DAY FROM dim_measurement.date) = dim_date.day ) and (EXTRACT(HOUR FROM dim_measurement.date) = dim_date.hour)" +
+//                        " and (EXTRACT(MINUTE FROM dim_measurement.date) = dim_date.minute )" +
+//                        "-- and (dim_measurement.humidity_exceeded = true or dim_measurement.temperature_exceeded = true or dim_measurement.co2_exceeded = true)\n" +
+//                        " on conflict do nothing" +
+//                        ";");
 //    }
 //
-//    public void stageDimMeasurementCreation(){
-//        jdbcManager.execute("create table if not exists stage_air4you.Dim_Measurement ( " +
-//                "measurement_Id INT not null primary key," +
-//                "room_Id VARCHAR(255)," +
-//                "date timestamp," +
-//                "temperature DECIMAL (6,2)," +
-//                "humidity DECIMAL (6,2)," +
-//                "co2 DECIMAL (6,2) ," +
-//                "temperature_Exceeded BOOLEAN," +
-//                "humidity_Exceeded BOOLEAN," +
-//                "co2_Exceeded BOOLEAN" +
-//                ")");
+//    private void extractToFactRegistrationStage() {
+//        try{
+//            jdbcManager.execute("\n" +
+//                    "insert into stage_air4you.fact_registration(\n" +
+//                    "    user_id, room_id, date_id\n" +
+//                    ") SELECT dim_user.u_id, dim_room.r_id, dim_date.date_id\n" +
+//                    "         from stage_air4you.dim_date, stage_air4you.dim_user inner join stage_air4you.dim_room\n" +
+//                    "on dim_room.user_id = dim_user.user_id\n" +
+//                    "where fact_type = 'room_registartion' and (EXTRACT(YEAR FROM dim_room.registration_date) = dim_date.year ) and (EXTRACT(MONTH FROM dim_room.registration_date) = dim_date.month )\n" +
+//                    "and (EXTRACT(DAY FROM dim_room.registration_date) = dim_date.day ) and (EXTRACT(HOUR FROM dim_room.registration_date) = dim_date.hour)\n" +
+//                    "  and (EXTRACT(MINUTE FROM dim_room.registration_date) = dim_date.minute )\n" +
+//                    "on conflict do nothing\n" +
+//                    ";\n");
+//        }catch(DuplicateKeyException e){
+//            throw e;
+//        }
 //    }
 //
-////    public void stageDimDateCreation(){
-////        jdbcManager.execute("create table if not exists stage_air4you.dim_date (\n" +
-////                "    date_id serial not null primary key,\n" +
-////                "    year varchar(10),\n" +
-////                "    month varchar (20),\n" +
-////                "    week varchar(20),\n" +
-////                "    day varchar (20),\n" +
-////                "    hour varchar(20),\n" +
-////                "    minute varchar(20),\n" +
-////                "    fact_type varchar(40)" +
-////                ")");
-////    }
+///*STAGING - Creating all staging tables for the dimension and fact tables*/
 //
-//    public void stageDimDateCreation(){
-//        jdbcManager.execute("create table if not exists stage_air4you.dim_date (\n" +
-//                "    date_id serial not null primary key,\n" +
-//                "    year int,\n" +
-//                "    month int,\n" +
-//                "    week int,\n" +
-//                "    day int,\n" +
-//                "    hour int,\n" +
-//                "    minute int,\n" +
-//                "    fact_type varchar(40)" +
-//                ")");
-//    }
 //
-//    public void satgeRegistrationFactCreation(){
-//        jdbcManager.execute("create table if not exists stage_air4you.fact_registration(\n" +
-//                "    user_id int not null,\n" +
-//                "    room_id int not null,\n" +
-//                "    date_id  int not null,\n" +
-//                "    foreign key (user_id) references stage_air4you.dim_user (u_id),\n" +
-//                "    foreign key (room_id) references stage_air4you.dim_room (r_id),\n" +
-//                "    foreign key (date_id) references stage_air4you.dim_date (date_id),\n" +
-//                "    constraint Registration_PK PRIMARY KEY(user_id, room_id, date_id)\n" +
-//                "    );");
-//    }
-//    public void stageFactMeasurementCreation(){
-//        jdbcManager.execute("create table if not exists stage_air4you.fact_measurement(\n" +
-//                "                    measurement_id int not null,\n" +
-//                "                    user_id int not null,\n" +
-//                "                    room_id int not null,\n" +
-//                "                    humidity_threshold_id int not null,\n" +
-//                "                    temperature_threshold_id int not null,\n" +
-//                "                    date_id  int not null,\n" +
-//                "                    foreign key (user_id) references stage_air4you.dim_user (u_id),\n" +
-//                "                    foreign key (room_id) references stage_air4you.dim_room (r_id),\n" +
-//                "                    foreign key (date_id) references stage_air4you.dim_date (date_id),\n" +
-//                "                    foreign key (measurement_id) references stage_air4you.dim_measurement (measurement_id),\n" +
-//                "                    foreign key (temperature_threshold_id) references stage_air4you.dim_temperature_threshold (temperature_threshold_id),\n" +
-//                "                    foreign key (humidity_threshold_id) references stage_air4you.dim_humiditythreshold (humidity_threshold_id),\n" +
-//                "                    constraint fact_measurement_PK PRIMARY KEY(user_id, room_id, date_id, measurement_id, humidity_threshold_id, temperature_threshold_id )\n" +
-//                "                    );");
-//    }
-//
+//    /*EXTRACTING - Extracting data from fact and dimensional data, and inserting it to the staging tables*/
 //    public void extractDimMeasurementToStage(){
 //        jdbcManager.execute("insert into stage_air4you.dim_measurement\n" +
 //                "(measurement_id, room_id, date, temperature, humidity, co2, temperature_exceeded, humidity_exceeded, co2_exceeded) SELECT\n" +
@@ -167,10 +93,11 @@
 //    }
 //
 //    public void extractRoomToStage(){
+//        jdbcManager.execute("truncate table stage_air4you.dim_room  cascade");
 //        jdbcManager.execute("Insert into stage_air4you.Dim_Room(\n" +
-//                "                                   room_id, name, registration_date, user_id\n" +
-//                ") SELECT room.room_id, room.name, room.registration_date, room.user_id from room\n" +
-//                "                except select room_id, name, registration_date, user_id from stage_air4you.Dim_Room"
+//                "room_id, name, registration_date, user_id\n" +
+//                ")SELECT room.room_id, room.name, room.registration_date, room.user_id from room\n" +
+//                "except select room_id, name, registration_date, user_id from stage_air4you.Dim_Room"
 //
 //        );
 //    }
@@ -183,27 +110,6 @@
 //
 //
 //
-//    public void extractTemperatureThresholdToStage(){
-//        jdbcManager.execute("Insert into stage_air4you.dim_temperature_threshold (\n" +
-//                "                select id,room_id, min,max,start_time,end_time\n" +
-//                "                from temperature_thresholds\n" +
-//                "                except select temperature_threshold_id,room_id, minimum_value,maximum_value,start_time,end_time\n" +
-//                "                from stage_air4you.dim_temperature_threshold)");
-//    }
-//
-//
-//
-//    public void extractDimHumidityThresholdToStage()
-//    {
-//        jdbcManager.execute("Insert into stage_air4you.Dim_HumidityThreshold(\n" +
-//                "                                                humidity_threshold_id, room_id, start_time, end_time, minimum_value, maximum_value\n" +
-//                ") SELECT\n" +
-//                "            id, room_id, end_time, start_time, max, min\n" +
-//                "            from humidity_thresholds\n" +
-//                "            except select humidity_threshold_id, room_id, start_time, end_time, minimum_value, maximum_value\n" +
-//                "            from stage_air4you.Dim_HumidityThreshold"
-//            );
-//    }
 //
 //    //Need to take data from Dim_Room and Dim_Token from stage.
 //    public void extractDimUserToStage(){
@@ -260,23 +166,36 @@
 //                "              from stage_air4you.dim_date");
 //    }
 //
-//
-//
-//    public void extractFactRegistrationToStage(){
-//        try{
-//            jdbcManager.execute("insert into stage_air4you.fact_registration(\n" +
-//                    "    user_id, room_id, date_id\n" +
-//                    ") SELECT dim_user.u_id, dim_room.r_id, dim_date.date_id\n" +
-//                    "         from stage_air4you.dim_date, stage_air4you.dim_user inner join stage_air4you.dim_room\n" +
-//                    "on dim_room.user_id = dim_user.user_id\n" +
-//                    "where fact_type = 'room_registartion'\n" +
-//                    "on conflict do nothing\n" +
-//                    ";\n");
-//        }catch(DuplicateKeyException e){
-//            throw e;
-//        }
+//    private void insertValidToAndValidFromToDimensionsStage() {
+//        jdbcManager.update("update  stage_air4you.dim_room\n" +
+//                "                set ValidFrom = to_char(CURRENT_DATE, 'YYYYMMDD')::integer,\n" +
+//                "                ValidTo = 99990101;\n" +
+//                "                update stage_air4you.dim_date\n" +
+//                "                set ValidFrom = to_char(CURRENT_DATE, 'YYYYMMDD')::integer,\n" +
+//                "                ValidTo = 99990101;\n" +
+//                "                update stage_air4you.dim_token\n" +
+//                "                set ValidFrom = to_char(CURRENT_DATE, 'YYYYMMDD')::integer,\n" +
+//                "                validto = 99990101;\n" +
+//                "                update stage_air4you.dim_measurement\n" +
+//                "                set ValidFrom = to_char(CURRENT_DATE, 'YYYYMMDD')::integer,\n" +
+//                "                validto = 99990101;\n" +
+//                "                update stage_air4you.dim_user\n" +
+//                "                set ValidFrom = to_char(CURRENT_DATE, 'YYYYMMDD')::integer,\n" +
+//                "                validto = 99990101;");
 //
 //    }
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //

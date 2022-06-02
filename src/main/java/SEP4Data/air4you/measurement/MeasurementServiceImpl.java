@@ -10,7 +10,11 @@ import SEP4Data.air4you.room.RoomRepository;
 import SEP4Data.air4you.room.IRoomService;
 import SEP4Data.air4you.tempThreshold.ITempThresholdService;
 import SEP4Data.air4you.tempThreshold.TemperatureThreshold;
+import SEP4Data.air4you.threshold.ISendThresholdToGateway;
 import SEP4Data.air4you.threshold.Threshold;
+import SEP4Data.air4you.threshold.ThresholdHolder;
+import jdk.swing.interop.SwingInterOpUtils;
+import net.bytebuddy.pool.TypePool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +25,14 @@ import java.util.*;
 @Service
 public class MeasurementServiceImpl implements IMeasurementService{
 
+
+    ThresholdHolder thresholdHolder = ThresholdHolder.getInstance();
     @Autowired
     MeasurementRepository measurementRepository;
+
+    @Autowired
+    ISendThresholdToGateway sendThresholdToGateway;
+
     @Autowired
     RoomRepository roomRepository;
 
@@ -35,7 +45,8 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
     //Adding measurement
     @Override
-    public Threshold addMeasurement(Measurement measurement) {
+    public void addMeasurement(Measurement measurement) {
+
 
         //TODO check if beyond threshold
         Date date = new Date();
@@ -73,8 +84,10 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
         data.setTitle(measurementRepository.getRoomName(measurement.getRoomId()));
 
+
         if(tempThresh != null && (measurement.getTemperature() < tempThresh.getMin() || measurement.getTemperature() > tempThresh.getMax())){
             measurement.setTemperatureExceeded(true);
+            mainActivity.sendNotification(to,data);
         }
 
         if(humThresh != null && (measurement.getHumidity() < humThresh.getMin() || measurement.getHumidity() > humThresh.getMax())){
@@ -90,6 +103,8 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
         mainActivity.sendNotification(to,data);
 
+
+
         measurementRepository.save(measurement);
 
         Threshold thresholdToReturn = new Threshold(measurement.getRoomId(), (int)tempThresh.getMin(), (int)tempThresh.getMax(), (int)humThresh.getMin(), (int)humThresh.getMax());
@@ -97,7 +112,12 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
 
 
-        return thresholdToReturn;
+        thresholdHolder.setThreshold(thresholdToReturn);
+        System.out.println(thresholdToReturn.getMaxTemp() + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11"+ new Date());
+        System.out.println("                    SET THRESHOLD IN MEASUREMENT                     ");
+        //return thresholdToReturn;
+
+//        sendThresholdToGateway.sendThresholdToGateway(thresholdToReturn);
     }
 
     @Override
@@ -169,7 +189,9 @@ public class MeasurementServiceImpl implements IMeasurementService{
         return temperatures;
     }
 
+    // This method will return measurements by room id
 
+    //This method will return measurements by date and room id
     @Override
     public List<Double> getAverageHumidity(String roomId) {
         ArrayList<Double> humidities = new ArrayList<Double>();
@@ -179,6 +201,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
         return humidities;
     }
 
+    //This method will return measurements between two dates
     @Override
     public List<Double> getAverageCo2(String roomId) {
         ArrayList<Double> temperatures = new ArrayList<Double>();
@@ -188,6 +211,7 @@ public class MeasurementServiceImpl implements IMeasurementService{
         return temperatures;
     }
 
+    //This method will return measurements for week by user id
     @Override
     public List<Measurement> getMeasurementByUserAndRoomIdWeek(String userId) {
         List<Room> listOfRooms = IRoomService.getRooms(userId);

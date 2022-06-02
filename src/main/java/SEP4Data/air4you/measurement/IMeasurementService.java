@@ -8,8 +8,9 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 
+@Service
 public interface IMeasurementService {
-    Threshold addMeasurement(Measurement measurement);
+    void addMeasurement(Measurement measurement);
     Data createNotification(Measurement measurement);
     List<Measurement> getMeasurements(String roomId);
     boolean deleteAllFromRoom(String roomId);
