@@ -85,13 +85,6 @@ public class MeasurementServiceImpl implements IMeasurementService{
         data.setTitle(measurementRepository.getRoomName(measurement.getRoomId()));
 
 
-
-        if (tempThresholdService.isInsideThreshold(measurement, tempThresh).getTemperatureExceeded())
-        {
-            data.setBody("Temperature is outside threshold");
-            data.setTitle("Threshold has been reached");
-            data.setExceeded(true);
-
         if(tempThresh != null && (measurement.getTemperature() < tempThresh.getMin() || measurement.getTemperature() > tempThresh.getMax())){
             measurement.setTemperatureExceeded(true);
             mainActivity.sendNotification(to,data);
@@ -118,7 +111,6 @@ public class MeasurementServiceImpl implements IMeasurementService{
 
 
 
-        Threshold thresholdToReturn = new Threshold(measurement.getRoomId(), tempThresh.getMax(), tempThresh.getMin(), humThresh.getMax(), humThresh.getMin());
 
         thresholdHolder.setThreshold(thresholdToReturn);
         System.out.println(thresholdToReturn.getMaxTemp() + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11"+ new Date());
@@ -198,16 +190,6 @@ public class MeasurementServiceImpl implements IMeasurementService{
     }
 
     // This method will return measurements by room id
-    @Override
-    public Measurement getLastMeasurementByRoomId(String roomId) {
-        List<Measurement> roomsMeasuremnts = new ArrayList<>();
-        for (Measurement measurement: measurementRepository.findAll()) {
-            if(measurement.getRoomId().equals(roomId)){
-                roomsMeasuremnts.add(measurement);
-            }
-        }
-        return roomsMeasuremnts.get(roomsMeasuremnts.size()-1);
-    }
 
     //This method will return measurements by date and room id
     @Override

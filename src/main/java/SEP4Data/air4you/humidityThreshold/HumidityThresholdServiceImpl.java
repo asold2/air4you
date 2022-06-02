@@ -99,7 +99,6 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
   // Updating humidity threshold by threshold Id
   @Override
   public boolean updateHumidityThreshold(HumidityThreshold humidityThreshold){
-  public void updateHumidityThreshold(HumidityThreshold humidityThreshold){
     //Not working. add id in path
     if(humidityThresholdRepository.existsById(humidityThreshold.getId())){
       humidityThresholdRepository.updateHumidityThreshold(humidityThreshold.getMax(), humidityThreshold.getMin(), humidityThreshold.getStartTime(), humidityThreshold.getEndTime(), humidityThreshold.getId());
@@ -112,7 +111,3 @@ public class HumidityThresholdServiceImpl implements IHumidityThresholdService
   }
   }
 
-
-
-
-}

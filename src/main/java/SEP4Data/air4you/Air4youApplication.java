@@ -1,7 +1,6 @@
 package SEP4Data.air4you;
 
 import SEP4Data.air4you.Notification.MainActivity;
-import SEP4Data.air4you.room.RoomService;
 import SEP4Data.air4you.room.RoomServiceImpl;
 import SEP4Data.air4you.threshold.ISendThresholdToGateway;
 import SEP4Data.air4you.threshold.SendThresholdToGateway;
@@ -40,8 +39,8 @@ public class Air4youApplication {
 		sender();
 
 	}
-//	@Scheduled(fixedRate = 240000)
 	@Scheduled(fixedRate = 240000)
+//	@Scheduled(fixedRate = 1000)
 	public static void sender(){
 		System.out.println("SENT TO THE FUCKER 1");
 		iSendThresholdToGateway.sendThresholdToGateway();

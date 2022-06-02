@@ -1,6 +1,5 @@
 package SEP4Data.air4you.threshold;
 
-import stage.JDBCManager;
 
 public class ThresholdHolder {
     private static  ThresholdHolder instance;
