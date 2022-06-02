@@ -30,7 +30,8 @@ public class SendThresholdToGateway implements ISendThresholdToGateway
 
             Threshold threshold = thresholdHolder.getThreshold();
             if(threshold!=null){
-                String url = "http://localhost:8080/send/tempThreshold/";
+                String url = "http://gatewayapplication-env.eba-p3capzyf.eu-west-1.elasticbeanstalk.com/send/tempThreshold/";
+//                String url = "http://localhost:8080/send/tempThreshold/";
 
                 HttpHeaders headers = new HttpHeaders();
 
